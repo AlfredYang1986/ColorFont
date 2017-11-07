@@ -16,7 +16,12 @@ SOURCES += main.cpp\
 		glm/detail/glm.cpp \
         cfmainwindow.cpp \
     glm/detail/glm.cpp \
-    glm/detail/dummy.cpp
+    prevdialog/cfprevdialog.cpp \
+    module/fileopt/cffileopt.cpp \
+    module/modulemanagement/cfmm.cpp \
+    module/basemodules/cfbasemodule.cpp \
+    errorhandler/errorhandler.cpp \
+    errorhandler/cferrorhandler.cpp
 
 HEADERS  += \
 		glm/detail/_features.hpp \
@@ -163,9 +168,17 @@ HEADERS  += \
 		glm/vec3.hpp \
 		glm/vec4.hpp \
 		glm/vector_relational.hpp \
-		cfmainwindow.h
+		cfmainwindow.h \
+    prevdialog/cfprevdialog.h \
+    module/fileopt/cffileopt.h \
+    module/modulemanagement/cfmm.h \
+    module/basemodules/cfbasemodule.h \
+    errorhandler/errorhandler.h \
+    errorhandler/cferrorhandler.h \
+    errorhandler/cferror.hpp
 
-FORMS    += cfmainwindow.ui
+FORMS    += cfmainwindow.ui \
+    prevdialog/prevdialog.ui
 
 mac {
 
