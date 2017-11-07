@@ -15,7 +15,8 @@ TEMPLATE = app
 SOURCES += main.cpp\
 		glm/detail/glm.cpp \
         cfmainwindow.cpp \
-    glm/detail/glm.cpp
+    glm/detail/glm.cpp \
+    glm/detail/dummy.cpp
 
 HEADERS  += \
 		glm/detail/_features.hpp \
@@ -171,3 +172,8 @@ mac {
 	INCLUDEPATH += /usr/local/include/freetype2
 	LIBS +=	/usr/local/lib/libfreetype.6.dylib
 }
+
+DISTFILES +=
+
+RESOURCES += \
+    res.qrc
