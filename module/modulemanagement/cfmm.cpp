@@ -2,11 +2,12 @@
 #include "../basemodules/cfbasemodule.h"
 #include <algorithm>
 #include <QException>
+#include "../fileopt/cffileopt.h"
 using namespace std;
 
 CFModuleManagement* CFModuleManagement::instance = NULL;
 
-const CFModuleManagement* CFModuleManagement::queryInstance() const {
+const CFModuleManagement* CFModuleManagement::queryInstance() {
     if (instance == NULL) {
         instance = new CFModuleManagement();
     }
@@ -24,7 +25,9 @@ CFModuleManagement::~CFModuleManagement() {
 }
 
 void CFModuleManagement::initCFModules() {
-
+    mms = {
+        std::make_pair("fileOpt", new CFFileOpt())
+    };
 }
 
 void CFModuleManagement::destoryCFModules() {
@@ -47,7 +50,7 @@ private:
     QString _pred;
 };
 
-const QMap<QString, QObject>
+const QMap<QString, QObject>*
 CFModuleManagement::pushMessage(const QString& module,
                                 const QString& method,
                                 const QMap<QString, QObject>& args) {
@@ -59,5 +62,8 @@ CFModuleManagement::pushMessage(const QString& module,
         CFBaseModule* cfm = iter->second;
         return cfm->pushCommand(method, args);
 
-    } else throw new QException("出现错误");
+    } else {
+        // TODO: 出现错误写法
+        exit(1);
+    }
 }

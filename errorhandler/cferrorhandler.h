@@ -13,7 +13,7 @@ protected:
 
 public:
     static const CFErrorHandler* queryInstance();
-    const CFError triggleError(int code) const;
+    const CFError& triggleError(int code) const;
 
 private:
     static CFErrorHandler* instance;

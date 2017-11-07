@@ -24,7 +24,7 @@ private:
     QString _pred;
 };
 
-const QMap<QString, QObject>
+const QMap<QString, QObject>*
 CFBaseModule::pushCommand(const QString& method,
                           const QMap<QString, QObject>& args) {
 
@@ -32,8 +32,11 @@ CFBaseModule::pushCommand(const QString& method,
     QList<std::pair<QString, module_func> >::iterator iter =
             std::find_if(funcs.begin(), funcs.end(), method_predicate(method));
 
-    if (iter != func.end()) {
-        module_func f = iter->second();
+    if (iter != funcs.end()) {
+        module_func f = iter->second;
         return f(args);
-    } else throw new QException("出现错误");
+    } else {
+        // TODO: "出现错误"
+        exit(1);
+    }
 }

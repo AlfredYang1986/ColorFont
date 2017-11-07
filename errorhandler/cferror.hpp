@@ -4,8 +4,7 @@
 #include <QException>
 
 class CFError : public QException {
-
-private:
+public:
     int error_code;
     QString error_message;
 };

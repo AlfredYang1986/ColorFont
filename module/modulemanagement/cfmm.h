@@ -14,7 +14,7 @@ protected:
     explicit CFModuleManagement();
 
 public:
-    static const CFModuleManagement* queryInstance() const;
+    static const CFModuleManagement* queryInstance();
     ~CFModuleManagement();
 
 public:
@@ -22,7 +22,7 @@ public:
     void destoryCFModules();
 
     CFBaseModule* queryModuleInstance() const;
-    const QMap<QString, QObject>
+    const QMap<QString, QObject>*
     pushMessage(const QString& module,
                 const QString& method,
                 const QMap<QString, QObject>& args);

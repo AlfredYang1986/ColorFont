@@ -4,7 +4,7 @@
 CFErrorHandler* CFErrorHandler::instance = NULL;
 
 const CFErrorHandler* CFErrorHandler::queryInstance() {
-    if (instance == null) {
+    if (instance == NULL) {
         instance = new CFErrorHandler();
     }
 
@@ -13,10 +13,6 @@ const CFErrorHandler* CFErrorHandler::queryInstance() {
 }
 
 CFErrorHandler::CFErrorHandler() {
-
-}
-
-CFErrorHandler::~CFErrorHandler() {
 
 }
 
@@ -32,11 +28,11 @@ private:
     int _code;
 };
 
-const CFError CFErrorHandle::triggleError(int code) const {
-    QList<CFError>::iterator iter =
-            std::find_if(errors.begin(), error.end(), error_predicate(code));
+const CFError& CFErrorHandler::triggleError(int code) const {
+    QList<CFError>::const_iterator iter =
+            std::find_if(errors.begin(), errors.end(), error_predicate(code));
 
-    if (iter != error.end()) {
+    if (iter != errors.end()) {
         return (*iter);
 
     } else exit(1);

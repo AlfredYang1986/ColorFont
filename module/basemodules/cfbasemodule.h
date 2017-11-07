@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-typedef const QMap<QString, QObject> (*module_func)(const QMap<QString, QObject>&);
+typedef const QMap<QString, QObject>* (*module_func)(const QMap<QString, QObject>&);
 
 class CFBaseModule : public QObject {
 
@@ -14,7 +14,7 @@ protected:
     ~CFBaseModule();
 
 public:
-    const QMap<QString, QObject>
+    const QMap<QString, QObject>*
     pushCommand(const QString& method,
                 const QMap<QString, QObject>& args);
 

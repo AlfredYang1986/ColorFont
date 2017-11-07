@@ -20,7 +20,6 @@ SOURCES += main.cpp\
     module/fileopt/cffileopt.cpp \
     module/modulemanagement/cfmm.cpp \
     module/basemodules/cfbasemodule.cpp \
-    errorhandler/errorhandler.cpp \
     errorhandler/cferrorhandler.cpp
 
 HEADERS  += \
@@ -173,7 +172,6 @@ HEADERS  += \
     module/fileopt/cffileopt.h \
     module/modulemanagement/cfmm.h \
     module/basemodules/cfbasemodule.h \
-    errorhandler/errorhandler.h \
     errorhandler/cferrorhandler.h \
     errorhandler/cferror.hpp
 
