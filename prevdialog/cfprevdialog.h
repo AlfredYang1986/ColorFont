@@ -26,8 +26,6 @@ protected:
     void setRightListViewModel();
 
 private:
-//    Ui::CFPrevDialog *ui;
-//    QSplitter* splitter;
     QListView* left;
     QTableView* right;
 };

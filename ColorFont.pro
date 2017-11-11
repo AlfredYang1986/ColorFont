@@ -19,7 +19,9 @@ SOURCES += main.cpp\
 	prevdialog/cfprevdialog.cpp \
 	module/fileopt/cffileopt.cpp \
 	module/modulemanagement/cfmm.cpp \
-	module/basemodules/cfbasemodule.cpp
+	module/basemodules/cfbasemodule.cpp \
+    errorhandler/cferrorhandler.cpp \
+    module/fftopt/cffftopt.cpp
 
 HEADERS  += \
 		glm/detail/_features.hpp \
@@ -172,7 +174,8 @@ HEADERS  += \
 	module/modulemanagement/cfmm.h \
 	module/basemodules/cfbasemodule.h \
 	errorhandler/cferrorhandler.h \
-	errorhandler/cferror.hpp
+	errorhandler/cferror.hpp \
+    module/fftopt/cffftopt.h
 
 FORMS    += cfmainwindow.ui
 

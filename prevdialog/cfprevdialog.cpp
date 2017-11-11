@@ -3,6 +3,7 @@
 
 #include <QStandardItem>
 #include <QStandardItemModel>
+#include <QListView>
 #include <QTableView>
 #include <QVBoxLayout>
 #include <QPushButton>
@@ -12,7 +13,6 @@
 #include <QDebug>
 
 CFPrevDialog::CFPrevDialog(QWidget *parent)
-//    : QDialog(parent), ui(new Ui::CFPrevDialog) {
     : QSplitter(Qt::Horizontal, parent) {
 
     setupUI();
