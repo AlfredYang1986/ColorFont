@@ -1,13 +1,15 @@
 #ifndef CFPREVDIALOG_H
 #define CFPREVDIALOG_H
 
-#include <QDialog>
+#include <QSplitter>
+class QListView;
+class QTableView;
 
-namespace Ui {
-    class CFPrevDialog;
-}
+//namespace Ui {
+//    class CFPrevDialog;
+//}
 
-class CFPrevDialog : public QDialog {
+class CFPrevDialog : public QSplitter {
 
     Q_OBJECT
 public:
@@ -16,9 +18,18 @@ public:
 signals:
 
 public slots:
+    void closeButton_toggle();
+
+protected:
+    void setupUI();
+    void setLeftListViewModel();
+    void setRightListViewModel();
 
 private:
-    Ui::CFPrevDialog *ui;
+//    Ui::CFPrevDialog *ui;
+//    QSplitter* splitter;
+    QListView* left;
+    QTableView* right;
 };
 
 #endif // CFPREVDIALOG_H

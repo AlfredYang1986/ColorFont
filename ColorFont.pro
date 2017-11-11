@@ -14,13 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
 		glm/detail/glm.cpp \
-        cfmainwindow.cpp \
-    glm/detail/glm.cpp \
-    prevdialog/cfprevdialog.cpp \
-    module/fileopt/cffileopt.cpp \
-    module/modulemanagement/cfmm.cpp \
-    module/basemodules/cfbasemodule.cpp \
-    errorhandler/cferrorhandler.cpp
+		cfmainwindow.cpp \
+	glm/detail/glm.cpp \
+	prevdialog/cfprevdialog.cpp \
+	module/fileopt/cffileopt.cpp \
+	module/modulemanagement/cfmm.cpp \
+	module/basemodules/cfbasemodule.cpp
 
 HEADERS  += \
 		glm/detail/_features.hpp \
@@ -168,15 +167,14 @@ HEADERS  += \
 		glm/vec4.hpp \
 		glm/vector_relational.hpp \
 		cfmainwindow.h \
-    prevdialog/cfprevdialog.h \
-    module/fileopt/cffileopt.h \
-    module/modulemanagement/cfmm.h \
-    module/basemodules/cfbasemodule.h \
-    errorhandler/cferrorhandler.h \
-    errorhandler/cferror.hpp
+	prevdialog/cfprevdialog.h \
+	module/fileopt/cffileopt.h \
+	module/modulemanagement/cfmm.h \
+	module/basemodules/cfbasemodule.h \
+	errorhandler/cferrorhandler.h \
+	errorhandler/cferror.hpp
 
-FORMS    += cfmainwindow.ui \
-    prevdialog/prevdialog.ui
+FORMS    += cfmainwindow.ui
 
 mac {
 
@@ -187,4 +185,4 @@ mac {
 DISTFILES +=
 
 RESOURCES += \
-    res.qrc
+	res.qrc
