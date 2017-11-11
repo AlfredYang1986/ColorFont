@@ -19,6 +19,7 @@ signals:
 
 public slots:
     void closeButton_toggle();
+    void resent_file_clicked(const QModelIndex&);
 
 protected:
     void setupUI();

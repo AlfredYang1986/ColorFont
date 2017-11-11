@@ -25,7 +25,7 @@ public:
     const QMap<QString, QObject>*
     pushMessage(const QString& module,
                 const QString& method,
-                const QMap<QString, QObject>& args);
+                const QMap<QString, QObject>* const args);
 
 private:
     static CFModuleManagement* instance;

@@ -26,7 +26,7 @@ private:
 
 const QMap<QString, QObject>*
 CFBaseModule::pushCommand(const QString& method,
-                          const QMap<QString, QObject>& args) {
+                          const QMap<QString, QObject>* const args) {
 
 
     QList<std::pair<QString, module_func> >::iterator iter =

@@ -26,6 +26,9 @@ public:
     const QList<QString> resentPathLst() const;
     const QString getResentFilePath() const;
 
+//    const QMap<QString, QObject>*
+//    open_test(const QMap<QString, QObject>&);
+
     friend class CFModuleManagement;
 };
 

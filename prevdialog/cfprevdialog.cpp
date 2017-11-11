@@ -1,5 +1,4 @@
 #include "cfprevdialog.h"
-#include "ui_prevdialog.h"
 
 #include <QStandardItem>
 #include <QStandardItemModel>
@@ -9,6 +8,8 @@
 #include <QPushButton>
 #include <QSplitterHandle>
 #include <QSize>
+
+#include "../module/modulemanagement/cfmm.h"
 
 #include <QDebug>
 
@@ -75,11 +76,51 @@ void CFPrevDialog::setLeftListViewModel() {
 }
 
 void CFPrevDialog::setRightListViewModel() {
+    // TODO: 最近保存数据逻辑，现在是假的
 
+    QStandardItemModel *qstmodel=new QStandardItemModel();
+    QStandardItem* item1    = new QStandardItem("调用FileModule的Open函数");
+    QStandardItem* item2    = new QStandardItem("调用FFTModule的Load函数");
+
+    QList<QStandardItem*> l;
+    l.append(item1);
+    l.append(item2);
+    qstmodel->insertRow(0, l);
+
+    QTableView *view = right;
+    view->setModel(qstmodel);
+    view->setSelectionMode(QAbstractItemView::SingleSelection);
+    view->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    view->setAutoFillBackground(true);
+
+    QObject::connect(view, SIGNAL(clicked(QModelIndex)),
+                     this, SLOT(resent_file_clicked(QModelIndex)));
+
+    // TODO: 这里要变好看
 }
 
 void CFPrevDialog::closeButton_toggle() {
     qDebug() << "close button toggle" ;
     this->close();
     exit(0);
+}
+
+void CFPrevDialog::resent_file_clicked(const QModelIndex & index) {
+    qDebug() << index << "clicked";
+    if (index.row() == 0 && index.column() == 0) {
+
+        const CFModuleManagement* cffm = CFModuleManagement::queryInstance();
+        const QMap<QString, QObject>* result =
+            const_cast<CFModuleManagement*>(cffm)->pushMessage("file", "open", NULL);
+
+        QMap<QString, QObject>::const_iterator iter = result->begin();
+        while(iter != result->end()) {
+            qDebug() << "result is :" << iter.key() << endl;
+        }
+
+    } else if (index.row() == 0 && index.column() == 0) {
+
+    } else {
+        // do nothing
+    }
 }

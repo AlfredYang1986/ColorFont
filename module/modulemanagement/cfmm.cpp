@@ -26,7 +26,7 @@ CFModuleManagement::~CFModuleManagement() {
 
 void CFModuleManagement::initCFModules() {
     mms = {
-        std::make_pair("fileOpt", new CFFileOpt())
+        std::make_pair("file", new CFFileOpt())
     };
 }
 
@@ -53,7 +53,7 @@ private:
 const QMap<QString, QObject>*
 CFModuleManagement::pushMessage(const QString& module,
                                 const QString& method,
-                                const QMap<QString, QObject>& args) {
+                                const QMap<QString, QObject>* const args) {
 
     QList<std::pair<QString, CFBaseModule*> >::iterator iter =
         std::find_if(mms.begin(), mms.end(), module_predicate(module));
