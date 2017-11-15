@@ -1,5 +1,6 @@
 #include "cfmainwindow.h"
 #include "ui_cfmainwindow.h"
+#include "dockwidget/cfeffectdock.h"
 
 #include <QDebug>
 
@@ -8,6 +9,8 @@ CFMainWindow::CFMainWindow(QWidget *parent) :
     ui(new Ui::CFMainWindow) {
 
     ui->setupUi(this);
+    effect_dock = new CFEffectDock();
+    this->addDockWidget(Qt::RightDockWidgetArea, effect_dock);
 }
 
 CFMainWindow::~CFMainWindow() {

@@ -17,8 +17,8 @@ int main(int argc, char *argv[]) {
     while( QTime::currentTime() < dieTime )
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
-//    CFMainWindow w;
-    CFPrevDialog w;
+    CFMainWindow w;
+//    CFPrevDialog w;
     w.show();
 
     splash->finish(&w);

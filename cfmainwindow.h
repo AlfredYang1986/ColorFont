@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+class CFEffectDock;
+
 namespace Ui {
 class CFMainWindow;
 }
@@ -26,6 +28,8 @@ private slots:
 
 private:
     Ui::CFMainWindow *ui;
+
+    CFEffectDock* effect_dock;
 };
 
 #endif // CFMAINWINDOW_H

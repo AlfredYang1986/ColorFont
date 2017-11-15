@@ -21,7 +21,11 @@ SOURCES += main.cpp\
 	module/modulemanagement/cfmm.cpp \
 	module/basemodules/cfbasemodule.cpp \
     errorhandler/cferrorhandler.cpp \
-    module/fftopt/cffftopt.cpp
+    module/fftopt/cffftopt.cpp \
+    dockwidget/cfeffectdock.cpp \
+    dockwidget/cfresentsymboldock.cpp \
+    dockwidget/shadowwidget/cfshadowwidget.cpp \
+    dockwidget/effectwidget/cfeffectwidget.cpp
 
 HEADERS  += \
 		glm/detail/_features.hpp \
@@ -175,7 +179,11 @@ HEADERS  += \
 	module/basemodules/cfbasemodule.h \
 	errorhandler/cferrorhandler.h \
 	errorhandler/cferror.hpp \
-    module/fftopt/cffftopt.h
+    module/fftopt/cffftopt.h \
+    dockwidget/cfeffectdock.h \
+    dockwidget/cfresentsymboldock.h \
+    dockwidget/shadowwidget/cfshadowwidget.h \
+    dockwidget/effectwidget/cfeffectwidget.h
 
 FORMS    += cfmainwindow.ui
 

@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>resource/screen.png</file>
+        <file>dockwidget/effectwidget/effect_tab.qml</file>
     </qresource>
 </RCC>
