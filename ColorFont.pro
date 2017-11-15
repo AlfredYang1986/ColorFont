@@ -25,7 +25,11 @@ SOURCES += main.cpp\
     dockwidget/cfeffectdock.cpp \
     dockwidget/cfresentsymboldock.cpp \
     dockwidget/shadowwidget/cfshadowwidget.cpp \
-    dockwidget/effectwidget/cfeffectwidget.cpp
+    dockwidget/effectwidget/cfeffectwidget.cpp \
+    dockwidget/bkgwidget/cfbkgwidget.cpp \
+    dockwidget/bkgwidget/colorbkg/cfcolorbkg.cpp \
+    dockwidget/bkgwidget/colorbkg/cfcolorselectpanel.cpp \
+    dockwidget/bkgwidget/colorbkg/cfcolorpreviewpanel.cpp
 
 HEADERS  += \
 		glm/detail/_features.hpp \
@@ -183,7 +187,11 @@ HEADERS  += \
     dockwidget/cfeffectdock.h \
     dockwidget/cfresentsymboldock.h \
     dockwidget/shadowwidget/cfshadowwidget.h \
-    dockwidget/effectwidget/cfeffectwidget.h
+    dockwidget/effectwidget/cfeffectwidget.h \
+    dockwidget/bkgwidget/cfbkgwidget.h \
+    dockwidget/bkgwidget/colorbkg/cfcolorbkg.h \
+    dockwidget/bkgwidget/colorbkg/cfcolorselectpanel.h \
+    dockwidget/bkgwidget/colorbkg/cfcolorpreviewpanel.h
 
 FORMS    += cfmainwindow.ui
 

@@ -17,7 +17,7 @@ public:
 
     virtual void setupUi();
     virtual void setupContent() = 0;
-    virtual QWidget* setControlPanel() = 0;
+    virtual void setControlPanel() = 0;
     virtual QPushButton* setClearBtn();
 
 protected:

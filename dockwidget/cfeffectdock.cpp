@@ -6,6 +6,7 @@
 #include <QHBoxLayout>
 #include "effectwidget/cfeffectwidget.h"
 #include "shadowwidget/cfshadowwidget.h"
+#include "bkgwidget/cfbkgwidget.h"
 
 #include <QDebug>
 
@@ -68,8 +69,19 @@ void CFEffectDock::setupFlag() {
     this->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 }
 
+class object_predicate {
+public:
+    object_predicate(const QString& s) : _s(s) {}
+
+    bool operator()(CFEffectWidget* eff) {
+        return eff->objectName() == _s;
+    }
+
+    QString _s;
+};
+
 void CFEffectDock::slot_effectSelected(const QModelIndex& index) {
-    content->reset();
+//    content->reset();
 
     QString str = index.data().toString();
     qDebug() << "select one : " << str;
@@ -78,17 +90,40 @@ void CFEffectDock::slot_effectSelected(const QModelIndex& index) {
         wds.at(index)->setVisible(false);
     }
 
-    if (str == tr("阴影效果")) {
-        CFEffectWidget * w = 0;
-        if (wds.count() > 0) {
-            w = wds.at(0);
-            w->setMinimumWidth(100);
-            w->setVisible(true);
-        } else {
-            w = new CFShadowWidget();
-            w->setupContent();
-            main_layout->insertWidget(0, w);
-            wds.append(w);
-        }
+    QList<CFEffectWidget*>::iterator iter =
+            std::find_if(wds.begin(), wds.end(), object_predicate(str));
+
+    CFEffectWidget * w = 0;
+    if (iter != wds.end()) {
+        w = *iter;
+        w->setVisible(true);
+    } else {
+        w = createSubPanelByName(str);
+        w->setObjectName(str);
+        w->setupContent();
+        main_layout->insertWidget(0, w);
+        wds.append(w);
+    }
+}
+
+CFEffectWidget* CFEffectDock::createSubPanelByName(const QString& name) {
+    if (name == tr("效果模板")) {
+        return new CFBkgWidget();
+    } else if (name == tr("阴影效果")) {
+        return new CFShadowWidget();
+    } else if (name == tr("霓虹效果")) {
+        return new CFShadowWidget();
+    } else if (name == tr("导入背景")) {
+        return new CFBkgWidget();
+    } else if (name == tr("导入挂件")) {
+        return new CFShadowWidget();
+    } else if (name == tr("填充效果")) {
+        return new CFShadowWidget();
+    } else if (name == tr("边框效果")) {
+        return new CFShadowWidget();
+    } else if (name == tr("斜面浮雕")) {
+        return new CFShadowWidget();
+    } else {
+        return NULL;
     }
 }

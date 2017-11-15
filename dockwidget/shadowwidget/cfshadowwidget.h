@@ -3,8 +3,6 @@
 
 #include "../effectwidget/cfeffectwidget.h"
 
-class QTableWidget;
-
 class CFShadowWidget : public CFEffectWidget {
 
     Q_OBJECT
@@ -14,7 +12,7 @@ public:
     ~CFShadowWidget();
 
     virtual void setupContent();
-    virtual QWidget* setControlPanel();
+    virtual void setControlPanel();
 };
 
 #endif // CFSHADOWWIDGET_H

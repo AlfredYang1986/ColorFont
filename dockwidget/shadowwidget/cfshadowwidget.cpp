@@ -29,7 +29,6 @@ void CFShadowWidget::setupContent() {
     tab->addTab(view, tr("阴影"));
 }
 
-QWidget* CFShadowWidget::setControlPanel() {
-    QWidget* view = new QWidget();
-    return view;
+void CFShadowWidget::setControlPanel() {
+    // do nothing ...
 }

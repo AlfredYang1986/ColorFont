@@ -19,6 +19,7 @@ public:
 protected:
     void setupUi();
     void setupFlag();
+    CFEffectWidget* createSubPanelByName(const QString& name);
 
 signals:
     void applyEffect(const QString& name);
