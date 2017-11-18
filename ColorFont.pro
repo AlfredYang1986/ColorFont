@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     dockwidget/commonwidget/colorbkg/cfcolorselectpanel.cpp \
     dockwidget/commonwidget/gradientwidget/lineargradientwidget/cflineargradientwidget.cpp \
     dockwidget/commonwidget/gradientwidget/cfgradientwidget.cpp \
-    dockwidget/commonwidget/imgwidget/cfimgwidget.cpp
+    dockwidget/commonwidget/imgwidget/cfimgwidget.cpp \
+    dockwidget/borderwidget/cfborderwidget.cpp
 
 HEADERS  += \
 		glm/detail/_features.hpp \
@@ -201,7 +202,8 @@ HEADERS  += \
     dockwidget/commonwidget/colorbkg/cfcolorselectpanel.h \
     dockwidget/commonwidget/gradientwidget/lineargradientwidget/cflineargradientwidget.h \
     dockwidget/commonwidget/gradientwidget/cfgradientwidget.h \
-    dockwidget/commonwidget/imgwidget/cfimgwidget.h
+    dockwidget/commonwidget/imgwidget/cfimgwidget.h \
+    dockwidget/borderwidget/cfborderwidget.h
 
 FORMS    += cfmainwindow.ui
 
