@@ -27,13 +27,14 @@ SOURCES += main.cpp\
     dockwidget/shadowwidget/cfshadowwidget.cpp \
     dockwidget/effectwidget/cfeffectwidget.cpp \
     dockwidget/bkgwidget/cfbkgwidget.cpp \
-    dockwidget/bkgwidget/colorbkg/cfcolorbkg.cpp \
-    dockwidget/bkgwidget/colorbkg/cfcolorselectpanel.cpp \
-    dockwidget/bkgwidget/colorbkg/cfcolorpreviewpanel.cpp \
-    dockwidget/bkgwidget/imgwidget/cfimgwidget.cpp \
-    dockwidget/bkgwidget/gradientwidget/cfgradientwidget.cpp \
-    dockwidget/bkgwidget/gradientwidget/lineargradientwidget/cflineargradientwidget.cpp \
-    dockwidget/hangupwidget/cfhangupwidget.cpp
+    dockwidget/hangupwidget/cfhangupwidget.cpp \
+    dockwidget/fillwidget/cffillwidget.cpp \
+    dockwidget/commonwidget/colorbkg/cfcolorbkg.cpp \
+    dockwidget/commonwidget/colorbkg/cfcolorpreviewpanel.cpp \
+    dockwidget/commonwidget/colorbkg/cfcolorselectpanel.cpp \
+    dockwidget/commonwidget/gradientwidget/lineargradientwidget/cflineargradientwidget.cpp \
+    dockwidget/commonwidget/gradientwidget/cfgradientwidget.cpp \
+    dockwidget/commonwidget/imgwidget/cfimgwidget.cpp
 
 HEADERS  += \
 		glm/detail/_features.hpp \
@@ -193,13 +194,14 @@ HEADERS  += \
     dockwidget/shadowwidget/cfshadowwidget.h \
     dockwidget/effectwidget/cfeffectwidget.h \
     dockwidget/bkgwidget/cfbkgwidget.h \
-    dockwidget/bkgwidget/colorbkg/cfcolorbkg.h \
-    dockwidget/bkgwidget/colorbkg/cfcolorselectpanel.h \
-    dockwidget/bkgwidget/colorbkg/cfcolorpreviewpanel.h \
-    dockwidget/bkgwidget/imgwidget/cfimgwidget.h \
-    dockwidget/bkgwidget/gradientwidget/cfgradientwidget.h \
-    dockwidget/bkgwidget/gradientwidget/lineargradientwidget/cflineargradientwidget.h \
-    dockwidget/hangupwidget/cfhangupwidget.h
+    dockwidget/hangupwidget/cfhangupwidget.h \
+    dockwidget/fillwidget/cffillwidget.h \
+    dockwidget/commonwidget/colorbkg/cfcolorbkg.h \
+    dockwidget/commonwidget/colorbkg/cfcolorpreviewpanel.h \
+    dockwidget/commonwidget/colorbkg/cfcolorselectpanel.h \
+    dockwidget/commonwidget/gradientwidget/lineargradientwidget/cflineargradientwidget.h \
+    dockwidget/commonwidget/gradientwidget/cfgradientwidget.h \
+    dockwidget/commonwidget/imgwidget/cfimgwidget.h
 
 FORMS    += cfmainwindow.ui
 

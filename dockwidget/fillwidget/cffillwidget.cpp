@@ -1,22 +1,20 @@
-#include "cfbkgwidget.h"
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QLineEdit>
+#include "cffillwidget.h"
+
 #include <QTabWidget>
 #include "../commonwidget/colorbkg/cfcolorbkg.h"
 #include "../commonwidget/imgwidget/cfimgwidget.h"
 #include "../commonwidget/gradientwidget/cfgradientwidget.h"
 
-CFBkgWidget::CFBkgWidget(QWidget *parent)
+CFFillWidget::CFFillWidget(QWidget *parent)
     : CFEffectWidget(parent) {
 
 }
 
-CFBkgWidget::~CFBkgWidget() {
+CFFillWidget::~CFFillWidget() {
 
 }
 
-void CFBkgWidget::setupContent() {
+void CFFillWidget::setupContent() {
     QWidget* view = new CFColorBkg();
     tab->addTab(view, tr("颜色"));
 
@@ -27,6 +25,6 @@ void CFBkgWidget::setupContent() {
     tab->addTab(view1, tr("图片"));
 }
 
-void CFBkgWidget::setControlPanel() {
-    // do nothing ...
+void CFFillWidget::setControlPanel() {
+
 }

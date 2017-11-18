@@ -8,6 +8,7 @@
 #include "shadowwidget/cfshadowwidget.h"
 #include "bkgwidget/cfbkgwidget.h"
 #include "hangupwidget/cfhangupwidget.h"
+#include "fillwidget/cffillwidget.h"
 
 #include <QDebug>
 
@@ -120,7 +121,7 @@ CFEffectWidget* CFEffectDock::createSubPanelByName(const QString& name) {
     } else if (name == tr("导入挂件")) {
         return new CFHangupWidget();
     } else if (name == tr("填充效果")) {
-        return new CFShadowWidget();
+        return new CFFillWidget();
     } else if (name == tr("边框效果")) {
         return new CFShadowWidget();
     } else if (name == tr("斜面浮雕")) {
