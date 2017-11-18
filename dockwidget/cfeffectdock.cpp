@@ -7,6 +7,7 @@
 #include "effectwidget/cfeffectwidget.h"
 #include "shadowwidget/cfshadowwidget.h"
 #include "bkgwidget/cfbkgwidget.h"
+#include "hangupwidget/cfhangupwidget.h"
 
 #include <QDebug>
 
@@ -101,6 +102,7 @@ void CFEffectDock::slot_effectSelected(const QModelIndex& index) {
         w = createSubPanelByName(str);
         w->setObjectName(str);
         w->setupContent();
+        w->setControlPanel();
         main_layout->insertWidget(0, w);
         wds.append(w);
     }
@@ -116,7 +118,7 @@ CFEffectWidget* CFEffectDock::createSubPanelByName(const QString& name) {
     } else if (name == tr("导入背景")) {
         return new CFBkgWidget();
     } else if (name == tr("导入挂件")) {
-        return new CFShadowWidget();
+        return new CFHangupWidget();
     } else if (name == tr("填充效果")) {
         return new CFShadowWidget();
     } else if (name == tr("边框效果")) {

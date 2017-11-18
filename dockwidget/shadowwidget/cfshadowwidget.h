@@ -3,6 +3,9 @@
 
 #include "../effectwidget/cfeffectwidget.h"
 
+class QLabel;
+class QLineEdit;
+
 class CFShadowWidget : public CFEffectWidget {
 
     Q_OBJECT
@@ -13,6 +16,7 @@ public:
 
     virtual void setupContent();
     virtual void setControlPanel();
+
 };
 
 #endif // CFSHADOWWIDGET_H

@@ -32,7 +32,8 @@ SOURCES += main.cpp\
     dockwidget/bkgwidget/colorbkg/cfcolorpreviewpanel.cpp \
     dockwidget/bkgwidget/imgwidget/cfimgwidget.cpp \
     dockwidget/bkgwidget/gradientwidget/cfgradientwidget.cpp \
-    dockwidget/bkgwidget/gradientwidget/lineargradientwidget/cflineargradientwidget.cpp
+    dockwidget/bkgwidget/gradientwidget/lineargradientwidget/cflineargradientwidget.cpp \
+    dockwidget/hangupwidget/cfhangupwidget.cpp
 
 HEADERS  += \
 		glm/detail/_features.hpp \
@@ -197,7 +198,8 @@ HEADERS  += \
     dockwidget/bkgwidget/colorbkg/cfcolorpreviewpanel.h \
     dockwidget/bkgwidget/imgwidget/cfimgwidget.h \
     dockwidget/bkgwidget/gradientwidget/cfgradientwidget.h \
-    dockwidget/bkgwidget/gradientwidget/lineargradientwidget/cflineargradientwidget.h
+    dockwidget/bkgwidget/gradientwidget/lineargradientwidget/cflineargradientwidget.h \
+    dockwidget/hangupwidget/cfhangupwidget.h
 
 FORMS    += cfmainwindow.ui
 
