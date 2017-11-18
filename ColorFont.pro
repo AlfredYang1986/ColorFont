@@ -23,7 +23,6 @@ SOURCES += main.cpp\
     errorhandler/cferrorhandler.cpp \
     module/fftopt/cffftopt.cpp \
     dockwidget/cfeffectdock.cpp \
-    dockwidget/cfresentsymboldock.cpp \
     dockwidget/shadowwidget/cfshadowwidget.cpp \
     dockwidget/effectwidget/cfeffectwidget.cpp \
     dockwidget/bkgwidget/cfbkgwidget.cpp \
@@ -35,7 +34,10 @@ SOURCES += main.cpp\
     dockwidget/commonwidget/gradientwidget/lineargradientwidget/cflineargradientwidget.cpp \
     dockwidget/commonwidget/gradientwidget/cfgradientwidget.cpp \
     dockwidget/commonwidget/imgwidget/cfimgwidget.cpp \
-    dockwidget/borderwidget/cfborderwidget.cpp
+    dockwidget/borderwidget/cfborderwidget.cpp \
+    dockwidget/preparedwidget/cfpreparedwidget.cpp \
+    dockwidget/cfresentchardock.cpp \
+    operatorwidget/cfoperatorwidget.cpp
 
 HEADERS  += \
 		glm/detail/_features.hpp \
@@ -191,7 +193,6 @@ HEADERS  += \
 	errorhandler/cferror.hpp \
     module/fftopt/cffftopt.h \
     dockwidget/cfeffectdock.h \
-    dockwidget/cfresentsymboldock.h \
     dockwidget/shadowwidget/cfshadowwidget.h \
     dockwidget/effectwidget/cfeffectwidget.h \
     dockwidget/bkgwidget/cfbkgwidget.h \
@@ -203,7 +204,10 @@ HEADERS  += \
     dockwidget/commonwidget/gradientwidget/lineargradientwidget/cflineargradientwidget.h \
     dockwidget/commonwidget/gradientwidget/cfgradientwidget.h \
     dockwidget/commonwidget/imgwidget/cfimgwidget.h \
-    dockwidget/borderwidget/cfborderwidget.h
+    dockwidget/borderwidget/cfborderwidget.h \
+    dockwidget/preparedwidget/cfpreparedwidget.h \
+    dockwidget/cfresentchardock.h \
+    operatorwidget/cfoperatorwidget.h
 
 FORMS    += cfmainwindow.ui
 

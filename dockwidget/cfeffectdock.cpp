@@ -10,6 +10,7 @@
 #include "hangupwidget/cfhangupwidget.h"
 #include "fillwidget/cffillwidget.h"
 #include "borderwidget/cfborderwidget.h"
+#include "preparedwidget/cfpreparedwidget.h"
 
 #include <QDebug>
 
@@ -112,7 +113,7 @@ void CFEffectDock::slot_effectSelected(const QModelIndex& index) {
 
 CFEffectWidget* CFEffectDock::createSubPanelByName(const QString& name) {
     if (name == tr("效果模板")) {
-        return new CFBkgWidget();
+        return new CFPreparedWidget();
     } else if (name == tr("阴影效果")) {
         return new CFShadowWidget();
     } else if (name == tr("霓虹效果")) {

@@ -18,8 +18,7 @@ int main(int argc, char *argv[]) {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     CFMainWindow w;
-//    CFPrevDialog w;
-    w.show();
+    w.showMaximized();
 
     splash->finish(&w);
     return a.exec();

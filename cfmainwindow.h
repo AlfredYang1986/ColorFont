@@ -4,6 +4,8 @@
 #include <QMainWindow>
 
 class CFEffectDock;
+class CFResentCharDock;
+class QMdiArea;
 
 namespace Ui {
 class CFMainWindow;
@@ -30,6 +32,9 @@ private:
     Ui::CFMainWindow *ui;
 
     CFEffectDock* effect_dock;
+    CFResentCharDock* char_dock;
+
+    QMdiArea* area;
 };
 
 #endif // CFMAINWINDOW_H
