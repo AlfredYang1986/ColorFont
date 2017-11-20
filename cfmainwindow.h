@@ -20,13 +20,10 @@ public:
     ~CFMainWindow();
 
 private slots:
-    void on_actionOpenFont_triggered();
-
     void on_actionClose_triggered();
-
     void on_actionSaveAs_triggered();
-
     void on_actionSave_triggered();
+    void on_actionImportTTF_triggered();
 
 private:
     Ui::CFMainWindow *ui;

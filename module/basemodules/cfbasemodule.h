@@ -2,8 +2,9 @@
 #define CFBASEMODULE_H
 
 #include <QObject>
+#include "../../common/funcargs/cfargs.h"
 
-typedef const QMap<QString, QObject>* (*module_func)(const QMap<QString, QObject>* const);
+typedef CFFuncResults (*module_func)(const CFFuncArguments&);
 
 class CFBaseModule : public QObject {
 
@@ -14,9 +15,9 @@ protected:
     ~CFBaseModule();
 
 public:
-    const QMap<QString, QObject>*
+    CFFuncResults
     pushCommand(const QString& method,
-                const QMap<QString, QObject>* const args);
+                const CFFuncArguments& args);
 
 protected:
     QList<std::pair<QString, module_func> > funcs;

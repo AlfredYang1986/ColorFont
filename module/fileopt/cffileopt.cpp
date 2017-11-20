@@ -2,9 +2,10 @@
 #include <QList>
 #include <QDebug>
 #include <QMap>
+#include "../../common/funcargs/cfargs.h"
 
-const QMap<QString, QObject>*
-open_test(const QMap<QString, QObject>* const args) {
+CFFuncResults
+open_test(const CFFuncArguments& args) {
     qDebug() << "debug chians of response" ;
 //    QMap<QString, QObject>::const_iterator iter = args->begin();
 //    while(iter != args->end()) {
@@ -12,7 +13,7 @@ open_test(const QMap<QString, QObject>* const args) {
 //                 << endl;
 //    }
 
-    return new QMap<QString, QObject>();
+    return CFFuncResults();
 }
 
 CFFileOpt::CFFileOpt() {

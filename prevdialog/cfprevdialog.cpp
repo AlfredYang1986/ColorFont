@@ -106,21 +106,21 @@ void CFPrevDialog::closeButton_toggle() {
 }
 
 void CFPrevDialog::resent_file_clicked(const QModelIndex & index) {
-    qDebug() << index << "clicked";
-    if (index.row() == 0 && index.column() == 0) {
+//    qDebug() << index << "clicked";
+//    if (index.row() == 0 && index.column() == 0) {
 
-        const CFModuleManagement* cffm = CFModuleManagement::queryInstance();
-        const QMap<QString, QObject>* result =
-            const_cast<CFModuleManagement*>(cffm)->pushMessage("file", "open", NULL);
+//        const CFModuleManagement* cffm = CFModuleManagement::queryInstance();
+//        const QMap<QString, QObject>* result =
+//            const_cast<CFModuleManagement*>(cffm)->pushMessage("file", "open", NULL);
 
-        QMap<QString, QObject>::const_iterator iter = result->begin();
-        while(iter != result->end()) {
-            qDebug() << "result is :" << iter.key() << endl;
-        }
+//        QMap<QString, QObject>::const_iterator iter = result->begin();
+//        while(iter != result->end()) {
+//            qDebug() << "result is :" << iter.key() << endl;
+//        }
 
-    } else if (index.row() == 0 && index.column() == 0) {
+//    } else if (index.row() == 0 && index.column() == 0) {
 
-    } else {
-        // do nothing
-    }
+//    } else {
+//        // do nothing
+//    }
 }

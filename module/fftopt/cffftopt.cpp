@@ -10,7 +10,9 @@ CFFftOpt::~CFFftOpt() {
 
 }
 
-void CFFftOpt::loadTTFFile(const QString &path) {
+CFFuncResults
+CFFftOpt::loadTTFFile(const CFFuncArguments& args) {
+    const QVariant& path = args.getV("path");
 
 }
 

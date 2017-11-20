@@ -3,11 +3,12 @@
 #include <algorithm>
 #include <QException>
 #include "../fileopt/cffileopt.h"
+#include "../fftopt/cffftopt.h"
 using namespace std;
 
 CFModuleManagement* CFModuleManagement::instance = NULL;
 
-const CFModuleManagement* CFModuleManagement::queryInstance() {
+CFModuleManagement* CFModuleManagement::queryInstance() {
     if (instance == NULL) {
         instance = new CFModuleManagement();
     }
@@ -26,7 +27,8 @@ CFModuleManagement::~CFModuleManagement() {
 
 void CFModuleManagement::initCFModules() {
     mms = {
-        std::make_pair("file", new CFFileOpt())
+        std::make_pair("file", new CFFileOpt()),
+        std::make_pair("fft", new CFFftOpt())
     };
 }
 
@@ -50,10 +52,10 @@ private:
     QString _pred;
 };
 
-const QMap<QString, QObject>*
+CFFuncResults
 CFModuleManagement::pushMessage(const QString& module,
                                 const QString& method,
-                                const QMap<QString, QObject>* const args) {
+                                const CFFuncArguments& args) {
 
     QList<std::pair<QString, CFBaseModule*> >::iterator iter =
         std::find_if(mms.begin(), mms.end(), module_predicate(module));

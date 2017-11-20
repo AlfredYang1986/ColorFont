@@ -4,6 +4,7 @@
 #include "../basemodules/cfbasemodule.h"
 //#include <ft2build.h>
 //#include FT_FREETYPE_H
+#include "common/funcargs/cfargs.h"
 
 /**
  * @brief The CFFftOpt class
@@ -21,10 +22,12 @@ public:
     ~CFFftOpt();
 
 public:
-    void loadTTFFile(const QString& path);
+    CFFuncResults loadTTFFile(const CFFuncArguments& args);
 
     void loadImage(const QString& path, int index = 0);
     void loadStroke(const QString& path, int index = 0);
+
+    friend class CFModuleManagement;
 };
 
 #endif // CFFFTOPT_H

@@ -32,6 +32,7 @@ void CFResentCharDock::setupUi() {
     layout->addWidget(tab);
 
     view->setLayout(layout);
+    view->setMinimumWidth(300);
 }
 
 void CFResentCharDock::setupFlag() {

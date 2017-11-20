@@ -37,7 +37,10 @@ SOURCES += main.cpp\
     dockwidget/borderwidget/cfborderwidget.cpp \
     dockwidget/preparedwidget/cfpreparedwidget.cpp \
     dockwidget/cfresentchardock.cpp \
-    operatorwidget/cfoperatorwidget.cpp
+    operatorwidget/cfoperatorwidget.cpp \
+    common/cfpassable.cpp \
+    common/funcargs/cfargs.cpp \
+    operatorwidget/cfoperatortab.cpp
 
 HEADERS  += \
 		glm/detail/_features.hpp \
@@ -207,7 +210,10 @@ HEADERS  += \
     dockwidget/borderwidget/cfborderwidget.h \
     dockwidget/preparedwidget/cfpreparedwidget.h \
     dockwidget/cfresentchardock.h \
-    operatorwidget/cfoperatorwidget.h
+    operatorwidget/cfoperatorwidget.h \
+    common/cfpassable.h \
+    common/funcargs/cfargs.h \
+    operatorwidget/cfoperatortab.h
 
 FORMS    += cfmainwindow.ui
 

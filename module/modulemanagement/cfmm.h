@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QMap>
+#include "../../common/funcargs/cfargs.h"
 
 class CFBaseModule;
 
@@ -14,7 +15,7 @@ protected:
     explicit CFModuleManagement();
 
 public:
-    static const CFModuleManagement* queryInstance();
+    static CFModuleManagement* queryInstance();
     ~CFModuleManagement();
 
 public:
@@ -22,10 +23,11 @@ public:
     void destoryCFModules();
 
     CFBaseModule* queryModuleInstance() const;
-    const QMap<QString, QObject>*
+
+    CFFuncResults
     pushMessage(const QString& module,
                 const QString& method,
-                const QMap<QString, QObject>* const args);
+                const CFFuncArguments& args);
 
 private:
     static CFModuleManagement* instance;
