@@ -9,6 +9,7 @@
 #include <QFileDialog>
 #include "common/funcargs/cfargs.h"
 #include "module/modulemanagement/cfmm.h"
+#include "dialog/importdialog/cfimportttfdialog.h"
 
 #include <QDebug>
 
@@ -65,9 +66,10 @@ void CFMainWindow::on_actionSave_triggered() {
 }
 
 void CFMainWindow::on_actionImportTTF_triggered() {
-    QString file_name = QFileDialog::getOpenFileName(
+    QString file_name =
+            QFileDialog::getOpenFileName(
                 this,
-                tr("Open File"),
+                tr("Open TTF File"),
                 "",
                 "",
                 0);
@@ -82,7 +84,16 @@ void CFMainWindow::on_actionImportTTF_triggered() {
         CFFuncResults reVal =
             cfmm->pushMessage("fft", "load", args);
 
-        qDebug() << "";
+        if (reVal.isOk()) {
+            // TODO: show import dialog
+
+
+        } else {
+            qDebug() << "load fft error"
+                     << "error is "
+                     << reVal.getLastError().error_code
+                     << reVal.getLastError().error_message;
+        }
 
     } else {
         // 用户取消，什么都不做

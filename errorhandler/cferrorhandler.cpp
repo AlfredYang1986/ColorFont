@@ -13,7 +13,11 @@ const CFErrorHandler* CFErrorHandler::queryInstance() {
 }
 
 CFErrorHandler::CFErrorHandler() {
-
+    errors = {
+        CFError(0, "No Error"),
+        CFError(1, "File not Exist"),
+        CFError(2, "Unknown error")
+    };
 }
 
 class error_predicate {

@@ -4,7 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT  += core gui
+QT 	+= opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -40,7 +41,10 @@ SOURCES += main.cpp\
     operatorwidget/cfoperatorwidget.cpp \
     common/cfpassable.cpp \
     common/funcargs/cfargs.cpp \
-    operatorwidget/cfoperatortab.cpp
+    operatorwidget/cfoperatortab.cpp \
+    dialog/importdialog/cfimportttfdialog.cpp \
+    dialog/importdialog/cfimportindexcell.cpp \
+    dialog/previewwidget/cfpreviewwidget.cpp
 
 HEADERS  += \
 		glm/detail/_features.hpp \
@@ -213,7 +217,10 @@ HEADERS  += \
     operatorwidget/cfoperatorwidget.h \
     common/cfpassable.h \
     common/funcargs/cfargs.h \
-    operatorwidget/cfoperatortab.h
+    operatorwidget/cfoperatortab.h \
+    dialog/importdialog/cfimportttfdialog.h \
+    dialog/importdialog/cfimportindexcell.h \
+    dialog/previewwidget/cfpreviewwidget.h
 
 FORMS    += cfmainwindow.ui
 

@@ -5,6 +5,9 @@
 
 class CFError : public QException {
 public:
+    CFError(int ec, const QString& str)
+        : error_code(ec), error_message(str) {}
+
     int error_code;
     QString error_message;
 };
