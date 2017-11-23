@@ -24,6 +24,10 @@ CFPreviewWidget::CFPreviewWidget(
 CFPreviewWidget::~CFPreviewWidget() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+    glDeleteTextures(1, &(character.TextureID));
+
+    if (program)
+        delete program;
 }
 
 void CFPreviewWidget::initializeGL() {
@@ -32,7 +36,10 @@ void CFPreviewWidget::initializeGL() {
     CFModuleManagement* cfmm =
         CFModuleManagement::queryInstance();
 
-    cfmm->pushMessage(OPENGL_MODULE, INIT_GL, CFFuncArguments());
+    CFFuncResults reVal =
+        cfmm->pushMessage(OPENGL_MODULE, INIT_GL, CFFuncArguments());
+
+    program = reVal.getV("program").value<QOpenGLShaderProgram*>();
 
     // Configure VAO/VBO for texture quads
     glGenVertexArrays(1, &VAO);
@@ -53,36 +60,37 @@ void CFPreviewWidget::resizeGL(int width, int height) {
     GLfloat x = GLfloat(width) / height;
     glFrustum(-x, x, -1.0, 1.0, 4.0, 15.0);
     glMatrixMode(GL_MODELVIEW);
+
+    {
+        FT_Face face = pc;
+
+        CFFuncArguments args;
+
+        {
+            QVariant v;
+            v.setValue(face);
+            args.pushV("face", v);
+        }
+
+        {
+            QVariant v;
+            v.setValue('f');
+            args.pushV("char", v);
+        }
+
+        CFModuleManagement* cfmm =
+            CFModuleManagement::queryInstance();
+
+        CFFuncResults result =
+            cfmm->pushMessage(OPENGL_MODULE, LOAD_FROM_GLYPH, args);
+
+        character = result.getV("character").value<Character>();
+    }
 }
 
 void CFPreviewWidget::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    FT_Face face = pc;
-
-    CFFuncArguments args;
-
-    {
-        QVariant v;
-        v.setValue(face);
-        args.pushV("face", v);
-    }
-
-    {
-        QVariant v;
-        v.setValue('f');
-        args.pushV("char", v);
-    }
-
-    CFModuleManagement* cfmm =
-        CFModuleManagement::queryInstance();
-
-    CFFuncResults result =
-        cfmm->pushMessage(OPENGL_MODULE, LOAD_FROM_GLYPH, args);
-
-    Character c = result.getV("character").value<Character>();
-
-    draw(c);
-    glDeleteTextures(1, &c.TextureID);
+    draw(character);
 }
 
 void CFPreviewWidget::draw(Character ch) {
@@ -106,6 +114,13 @@ void CFPreviewWidget::draw(Character ch) {
         v.setValue(ch);
         args.pushV("character", v);
     }
+
+    {
+        QVariant v;
+        v.setValue(program);
+        args.pushV("program", v);
+    }
+
 
     CFModuleManagement* cfmm =
         CFModuleManagement::queryInstance();

@@ -15,11 +15,13 @@ struct Character {
     glm::ivec2 Size;       // Size of glyph
     glm::ivec2 Bearing;    // Offset from baseline to left/top of glyph
     GLuint 	   Advance;    // Offset to advance to next glyph
+//    GLuint 	   Height;     // Offset to next line
 };
 
 Q_DECLARE_METATYPE(Character)
 Q_DECLARE_METATYPE(QGLContext*)
 Q_DECLARE_METATYPE(FT_Face)
+Q_DECLARE_METATYPE(QOpenGLShaderProgram*)
 
 class CFFuncArguments : public CFPassable {};
 

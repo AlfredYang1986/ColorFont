@@ -21,15 +21,18 @@ void CFImportIndexCell::setupUi() {
 
     QVBoxLayout* layout = new QVBoxLayout();
 
-    CFModuleManagement* cfmm =
-            CFModuleManagement::queryInstance();
-    CFFuncResults result = cfmm->pushMessage(OPENGL_MODULE, QUERY_GL_CONTEXT, CFFuncArguments());
-    QGLContext* context = result.getV("context").value<QGLContext*>();
+//    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+//    CFFuncResults result = cfmm->pushMessage(OPENGL_MODULE, QUERY_GL_CONTEXT, CFFuncArguments());
+//    QGLContext* context = result.getV("context").value<QGLContext*>();
+
+    QGLFormat qglFormat(QGL::DoubleBuffer | QGL::DepthBuffer);
+    qglFormat.setVersion(4, 2);
+    qglFormat.setProfile(QGLFormat::CoreProfile);
+    qglFormat.setSampleBuffers(true);
+    QGLContext* context = new QGLContext(qglFormat);
 
     CFPreviewWidget* w = new CFPreviewWidget(pc, context);
-//    QWidget* w = new QWidget();
     w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-//    w->setFixedSize(100, 100);
     layout->addWidget(w);
 
     QLineEdit* edit = new QLineEdit();

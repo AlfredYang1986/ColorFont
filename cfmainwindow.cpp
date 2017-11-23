@@ -84,7 +84,7 @@ void CFMainWindow::on_actionImportTTF_triggered() {
             qDebug() << "load fft good";
             FT_Face c = reVal.getV("character").value<FT_Face>();
             CFImportTTFDialog dialog(c, this);
-            dialog.resize(500, 500);
+            dialog.resize(1000, 500);
             dialog.exec();
             qDebug() << "close dialog";
 

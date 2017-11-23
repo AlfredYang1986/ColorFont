@@ -3,6 +3,9 @@
 #include "../modulemanagement/cfmm.h"
 #include <QGLContext>
 
+const GLfloat DEFAULT_WIDTH = 100.f;
+const GLfloat DEFAULT_HEIGHT = 100.f;
+
 static const char *vertexShaderSourceCore =
     "#version 410\n"
     "layout (location = 0) in vec4 vertex; // <vec2 pos, vec2 tex> \n"
@@ -73,33 +76,31 @@ init_gl(const CFFuncArguments&) {
     CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
     CFOpenGLOpt* module = (CFOpenGLOpt*)(cfmm->queryModuleInstance(OPENGL_MODULE));
 
-    if (!module->hasInit()) {
-        qDebug() << "OpenGL Versions Supported: " << QGLFormat::openGLVersionFlags() << "\n";
-        printf("version: %s\n", (char*)glGetString(GL_VERSION));
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
 
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
+    glShadeModel(GL_FLAT); 	// 设置阴影平滑模式
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
 
-        glShadeModel(GL_FLAT); 	// 设置阴影平滑模式
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_CULL_FACE);
-
-        module->program = new QOpenGLShaderProgram;
-        module->program->addShaderFromSourceCode(
+    QOpenGLShaderProgram * program = new QOpenGLShaderProgram;
+    program->addShaderFromSourceCode(
                             QOpenGLShader::Vertex, vertexShaderSourceCore);
-        module->program->addShaderFromSourceCode(
+    program->addShaderFromSourceCode(
                             QOpenGLShader::Fragment, fragmentShaderSourceCore);
 
-        module->program->link();
-        module->program->bind();
+    program->link();
+    program->bind();
 
-        glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
-        glUniformMatrix4fv(glGetUniformLocation(module->program->programId(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    glm::mat4 projection = glm::ortho(0.0f, DEFAULT_WIDTH, 0.0f, DEFAULT_HEIGHT);
+    glUniformMatrix4fv(glGetUniformLocation(program->programId(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-        module->inited();
-    }
+    QVariant v;
+    v.setValue(program);
+    CFFuncResults result;
+    result.pushV("program", v);
 
-    return CFFuncResults();
+    return result;
 }
 
 CFFuncResults
@@ -156,6 +157,8 @@ texture_from_glyph(const CFFuncArguments& args) {
         (GLuint)(face->glyph->advance.x)
     };
 
+    qDebug() << "c ad is " << c.Advance;
+
     CFFuncResults result;
     QVariant v;
     v.setValue(c);
@@ -168,18 +171,16 @@ draw_glyph(const CFFuncArguments& args) {
     GLuint VAO = args.getV("VAO").value<GLuint>();
     GLuint VBO = args.getV("VBO").value<GLuint>();
     Character ch = args.getV("character").value<Character>();
+    QOpenGLShaderProgram* program = args.getV("program").value<QOpenGLShaderProgram*>();
 
-    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
-    CFOpenGLOpt* module = (CFOpenGLOpt*)(cfmm->queryModuleInstance(OPENGL_MODULE));
-
-    glUniform3f(glGetUniformLocation(module->program->programId(), "textColor"), 1.0, 0.0, 0.0);
+    glUniform3f(glGetUniformLocation(program->programId(), "textColor"), 1.0, 0.0, 0.0);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 
-    GLfloat scale = 10.0f;
-
-    GLfloat xpos = 100.0 + ch.Bearing.x * scale;
-    GLfloat ypos = 100.0 - (ch.Size.y - ch.Bearing.y) * scale;
+    GLfloat scale = 1.0f;
+    GLfloat ad = (ch.Advance >> 6) * scale;
+    GLfloat xpos = DEFAULT_WIDTH / 2 + ch.Bearing.x * scale - ad / 2;
+    GLfloat ypos = DEFAULT_HEIGHT / 2 - (ch.Size.y - ch.Bearing.y) * scale - ad / 2;
 
     GLfloat w = ch.Size.x * scale;
     GLfloat h = ch.Size.y * scale;

@@ -28,7 +28,7 @@ private:
 
 private:
     GLuint VAO, VBO;
-
+    QOpenGLShaderProgram * program;
     Character character;
     FT_Face pc;
 };
