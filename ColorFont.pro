@@ -44,7 +44,8 @@ SOURCES += main.cpp\
     operatorwidget/cfoperatortab.cpp \
     dialog/importdialog/cfimportttfdialog.cpp \
     dialog/importdialog/cfimportindexcell.cpp \
-    dialog/previewwidget/cfpreviewwidget.cpp
+    dialog/previewwidget/cfpreviewwidget.cpp \
+    module/openglopt/cfopenglopt.cpp
 
 HEADERS  += \
 		glm/detail/_features.hpp \
@@ -220,7 +221,8 @@ HEADERS  += \
     operatorwidget/cfoperatortab.h \
     dialog/importdialog/cfimportttfdialog.h \
     dialog/importdialog/cfimportindexcell.h \
-    dialog/previewwidget/cfpreviewwidget.h
+    dialog/previewwidget/cfpreviewwidget.h \
+    module/openglopt/cfopenglopt.h
 
 FORMS    += cfmainwindow.ui
 

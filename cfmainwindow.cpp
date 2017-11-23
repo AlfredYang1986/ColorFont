@@ -68,11 +68,7 @@ void CFMainWindow::on_actionSave_triggered() {
 void CFMainWindow::on_actionImportTTF_triggered() {
     QString file_name =
             QFileDialog::getOpenFileName(
-                this,
-                tr("Open TTF File"),
-                "",
-                "",
-                0);
+                this, tr("Open TTF File"), "", "", 0);
 
     if (!file_name.isNull()) {
         CFFuncArguments args;
@@ -82,11 +78,15 @@ void CFMainWindow::on_actionImportTTF_triggered() {
             CFModuleManagement::queryInstance();
 
         CFFuncResults reVal =
-            cfmm->pushMessage("fft", "load", args);
+            cfmm->pushMessage(FFT_MODULE, FFT_LOAD_FILE, args);
 
         if (reVal.isOk()) {
-            // TODO: show import dialog
-
+            qDebug() << "load fft good";
+            FT_Face c = reVal.getV("character").value<FT_Face>();
+            CFImportTTFDialog dialog(c, this);
+            dialog.resize(500, 500);
+            dialog.exec();
+            qDebug() << "close dialog";
 
         } else {
             qDebug() << "load fft error"

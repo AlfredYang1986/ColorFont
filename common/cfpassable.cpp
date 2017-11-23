@@ -1,4 +1,5 @@
 #include "cfpassable.h"
+#include <QDebug>
 
 class key_perdicate {
 
@@ -18,9 +19,9 @@ CFPassable::getV(const QString& name) const {
     QList<std::pair<QString, QVariant> >::const_iterator citer =
             std::find_if(content.begin(), content.end(), key_perdicate(name));
 
-    if (citer == content.end()) {
-        return QVariant();
-    } else (*citer).second;
+    if (citer != content.end())
+        return (*citer).second;
+    else return QVariant();
 }
 
 void

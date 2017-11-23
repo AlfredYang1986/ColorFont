@@ -5,6 +5,16 @@
 #include <QMap>
 #include "../../common/funcargs/cfargs.h"
 
+static const QString FFT_MODULE = "fft";
+static const QString FFT_LOAD_FILE = "load";
+
+static const QString OPENGL_MODULE = "opengl";
+static const QString INIT_GL = "Init GL";
+static const QString QUERY_GL_CONTEXT = "query gl context";
+static const QString RELEASE_TEXTURE = "release texture";
+static const QString LOAD_FROM_GLYPH = "load from glyph";
+static const QString DRAW_GLYPH = "draw glyph";
+
 class CFBaseModule;
 
 class CFModuleManagement : public QObject {
@@ -22,7 +32,7 @@ public:
     void initCFModules();
     void destoryCFModules();
 
-    CFBaseModule* queryModuleInstance() const;
+    CFBaseModule* queryModuleInstance(const QString& module) const;
 
     CFFuncResults
     pushMessage(const QString& module,

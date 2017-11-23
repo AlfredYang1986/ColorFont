@@ -2,22 +2,28 @@
 #define CFIMPORTTTFDIALOG_H
 
 #include <QDialog>
+#include "../../common/funcargs/cfargs.h"
 
 class QWidget;
+class QTableWidget;
 
 class CFImportTTFDialog : public QDialog {
 
     Q_OBJECT
 
 public:
-    explicit CFImportTTFDialog(QWidget* parent);
+    explicit CFImportTTFDialog(
+            FT_Face face,
+            QWidget* parent = 0);
     ~CFImportTTFDialog();
 
 protected:
     void setupUi();
 
 private:
+    QTableWidget* table;
 
+    FT_Face pc;
 };
 
 

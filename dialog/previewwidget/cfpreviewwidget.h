@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QtOpenGL>
 #include <glm/glm.hpp>
+#include "../../common/funcargs/cfargs.h"
 
 QT_FORWARD_DECLARE_CLASS(QOpenGLShaderProgram)
 
@@ -12,11 +13,10 @@ class CFPreviewWidget : public QGLWidget {
     Q_OBJECT
 
 public:
-    explicit CFPreviewWidget(QGLContext* context,
-                             QWidget* parent);
+    explicit CFPreviewWidget(FT_Face pc,
+                             QGLContext* context,
+                             QWidget* parent = 0);
     ~CFPreviewWidget();
-
-//    void
 
 protected:
     void initializeGL();
@@ -24,11 +24,13 @@ protected:
     void paintGL();
 
 private:
-    void draw();
+    void draw(Character ch);
 
 private:
-    QOpenGLShaderProgram* program;
     GLuint VAO, VBO;
+
+    Character character;
+    FT_Face pc;
 };
 
 #endif // CFPREVIEWWIDGET_H

@@ -7,67 +7,32 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
+#include "../../common/funcargs/cfargs.h"
+#include "../../module/modulemanagement/cfmm.h"
+#include "../../module/openglopt/cfopenglopt.h"
 #include <QDebug>
 
-static const char *vertexShaderSourceCore =
-    "#version 410\n"
-    "layout (location = 0) in vec4 vertex; // <vec2 pos, vec2 tex> \n"
-    "out vec2 TexCoords;\n"
-    "uniform mat4 projection;\n"
-    "void main() {\n"
-    "	gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);\n"
-    "	TexCoords = vertex.zw;\n"
-    "}\n";
+CFPreviewWidget::CFPreviewWidget(
+        FT_Face p,
+        QGLContext* context,
+        QWidget* parent)
 
-static const char *fragmentShaderSourceCore =
-    "#version 410\n"
-    "in vec2 TexCoords;\n"
-    "out vec4 color;\n"
-    "uniform sampler2D text;\n"
-    "uniform vec3 textColor;\n"
-    "void main() {\n"
-    "	vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);\n"
-    "	color = vec4(textColor, 1.0) * sampled;\n"
-    "}\n";
+    : QGLWidget(context, parent), pc(p) {
 
-CFPreviewWidget::CFPreviewWidget(QGLContext *context, QWidget *parent)
-    : QGLWidget(context, parent) {
-
-    QGLFormat qglFormat(QGL::DoubleBuffer | QGL::DepthBuffer);
-    qglFormat.setVersion(4, 2);
-    qglFormat.setProfile(QGLFormat::CoreProfile);
-    qglFormat.setSampleBuffers(true);
-
-    setFormat(qglFormat);
 }
 
 CFPreviewWidget::~CFPreviewWidget() {
-
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
 }
 
 void CFPreviewWidget::initializeGL() {
-    qDebug() << "OpenGL Versions Supported: " << QGLFormat::openGLVersionFlags() << "\n";
-    printf("version: %s\n", (char*)glGetString(GL_VERSION));
     qglClearColor(Qt::black);
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
+    CFModuleManagement* cfmm =
+        CFModuleManagement::queryInstance();
 
-    glShadeModel(GL_FLAT); 	// 设置阴影平滑模式
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-
-    program = new QOpenGLShaderProgram;
-    program->addShaderFromSourceCode(
-                QOpenGLShader::Vertex, vertexShaderSourceCore);
-    program->addShaderFromSourceCode(
-                QOpenGLShader::Fragment, vertexShaderSourceCore);
-
-    program->link();
-    program->bind();
-
-    glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
-    glUniformMatrix4fv(glGetUniformLocation(program->programId(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    cfmm->pushMessage(OPENGL_MODULE, INIT_GL, CFFuncArguments());
 
     // Configure VAO/VBO for texture quads
     glGenVertexArrays(1, &VAO);
@@ -92,6 +57,59 @@ void CFPreviewWidget::resizeGL(int width, int height) {
 
 void CFPreviewWidget::paintGL() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//    draw();
+    FT_Face face = pc;
+
+    CFFuncArguments args;
+
+    {
+        QVariant v;
+        v.setValue(face);
+        args.pushV("face", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue('f');
+        args.pushV("char", v);
+    }
+
+    CFModuleManagement* cfmm =
+        CFModuleManagement::queryInstance();
+
+    CFFuncResults result =
+        cfmm->pushMessage(OPENGL_MODULE, LOAD_FROM_GLYPH, args);
+
+    Character c = result.getV("character").value<Character>();
+
+    draw(c);
+    glDeleteTextures(1, &c.TextureID);
+}
+
+void CFPreviewWidget::draw(Character ch) {
+
+    CFFuncArguments args;
+
+    {
+        QVariant v;
+        v.setValue(VAO);
+        args.pushV("VAO", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue(VBO);
+        args.pushV("VBO", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue(ch);
+        args.pushV("character", v);
+    }
+
+    CFModuleManagement* cfmm =
+        CFModuleManagement::queryInstance();
+
+    cfmm->pushMessage(OPENGL_MODULE, DRAW_GLYPH, args);
 }
 

@@ -4,6 +4,7 @@
 #include <QException>
 #include "../fileopt/cffileopt.h"
 #include "../fftopt/cffftopt.h"
+#include "../openglopt/cfopenglopt.h"
 using namespace std;
 
 CFModuleManagement* CFModuleManagement::instance = NULL;
@@ -28,16 +29,13 @@ CFModuleManagement::~CFModuleManagement() {
 void CFModuleManagement::initCFModules() {
     mms = {
         std::make_pair("file", new CFFileOpt()),
-        std::make_pair("fft", new CFFftOpt())
+        std::make_pair(FFT_MODULE, new CFFftOpt()),
+        std::make_pair(OPENGL_MODULE, new CFOpenGLOpt())
     };
 }
 
 void CFModuleManagement::destoryCFModules() {
 
-}
-
-CFBaseModule* CFModuleManagement::queryModuleInstance() const {
-    return NULL;
 }
 
 class module_predicate {
@@ -51,6 +49,21 @@ public:
 private:
     QString _pred;
 };
+
+CFBaseModule*
+CFModuleManagement::queryModuleInstance(const QString& module) const {
+
+    QList<std::pair<QString, CFBaseModule*> >::const_iterator iter =
+        std::find_if(mms.begin(), mms.end(), module_predicate(module));
+
+    if (iter != mms.end()) {
+        return iter->second;
+
+    } else {
+        // TODO: 出现错误写法
+        exit(1);
+    }
+}
 
 CFFuncResults
 CFModuleManagement::pushMessage(const QString& module,
