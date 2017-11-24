@@ -14,10 +14,11 @@
 
 CFPreviewWidget::CFPreviewWidget(
         FT_Face p,
+        FT_ULong ccd,
         QGLContext* context,
         QWidget* parent)
 
-    : QGLWidget(context, parent), pc(p) {
+    : QGLWidget(context, parent), pc(p), charcode(ccd) {
 
 }
 
@@ -31,7 +32,8 @@ CFPreviewWidget::~CFPreviewWidget() {
 }
 
 void CFPreviewWidget::initializeGL() {
-    qglClearColor(Qt::black);
+    qglClearColor(Qt::gray);
+    makeCurrent();
 
     CFModuleManagement* cfmm =
         CFModuleManagement::queryInstance();
@@ -54,6 +56,7 @@ void CFPreviewWidget::initializeGL() {
 }
 
 void CFPreviewWidget::resizeGL(int width, int height) {
+    makeCurrent();
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -74,23 +77,22 @@ void CFPreviewWidget::resizeGL(int width, int height) {
 
         {
             QVariant v;
-            v.setValue('f');
-            args.pushV("char", v);
+            v.setValue(charcode);
+            args.pushV("charcode", v);
         }
 
-        CFModuleManagement* cfmm =
-            CFModuleManagement::queryInstance();
+        CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
 
-        CFFuncResults result =
-            cfmm->pushMessage(OPENGL_MODULE, LOAD_FROM_GLYPH, args);
-
+        CFFuncResults result = cfmm->pushMessage(OPENGL_MODULE, LOAD_FROM_GLYPH, args);
         character = result.getV("character").value<Character>();
     }
 }
 
 void CFPreviewWidget::paintGL() {
+    makeCurrent();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    draw(character);
+    if (charcode > 0)
+        draw(character);
 }
 
 void CFPreviewWidget::draw(Character ch) {
@@ -122,9 +124,36 @@ void CFPreviewWidget::draw(Character ch) {
     }
 
 
-    CFModuleManagement* cfmm =
-        CFModuleManagement::queryInstance();
-
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
     cfmm->pushMessage(OPENGL_MODULE, DRAW_GLYPH, args);
 }
 
+void CFPreviewWidget::resetCharcode(FT_ULong code) {
+    makeCurrent();
+    charcode = code;
+    {
+        FT_Face face = pc;
+
+        CFFuncArguments args;
+
+        {
+            QVariant v;
+            v.setValue(face);
+            args.pushV("face", v);
+        }
+
+        {
+            QVariant v;
+            v.setValue(charcode);
+            args.pushV("charcode", v);
+        }
+
+        CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+        CFFuncResults result = cfmm->pushMessage(OPENGL_MODULE, LOAD_FROM_GLYPH, args);
+        character = result.getV("character").value<Character>();
+    }
+}
+
+void CFPreviewWidget::repaintOpenGL() {
+    this->updateGL();
+}

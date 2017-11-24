@@ -3,6 +3,9 @@
 #include "../modulemanagement/cfmm.h"
 #include <QGLContext>
 
+//#include <ft2build.h>
+//#include FT_FREETYPE_H
+
 const GLfloat DEFAULT_WIDTH = 100.f;
 const GLfloat DEFAULT_HEIGHT = 100.f;
 
@@ -73,8 +76,8 @@ QGLContext* CFOpenGLOpt::systemGLContext() const {
 
 CFFuncResults
 init_gl(const CFFuncArguments&) {
-    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
-    CFOpenGLOpt* module = (CFOpenGLOpt*)(cfmm->queryModuleInstance(OPENGL_MODULE));
+//    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+//    CFOpenGLOpt* module = (CFOpenGLOpt*)(cfmm->queryModuleInstance(OPENGL_MODULE));
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
@@ -119,10 +122,15 @@ query_gl_context(const CFFuncArguments&) {
 CFFuncResults
 texture_from_glyph(const CFFuncArguments& args) {
     FT_Face face = args.getV("face").value<FT_Face>();
-    char cr = args.getV("char").toChar().toLatin1();
+    FT_ULong charcode = args.getV("charcode").value<FT_ULong>();
 
-    if (FT_Load_Char(face, (FT_ULong)cr, FT_LOAD_RENDER))
+    FT_Set_Pixel_Sizes(face, 0, 60);
+
+//    FT_Set_Char_Size(face, 0, 12<<6, 300, 300);
+
+    if (FT_Load_Glyph(face, charcode, FT_LOAD_RENDER)) {
         qDebug() << "ERROR::FREETYTPE: Failed to load Glyph";
+    }
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
 
@@ -149,6 +157,8 @@ texture_from_glyph(const CFFuncArguments& args) {
 
     glBindTexture(GL_TEXTURE_2D, 0);
 
+    qDebug() << "test : " << texture;
+
     // Now store character for later use
     Character c {
         texture,
@@ -156,8 +166,6 @@ texture_from_glyph(const CFFuncArguments& args) {
         glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
         (GLuint)(face->glyph->advance.x)
     };
-
-    qDebug() << "c ad is " << c.Advance;
 
     CFFuncResults result;
     QVariant v;
@@ -173,7 +181,7 @@ draw_glyph(const CFFuncArguments& args) {
     Character ch = args.getV("character").value<Character>();
     QOpenGLShaderProgram* program = args.getV("program").value<QOpenGLShaderProgram*>();
 
-    glUniform3f(glGetUniformLocation(program->programId(), "textColor"), 1.0, 0.0, 0.0);
+    glUniform3f(glGetUniformLocation(program->programId(), "textColor"), 1.0, 1.0, 1.0);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 

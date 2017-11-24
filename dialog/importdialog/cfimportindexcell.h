@@ -15,18 +15,21 @@ class CFImportIndexCell : public QWidget {
 public:
     explicit CFImportIndexCell(
             FT_Face p,
+            FT_ULong ccd,
             QWidget* parent = 0);
     ~CFImportIndexCell();
 
+    void resetCharcode(FT_ULong code);
+    void repaintOpenGL();
 protected:
     void setupUi();
     QSize sizeHint() const;
 
 private:
     QLineEdit* edit;
-    CFPreviewWidget* widget;
-
+    CFPreviewWidget* w;
     FT_Face pc;
+    FT_ULong charcode;
 };
 
 #endif // CFIMPORTINDEXCELL_H

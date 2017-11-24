@@ -14,9 +14,13 @@ class CFPreviewWidget : public QGLWidget {
 
 public:
     explicit CFPreviewWidget(FT_Face pc,
+                             FT_ULong ccd,
                              QGLContext* context,
                              QWidget* parent = 0);
     ~CFPreviewWidget();
+
+    void resetCharcode(FT_ULong code);
+    void repaintOpenGL();
 
 protected:
     void initializeGL();
@@ -31,6 +35,7 @@ private:
     QOpenGLShaderProgram * program;
     Character character;
     FT_Face pc;
+    FT_ULong charcode;
 };
 
 #endif // CFPREVIEWWIDGET_H

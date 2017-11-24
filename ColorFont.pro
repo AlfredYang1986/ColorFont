@@ -45,7 +45,8 @@ SOURCES += main.cpp\
     dialog/importdialog/cfimportttfdialog.cpp \
     dialog/importdialog/cfimportindexcell.cpp \
     dialog/previewwidget/cfpreviewwidget.cpp \
-    module/openglopt/cfopenglopt.cpp
+    module/openglopt/cfopenglopt.cpp \
+    common/pagewidget/PageWidget.cpp
 
 HEADERS  += \
 		glm/detail/_features.hpp \
@@ -222,9 +223,11 @@ HEADERS  += \
     dialog/importdialog/cfimportttfdialog.h \
     dialog/importdialog/cfimportindexcell.h \
     dialog/previewwidget/cfpreviewwidget.h \
-    module/openglopt/cfopenglopt.h
+    module/openglopt/cfopenglopt.h \
+    common/pagewidget/PageWidget.h
 
-FORMS    += cfmainwindow.ui
+FORMS    += cfmainwindow.ui \
+    common/pagewidget/PageWidget.ui
 
 mac {
 
