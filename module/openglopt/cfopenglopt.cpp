@@ -25,9 +25,31 @@ static const char *fragmentShaderSourceCore =
     "out vec4 color;\n"
     "uniform sampler2D text;\n"
     "uniform vec3 textColor;\n"
+    "uniform vec3 bkColor;\n"
     "void main() {\n"
-    "	vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);\n"
-    "	color = vec4(textColor, 1.0) * sampled;\n"
+    "	float tmp = texture(text, TexCoords).r;\n"
+    "	if (tmp > 0.6) {\n"
+    "		vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);\n"
+    "		color = vec4(textColor, 1.0) * sampled ;\n"
+    "	} else { \n"
+    "		color = vec4(bkColor, 1.0);\n"
+    "	}"
+    "}\n";
+
+static const char *vertexBackgroundShaderSourceCore =
+    "#version 410\n"
+    "layout (location = 0) in vec2 vertex; // <vec2 pos, vec2 tex> \n"
+    "uniform mat4 projection;\n"
+    "void main() {\n"
+    "	gl_Position = projection * vec4(vertex.xy, 0.1, 1.0);\n"
+    "}\n";
+
+static const char *fragmentBackgroundShaderSourceCore =
+    "#version 410\n"
+    "out vec4 color;\n"
+    "uniform vec3 textColor;\n"
+    "void main() {\n"
+    "	color = vec4(textColor, 1.0);\n"
     "}\n";
 
 CFFuncResults
@@ -39,6 +61,8 @@ texture_from_glyph(const CFFuncArguments& args);
 CFFuncResults
 draw_glyph(const CFFuncArguments& args);
 CFFuncResults
+fill_background(const CFFuncArguments& args);
+CFFuncResults
 release_texture(const CFFuncArguments& args);
 
 CFOpenGLOpt::CFOpenGLOpt()
@@ -48,14 +72,9 @@ CFOpenGLOpt::CFOpenGLOpt()
         std::make_pair(QUERY_GL_CONTEXT, &query_gl_context),
         std::make_pair(RELEASE_TEXTURE, &release_texture),
         std::make_pair(LOAD_FROM_GLYPH, &texture_from_glyph),
-        std::make_pair(DRAW_GLYPH, &draw_glyph)
+        std::make_pair(DRAW_GLYPH, &draw_glyph),
+        std::make_pair(DRAW_BACKGROUND, &fill_background)
     };
-
-    QGLFormat qglFormat(QGL::DoubleBuffer | QGL::DepthBuffer);
-    qglFormat.setVersion(4, 2);
-    qglFormat.setProfile(QGLFormat::CoreProfile);
-    qglFormat.setSampleBuffers(true);
-    context = new QGLContext(qglFormat);
 }
 
 CFOpenGLOpt::~CFOpenGLOpt() {
@@ -76,15 +95,21 @@ QGLContext* CFOpenGLOpt::systemGLContext() const {
 
 CFFuncResults
 init_gl(const CFFuncArguments&) {
-//    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
-//    CFOpenGLOpt* module = (CFOpenGLOpt*)(cfmm->queryModuleInstance(OPENGL_MODULE));
-
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
 
     glShadeModel(GL_FLAT); 	// 设置阴影平滑模式
     glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
     glEnable(GL_CULL_FACE);
+
+    glEnable(GL_ALPHA_TEST);
+
+    QOpenGLShaderProgram * program_bk = new QOpenGLShaderProgram;
+    program_bk->addShaderFromSourceCode(
+                            QOpenGLShader::Vertex, vertexBackgroundShaderSourceCore);
+    program_bk->addShaderFromSourceCode(
+                            QOpenGLShader::Fragment, fragmentBackgroundShaderSourceCore);
 
     QOpenGLShaderProgram * program = new QOpenGLShaderProgram;
     program->addShaderFromSourceCode(
@@ -92,16 +117,13 @@ init_gl(const CFFuncArguments&) {
     program->addShaderFromSourceCode(
                             QOpenGLShader::Fragment, fragmentShaderSourceCore);
 
-    program->link();
-    program->bind();
-
-    glm::mat4 projection = glm::ortho(0.0f, DEFAULT_WIDTH, 0.0f, DEFAULT_HEIGHT);
-    glUniformMatrix4fv(glGetUniformLocation(program->programId(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
     QVariant v;
     v.setValue(program);
+    QVariant v_bk;
+    v_bk.setValue(program_bk);
     CFFuncResults result;
     result.pushV("program", v);
+    result.pushV("program_bk", v_bk);
 
     return result;
 }
@@ -157,8 +179,6 @@ texture_from_glyph(const CFFuncArguments& args) {
 
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    qDebug() << "test : " << texture;
-
     // Now store character for later use
     Character c {
         texture,
@@ -181,7 +201,14 @@ draw_glyph(const CFFuncArguments& args) {
     Character ch = args.getV("character").value<Character>();
     QOpenGLShaderProgram* program = args.getV("program").value<QOpenGLShaderProgram*>();
 
-    glUniform3f(glGetUniformLocation(program->programId(), "textColor"), 1.0, 1.0, 1.0);
+    program->link();
+    program->bind();
+
+    glm::mat4 projection = glm::ortho(0.0f, DEFAULT_WIDTH, 0.0f, DEFAULT_HEIGHT);
+    glUniformMatrix4fv(glGetUniformLocation(program->programId(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+    glUniform3f(glGetUniformLocation(program->programId(), "textColor"), 0.0, 0.0, 0.0);
+    glUniform3f(glGetUniformLocation(program->programId(), "bkColor"), 1.0, 1.0, 1.0);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 
@@ -208,12 +235,55 @@ draw_glyph(const CFFuncArguments& args) {
     // Update content of VBO memory
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
     // Render quad
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
     glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    return CFFuncResults();
+}
+
+
+CFFuncResults
+fill_background(const CFFuncArguments& args) {
+    GLuint VAO = args.getV("VAO").value<GLuint>();
+    GLuint VBO = args.getV("VBO").value<GLuint>();
+    QOpenGLShaderProgram* program = args.getV("program").value<QOpenGLShaderProgram*>();
+
+    program->link();
+    program->bind();
+
+    glm::mat4 projection = glm::ortho(0.0f, DEFAULT_WIDTH, 0.0f, DEFAULT_HEIGHT);
+    glUniformMatrix4fv(glGetUniformLocation(program->programId(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    glUniform3f(glGetUniformLocation(program->programId(), "textColor"), 1.0, 1.0, 1.0);
+    glBindVertexArray(VAO);
+
+    GLfloat xpos = 0;
+    GLfloat ypos = 0;
+
+    GLfloat w = DEFAULT_WIDTH;
+    GLfloat h = DEFAULT_HEIGHT;
+    // Update VBO for each character
+    GLfloat vertices[6][2] = {
+        { xpos,     ypos + h },
+        { xpos,     ypos },
+        { xpos + w, ypos },
+
+        { xpos,     ypos + h },
+        { xpos + w, ypos },
+        { xpos + w, ypos + h }
+    };
+
+    // Update content of VBO memory
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+    // Render quad
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 
     return CFFuncResults();
 }

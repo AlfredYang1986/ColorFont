@@ -14,6 +14,7 @@ static const QString QUERY_GL_CONTEXT = "query gl context";
 static const QString RELEASE_TEXTURE = "release texture";
 static const QString LOAD_FROM_GLYPH = "load from glyph";
 static const QString DRAW_GLYPH = "draw glyph";
+static const QString DRAW_BACKGROUND = "draw background";
 
 class CFBaseModule;
 

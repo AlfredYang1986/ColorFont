@@ -9,6 +9,7 @@
 #include "../../common/pagewidget/PageWidget.h"
 
 const int PAGE_COUNT = 27;
+//const int PAGE_COUNT = 1;
 
 CFImportTTFDialog::CFImportTTFDialog(
         FT_Face p,

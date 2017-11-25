@@ -22,7 +22,6 @@ public:
     void inited();
     QGLContext* systemGLContext() const;
 
-    QOpenGLShaderProgram* program;
 private:
     bool _is_init;
     QGLContext* context;

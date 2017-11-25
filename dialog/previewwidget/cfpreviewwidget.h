@@ -28,11 +28,13 @@ protected:
     void paintGL();
 
 private:
+    void drawBackground();
     void draw(Character ch);
 
 private:
-    GLuint VAO, VBO;
+    GLuint VAO, VBO, VAO_BK, VBO_BK;
     QOpenGLShaderProgram * program;
+    QOpenGLShaderProgram * program_bk;
     Character character;
     FT_Face pc;
     FT_ULong charcode;
