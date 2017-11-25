@@ -66,16 +66,15 @@ void CFMainWindow::on_actionSave_triggered() {
 }
 
 void CFMainWindow::on_actionImportTTF_triggered() {
-    QString file_name =
-            QFileDialog::getOpenFileName(
-                this, tr("Open TTF File"), "", "", 0);
+    QString file_name = QFileDialog::getOpenFileName(this,
+                                                     tr("Open TTF File"),
+                                                     "", "", 0);
 
     if (!file_name.isNull()) {
         CFFuncArguments args;
         args.pushV("path", QVariant(file_name));
 
-        CFModuleManagement* cfmm =
-            CFModuleManagement::queryInstance();
+        CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
 
         CFFuncResults reVal =
             cfmm->pushMessage(FFT_MODULE, FFT_LOAD_FILE, args);

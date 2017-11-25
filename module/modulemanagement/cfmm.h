@@ -7,7 +7,8 @@
 
 static const QString FFT_MODULE = "fft";
 static const QString FFT_LOAD_FILE = "load";
-static const QString FFT_FREE_FACE = "free face";
+static const QString FFT_IMPORT_CHAR = "import char";
+static const QString FFT_IMPORT_SYMBOL = "import symbol";
 
 static const QString OPENGL_MODULE = "opengl";
 static const QString INIT_GL = "Init GL";

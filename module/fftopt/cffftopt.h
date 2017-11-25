@@ -22,12 +22,12 @@ public:
     ~CFFftOpt();
 
     FT_Library queryFaceLib();
-    const QVector<FT_Face>& queryOpenedFaces() const;
-    QVector<FT_Face>& queryOpenedFaces();
+    const QVector<std::pair<QString, FT_Face> >& queryOpenedFaces() const;
+    QVector<std::pair<QString, FT_Face> >& queryOpenedFaces();
 
 private:
     FT_Library ft;
-    QVector<FT_Face> faces;
+    QVector<std::pair<QString, FT_Face> > faces;
 
     friend class CFModuleManagement;
 };
