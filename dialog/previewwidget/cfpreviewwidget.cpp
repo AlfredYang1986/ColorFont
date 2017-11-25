@@ -22,7 +22,8 @@ CFPreviewWidget::CFPreviewWidget(
 
 }
 
-CFPreviewWidget::~CFPreviewWidget() {
+void CFPreviewWidget::releaseResources() {
+    makeCurrent();
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteVertexArrays(1, &VAO_BK);
@@ -31,6 +32,14 @@ CFPreviewWidget::~CFPreviewWidget() {
 
     if (program)
         delete program;
+
+    if (program_bk)
+        delete program_bk;
+
+}
+
+CFPreviewWidget::~CFPreviewWidget() {
+
 }
 
 void CFPreviewWidget::initializeGL() {

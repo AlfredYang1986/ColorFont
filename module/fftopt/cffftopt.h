@@ -22,16 +22,12 @@ public:
     ~CFFftOpt();
 
     FT_Library queryFaceLib();
-
-public:
-//    CFFuncResults loadTTFFile(const CFFuncArguments& args);
-
-    void loadImage(const QString& path, int index = 0);
-    void loadStroke(const QString& path, int index = 0);
+    const QVector<FT_Face>& queryOpenedFaces() const;
+    QVector<FT_Face>& queryOpenedFaces();
 
 private:
     FT_Library ft;
-    QList<FT_Face> faces;
+    QVector<FT_Face> faces;
 
     friend class CFModuleManagement;
 };

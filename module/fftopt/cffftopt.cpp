@@ -7,12 +7,12 @@
 #include <QDebug>
 
 CFFuncResults loadTTFFile(const CFFuncArguments& args);
-CFFuncResults load_glyph_in_file(const CFFuncArguments& args);
 CFFuncResults free_ttf_file(const CFFuncArguments& args);
 
 CFFftOpt::CFFftOpt() {
     funcs = {
-        std::make_pair(FFT_LOAD_FILE, &loadTTFFile)
+        std::make_pair(FFT_LOAD_FILE, &loadTTFFile),
+        std::make_pair(FFT_FREE_FACE, &free_ttf_file)
     };
 
     if (FT_Init_FreeType(&ft))
@@ -27,12 +27,12 @@ FT_Library CFFftOpt::queryFaceLib() {
     return ft;
 }
 
-void CFFftOpt::loadImage(const QString& path, int index) {
-
+const QVector<FT_Face>& CFFftOpt::queryOpenedFaces() const {
+    return faces;
 }
 
-void CFFftOpt::loadStroke(const QString& path, int index) {
-
+QVector<FT_Face>& CFFftOpt::queryOpenedFaces() {
+    return faces;
 }
 
 CFFuncResults
@@ -57,28 +57,28 @@ loadTTFFile(const CFFuncArguments& args) {
     qDebug() << "face num_charmaps :" << face->num_charmaps;
     qDebug() << "face num_fixed_sized:" << face->num_fixed_sizes;
 
-//    FT_Set_Pixel_Sizes(face, 0, 60);
-
-//    if (FT_Load_Char(face, 'f', FT_LOAD_RENDER))
-//    if (FT_Load_Glyph(face, 0, FT_LOAD_RENDER))
-//        qDebug() << "ERROR::FREETYTPE: Failed to load Glyph";
-
     CFFuncResults reVal;
     QVariant v(QVariant::UserType);
     v.setValue(face);
-    reVal.pushV("character", v);
+    reVal.pushV("face", v);
+
+    opt->queryOpenedFaces().push_back(face);
 
     return reVal;
 }
 
 CFFuncResults
-load_glyph_in_file(const CFFuncArguments& args) {
-
-}
-
-CFFuncResults
 free_ttf_file(const CFFuncArguments& args) {
-//    FT_Done_Face(face);
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    CFFftOpt* opt = (CFFftOpt*)cfmm->queryModuleInstance(FFT_MODULE);
+    QVector<FT_Face> faces = opt->queryOpenedFaces();
+    FT_Face face = args.getV("face").value<FT_Face>();
+    faces.erase(
+        std::remove_if(faces.begin(), faces.end(), std::bind1st(std::equal_to<FT_Face>(), face)),
+                faces.end());
+    FT_Done_Face(face);
+
+    return CFFuncResults();
 }
 
 

@@ -7,6 +7,7 @@
 #include "cfimportindexcell.h"
 #include "../../common/funcargs/cfargs.h"
 #include "../../common/pagewidget/PageWidget.h"
+#include "../../module/modulemanagement/cfmm.h"
 
 const int PAGE_COUNT = 27;
 //const int PAGE_COUNT = 1;
@@ -20,7 +21,13 @@ CFImportTTFDialog::CFImportTTFDialog(
 }
 
 CFImportTTFDialog::~CFImportTTFDialog() {
-    FT_Done_Face(pc);
+//    FT_Done_Face(pc);
+    CFFuncArguments args;
+    QVariant v;
+    v.setValue(pc);
+    args.pushV("face", v);
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    cfmm->pushMessage(FFT_MODULE, FFT_FREE_FACE, args);
 }
 
 void CFImportTTFDialog::setupUi() {

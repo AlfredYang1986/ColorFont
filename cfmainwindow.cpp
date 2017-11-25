@@ -81,8 +81,7 @@ void CFMainWindow::on_actionImportTTF_triggered() {
             cfmm->pushMessage(FFT_MODULE, FFT_LOAD_FILE, args);
 
         if (reVal.isOk()) {
-            qDebug() << "load fft good";
-            FT_Face c = reVal.getV("character").value<FT_Face>();
+            FT_Face c = reVal.getV("face").value<FT_Face>();
             CFImportTTFDialog dialog(c, this);
             dialog.resize(1000, 500);
             dialog.exec();

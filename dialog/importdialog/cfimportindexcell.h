@@ -7,6 +7,7 @@
 
 class QLineEdit;
 class CFPreviewWidget;
+class QMenu;
 
 class CFImportIndexCell : public QWidget {
 
@@ -21,11 +22,18 @@ public:
 
     void resetCharcode(FT_ULong code);
     void repaintOpenGL();
+
+public slots:
+    void slot_importCodeAsChar();
+    void slot_importCodeAsSymbol();
 protected:
     void setupUi();
     QSize sizeHint() const;
+    void contextMenuEvent(QContextMenuEvent *);
 
 private:
+    QMenu* m;
+    QGLContext* context;
     QLineEdit* edit;
     CFPreviewWidget* w;
     FT_Face pc;

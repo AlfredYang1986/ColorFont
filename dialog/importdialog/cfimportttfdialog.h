@@ -26,9 +26,7 @@ public slots:
     void slot_pageChanged(int);
 
 private:
-//    QTableWidget* table;
     QVector<FT_ULong> char_lst;
-
     FT_Face pc;
 };
 

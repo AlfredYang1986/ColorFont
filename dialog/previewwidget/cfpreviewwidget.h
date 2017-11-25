@@ -22,6 +22,7 @@ public:
     void resetCharcode(FT_ULong code);
     void repaintOpenGL();
 
+    void releaseResources();
 protected:
     void initializeGL();
     void resizeGL(int width, int height);
