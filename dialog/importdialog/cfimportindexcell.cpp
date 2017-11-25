@@ -19,9 +19,7 @@ CFImportIndexCell::CFImportIndexCell(
 
 CFImportIndexCell::~CFImportIndexCell() {
     w->releaseResources();
-    // context 由QGLWidget自己释放
-//    if (context && context->isValid())
-//        delete context;
+// context 由QGLWidget自己释放
 }
 
 void CFImportIndexCell::setupUi() {
@@ -38,9 +36,9 @@ void CFImportIndexCell::setupUi() {
     w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     layout->addWidget(w);
 
-    QLineEdit* edit = new QLineEdit();
-    edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    layout->addWidget(edit);
+//    QLineEdit* edit = new QLineEdit();
+//    edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+//    layout->addWidget(edit);
 
     this->setLayout(layout);
 }

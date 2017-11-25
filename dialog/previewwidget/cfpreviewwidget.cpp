@@ -179,6 +179,8 @@ void CFPreviewWidget::resetCharcode(FT_ULong code) {
         CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
         CFFuncResults result = cfmm->pushMessage(OPENGL_MODULE, LOAD_FROM_GLYPH, args);
         character = result.getV("character").value<Character>();
+//        QString name = result.getV("name").value<QString>();
+//        qDebug() << "charcode name is " << name;
     }
 }
 

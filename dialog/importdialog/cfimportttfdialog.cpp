@@ -21,7 +21,6 @@ CFImportTTFDialog::CFImportTTFDialog(
 }
 
 CFImportTTFDialog::~CFImportTTFDialog() {
-//    FT_Done_Face(pc);
     CFFuncArguments args;
     QVariant v;
     v.setValue(pc);

@@ -8,6 +8,8 @@
 
 CFFuncResults loadTTFFile(const CFFuncArguments& args);
 CFFuncResults free_ttf_file(const CFFuncArguments& args);
+CFFuncResults import_code_as_chars(const CFFuncArguments& args);
+CFFuncResults import_code_as_symbol(const CFFuncArguments& args);
 
 CFFftOpt::CFFftOpt() {
     funcs = {
@@ -79,6 +81,16 @@ free_ttf_file(const CFFuncArguments& args) {
     FT_Done_Face(face);
 
     return CFFuncResults();
+}
+
+CFFuncResults
+import_code_as_chars(const CFFuncArguments& args) {
+
+}
+
+CFFuncResults
+import_code_as_symbol(const CFFuncArguments& args) {
+
 }
 
 

@@ -145,6 +145,7 @@ CFFuncResults
 texture_from_glyph(const CFFuncArguments& args) {
     FT_Face face = args.getV("face").value<FT_Face>();
     FT_ULong charcode = args.getV("charcode").value<FT_ULong>();
+//    FT_UInt gindex = args.getV("gindex").value<FT_UInt>();
 
     FT_Set_Pixel_Sizes(face, 0, 60);
 
@@ -191,6 +192,19 @@ texture_from_glyph(const CFFuncArguments& args) {
     QVariant v;
     v.setValue(c);
     result.pushV("character", v);
+
+//    char name_buf[256];
+//    memset(name_buf, sizeof(char), sizeof(name_buf));
+
+//    if (FT_HAS_GLYPH_NAMES(face)) {
+//        QVariant v;
+//        if (FT_Get_Glyph_Name(face, gindex, name_buf, 256)) {
+//            QString str = QString(QLatin1String(name_buf));
+//            v.setValue(str);
+//        }
+//        result.pushV("name", v);
+//    }
+
     return result;
 }
 
