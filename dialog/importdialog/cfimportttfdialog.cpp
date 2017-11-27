@@ -75,7 +75,7 @@ void CFImportTTFDialog::setupUi() {
     QHBoxLayout* control_panel = new QHBoxLayout();
     control_panel->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
     QPushButton* import_btn = new QPushButton(tr("导入所有"));
-    QObject::connect(import_btn, SIGNAL(released()), this, SLOT(slot_importCurrentFont));
+    QObject::connect(import_btn, SIGNAL(released()), this, SLOT(slot_importCurrentFont()));
     control_panel->addWidget(import_btn);
     control_panel->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
     layout->addLayout(control_panel);

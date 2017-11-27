@@ -16,10 +16,11 @@ protected:
 public:
     ~CFXMLOpt();
 
-    void init_config();
+    bool init_config();
 
     QDomDocument* doc;
 private:
+    QFile* file;
     QString path;
 
     friend class CFModuleManagement;
