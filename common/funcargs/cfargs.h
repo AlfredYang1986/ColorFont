@@ -19,9 +19,7 @@ struct Character {
 };
 
 Q_DECLARE_METATYPE(Character)
-Q_DECLARE_METATYPE(QGLContext*)
 Q_DECLARE_METATYPE(FT_Face)
-Q_DECLARE_METATYPE(QOpenGLShaderProgram*)
 
 class CFFuncArguments : public CFPassable {};
 

@@ -28,7 +28,7 @@ CFModuleManagement::~CFModuleManagement() {
 
 void CFModuleManagement::initCFModules() {
     mms = {
-        std::make_pair("file", new CFFileOpt()),
+        std::make_pair(FILE_MODULE, new CFFileOpt()),
         std::make_pair(FFT_MODULE, new CFFftOpt()),
         std::make_pair(OPENGL_MODULE, new CFOpenGLOpt())
     };

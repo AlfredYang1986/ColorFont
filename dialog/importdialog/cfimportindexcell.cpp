@@ -77,8 +77,59 @@ void CFImportIndexCell::contextMenuEvent(QContextMenuEvent *) {
 
 void CFImportIndexCell::slot_importCodeAsChar() {
     qDebug() << "import charcode as char";
+
+    CFModuleManagement* cfmm =
+            CFModuleManagement::queryInstance();
+
+    CFFuncArguments args;
+
+    {
+        QVariant v;
+        v.setValue(pc);
+        args.pushV("face", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue(charcode);
+        args.pushV("charcode", v);
+    }
+
+//    {
+//        QVariant v;
+//        v.setValue("");
+//        args.pushV("index", v);
+//    }
+
+    cfmm->pushMessage(FFT_MODULE, FFT_IMPORT_CHAR, args);
 }
 
 void CFImportIndexCell::slot_importCodeAsSymbol() {
     qDebug() << "import charcode as symbol";
+
+    CFModuleManagement* cfmm =
+            CFModuleManagement::queryInstance();
+
+    CFFuncArguments args;
+
+    {
+        QVariant v;
+        v.setValue(pc);
+        args.pushV("face", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue(charcode);
+        args.pushV("charcode", v);
+    }
+
+//    {
+//        QVariant v;
+//        v.setValue("");
+//        args.pushV("index", v);
+//    }
+
+    cfmm->pushMessage(FFT_MODULE, FFT_IMPORT_SYMBOL, args);
+
 }

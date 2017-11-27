@@ -21,6 +21,8 @@ public:
     ~CFFileOpt();
 
 public:
+
+
     void saveToPath(const QString& path);
     void* loadFromPath(const QString& path);
     const QList<QString> resentPathLst() const;

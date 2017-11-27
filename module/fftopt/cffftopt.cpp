@@ -3,6 +3,7 @@
 #include <QtOpenGL/QtOpenGL>
 #include "../../common/funcargs/cfargs.h"
 #include "../../module/modulemanagement/cfmm.h"
+#include <QVariant>
 
 #include <QDebug>
 
@@ -68,7 +69,7 @@ class path_predicate {
 public:
     path_predicate(const QString& p) : _p(p) {}
     bool operator()(const std::pair<QString, FT_Face>& iter) {
-        iter.first == _p;
+        return iter.first == _p;
     }
 
 private:
@@ -79,7 +80,7 @@ class face_predicate {
 public:
     face_predicate(FT_Face p) : _p(p) {}
     bool operator()(const std::pair<QString, FT_Face>& iter) {
-        iter.second == _p;
+        return iter.second == _p;
     }
 private:
     FT_Face _p;
@@ -116,6 +117,18 @@ import_code_as_chars(const CFFuncArguments& args) {
     /**
      *	1. move files to certain path
      */
+
+    QVariant vp;
+    vp.setValue(path);
+    CFFuncArguments vp_args;
+    vp_args.pushV("path", vp);
+
+    cfmm->pushMessage(FILE_MODULE,
+                      FILE_TTF_DIR,
+                      CFFuncArguments());
+    cfmm->pushMessage(FILE_MODULE,
+                      FILE_MOVE_TO_TTF_DIR,
+                      vp_args);
 
     /**
      *	2. save attributes to the config file for reload

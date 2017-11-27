@@ -5,14 +5,19 @@
 #include <QMap>
 #include "../../common/funcargs/cfargs.h"
 
+static const QString FILE_MODULE = "file module";
+static const QString FILE_TTF_DIR = "create ttf dir";
+static const QString FILE_MOVE_TO_TTF_DIR = "move to ttf dir";
+
 static const QString FFT_MODULE = "fft";
 static const QString FFT_LOAD_FILE = "load";
+static const QString FFT_FREE_FACE = "free ttf file";
 static const QString FFT_IMPORT_CHAR = "import char";
 static const QString FFT_IMPORT_SYMBOL = "import symbol";
 
 static const QString OPENGL_MODULE = "opengl";
 static const QString INIT_GL = "Init GL";
-static const QString QUERY_GL_CONTEXT = "query gl context";
+//static const QString QUERY_GL_CONTEXT = "query gl context";
 static const QString RELEASE_TEXTURE = "release texture";
 static const QString LOAD_FROM_GLYPH = "load from glyph";
 static const QString DRAW_GLYPH = "draw glyph";

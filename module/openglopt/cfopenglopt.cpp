@@ -69,7 +69,7 @@ CFOpenGLOpt::CFOpenGLOpt()
     : _is_init(false) {
     funcs = {
         std::make_pair(INIT_GL, &init_gl),
-        std::make_pair(QUERY_GL_CONTEXT, &query_gl_context),
+//        std::make_pair(QUERY_GL_CONTEXT, &query_gl_context),
         std::make_pair(RELEASE_TEXTURE, &release_texture),
         std::make_pair(LOAD_FROM_GLYPH, &texture_from_glyph),
         std::make_pair(DRAW_GLYPH, &draw_glyph),
@@ -130,15 +130,16 @@ init_gl(const CFFuncArguments&) {
 
 CFFuncResults
 query_gl_context(const CFFuncArguments&) {
-    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
-    CFOpenGLOpt* module = (CFOpenGLOpt*)(cfmm->queryModuleInstance(OPENGL_MODULE));
+//    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+//    CFOpenGLOpt* module = (CFOpenGLOpt*)(cfmm->queryModuleInstance(OPENGL_MODULE));
 
-    QGLContext* context = module->systemGLContext();
-    CFFuncResults reVal;
-    QVariant v;
-    v.setValue(context);
-    reVal.pushV("context", v);
-    return reVal;
+//    QGLContext* context = module->systemGLContext();
+//    CFFuncResults reVal;
+//    QVariant v;
+//    v.setValue(context);
+//    reVal.pushV("context", v);
+//    return reVal;
+    return CFFuncResults();
 }
 
 CFFuncResults

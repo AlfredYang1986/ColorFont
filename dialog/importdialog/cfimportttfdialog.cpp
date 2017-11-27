@@ -75,7 +75,6 @@ void CFImportTTFDialog::setupUi() {
 }
 
 void CFImportTTFDialog::slot_pageChanged(int p) {
-    qDebug() << "page is :" << p;
     for (int index = 0; index < PAGE_COUNT; ++index) {
 
         CFImportIndexCell* cell = this->findChild<CFImportIndexCell*>(QString::number(index));
