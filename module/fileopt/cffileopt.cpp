@@ -61,15 +61,9 @@ move_2_ttf_dir(const CFFuncArguments &args) {
     QString ori_path = args.getV("path").value<QString>();
     QString dst_path = QCoreApplication::applicationDirPath() + TTF_PATH;
 
-    QVariant v;
-    if (QFile::copy(ori_path, dst_path + "/test.ttf")) {
-        v.setValue(true);
-    } else {
-        v.setValue(false);
+    if (!QFile(dst_path + "/test.ttf").exists()) {
+        QFile::copy(ori_path, dst_path + "/test.ttf");
     }
 
-    CFFuncResults reVal;
-    reVal.pushV("result", v);
-
-    return reVal;
+    return CFFuncResults();
 }

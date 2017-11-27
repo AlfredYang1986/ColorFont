@@ -28,7 +28,7 @@ static const char *fragmentShaderSourceCore =
     "uniform vec3 bkColor;\n"
     "void main() {\n"
     "	float tmp = texture(text, TexCoords).r;\n"
-    "	if (tmp > 0.6) {\n"
+    "	if (tmp > 0) {\n"
     "		vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);\n"
     "		color = vec4(textColor, 1.0) * sampled ;\n"
     "	} else { \n"
@@ -148,9 +148,8 @@ texture_from_glyph(const CFFuncArguments& args) {
     FT_ULong charcode = args.getV("charcode").value<FT_ULong>();
 //    FT_UInt gindex = args.getV("gindex").value<FT_UInt>();
 
-    FT_Set_Pixel_Sizes(face, 0, 60);
-
-//    FT_Set_Char_Size(face, 0, 12<<6, 300, 300);
+    FT_Set_Pixel_Sizes(face, 0, 48);
+    FT_Set_Char_Size(face, 0, 18<<6, 300, 300);
 
     if (FT_Load_Glyph(face, charcode, FT_LOAD_RENDER)) {
         qDebug() << "ERROR::FREETYTPE: Failed to load Glyph";

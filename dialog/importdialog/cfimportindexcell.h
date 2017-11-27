@@ -28,7 +28,6 @@ public slots:
     void slot_importCodeAsSymbol();
 protected:
     void setupUi();
-    QSize sizeHint() const;
     void contextMenuEvent(QContextMenuEvent *);
 
 private:

@@ -71,6 +71,15 @@ void CFImportTTFDialog::setupUi() {
     QObject::connect(pw, SIGNAL(currentPageChanged(int)), this, SLOT(slot_pageChanged(int)));
 
     layout->addWidget(pw);
+
+    QHBoxLayout* control_panel = new QHBoxLayout();
+    control_panel->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+    QPushButton* import_btn = new QPushButton(tr("导入所有"));
+    QObject::connect(import_btn, SIGNAL(released()), this, SLOT(slot_importCurrentFont));
+    control_panel->addWidget(import_btn);
+    control_panel->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+    layout->addLayout(control_panel);
+
     this->setLayout(layout);
 }
 
@@ -85,4 +94,8 @@ void CFImportTTFDialog::slot_pageChanged(int p) {
         cell->resetCharcode(ccd);
         cell->repaintOpenGL();
     }
+}
+
+void CFImportTTFDialog::slot_importCurrentFont() {
+
 }

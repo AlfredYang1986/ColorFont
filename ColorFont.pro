@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT  += core gui
+QT  += xml
 QT 	+= opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -46,7 +47,8 @@ SOURCES += main.cpp\
     dialog/importdialog/cfimportindexcell.cpp \
     dialog/previewwidget/cfpreviewwidget.cpp \
     module/openglopt/cfopenglopt.cpp \
-    common/pagewidget/PageWidget.cpp
+    common/pagewidget/PageWidget.cpp \
+    module/xmlopt/cfxmlopt.cpp
 
 HEADERS  += \
 		glm/detail/_features.hpp \
@@ -224,7 +226,8 @@ HEADERS  += \
     dialog/importdialog/cfimportindexcell.h \
     dialog/previewwidget/cfpreviewwidget.h \
     module/openglopt/cfopenglopt.h \
-    common/pagewidget/PageWidget.h
+    common/pagewidget/PageWidget.h \
+    module/xmlopt/cfxmlopt.h
 
 FORMS    += cfmainwindow.ui \
     common/pagewidget/PageWidget.ui

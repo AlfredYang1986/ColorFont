@@ -82,7 +82,7 @@ void CFMainWindow::on_actionImportTTF_triggered() {
         if (reVal.isOk()) {
             FT_Face c = reVal.getV("face").value<FT_Face>();
             CFImportTTFDialog dialog(c, this);
-            dialog.resize(1000, 500);
+            dialog.resize(600, 300);
             dialog.exec();
             qDebug() << "close dialog";
 

@@ -36,16 +36,9 @@ void CFImportIndexCell::setupUi() {
     w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     layout->addWidget(w);
 
-//    QLineEdit* edit = new QLineEdit();
-//    edit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-//    layout->addWidget(edit);
-
     this->setLayout(layout);
 }
 
-QSize CFImportIndexCell::sizeHint() const {
-    return QSize(100, 100);
-}
 
 void CFImportIndexCell::resetCharcode(FT_ULong code) {
     w->resetCharcode(code);

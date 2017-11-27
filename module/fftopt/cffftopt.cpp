@@ -133,6 +133,17 @@ import_code_as_chars(const CFFuncArguments& args) {
     /**
      *	2. save attributes to the config file for reload
      */
+    QVariant v;
+    v.setValue(charcode);
+    CFFuncArguments v_args;
+    v_args.pushV("path", v);
+
+    cfmm->pushMessage(FFT_XML_MODULE,
+                      FFT_XML_LOAD,
+                      CFFuncArguments());
+    cfmm->pushMessage(FFT_XML_MODULE,
+                      FFT_XML_PUSH,
+                      v_args);
 
     return CFFuncResults();
 }
