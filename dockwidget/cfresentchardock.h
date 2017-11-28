@@ -7,6 +7,8 @@ class QWidget;
 class QTabWidget;
 class QLineEdit;
 
+class CFFFTLibPrevWidget;
+
 class CFResentCharDock : public QDockWidget {
 
     Q_OBJECT
@@ -21,8 +23,8 @@ protected:
 
 private:
     QWidget* view;
-    QTabWidget* tab;
     QLineEdit* search_bar;
+    CFFFTLibPrevWidget* tab;
 };
 
 #endif // CFRESENTSYMBOLDOCK_H

@@ -5,6 +5,8 @@
 #include <QTabWidget>
 #include <QWidget>
 
+#include "../dialog/fftlibprevwidget/cffftlibprevwidget.h"
+
 CFResentCharDock::CFResentCharDock(QWidget* parent)
     : QDockWidget(parent) {
 
@@ -25,7 +27,8 @@ void CFResentCharDock::setupUi() {
     up->addWidget(search_bar);
 
     QVBoxLayout* layout = new QVBoxLayout();
-    tab = new QTabWidget();
+//    tab = new QTabWidget();
+    tab = new CFFFTLibPrevWidget();
     tab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     layout->addLayout(up);
