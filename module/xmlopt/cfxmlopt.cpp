@@ -42,6 +42,12 @@ bool CFXMLOpt::init_config() {
     const int Indent = 4;
     QString path = QCoreApplication::applicationDirPath() + config_path;
     bool result = false;
+
+    if (file) {
+        file->close();
+        delete file;
+    }
+
     file = new QFile(path);
     if (!file->exists()) {
 
@@ -104,6 +110,35 @@ load_font_config(const CFFuncArguments& args) {
 
 CFFuncResults
 push_font_node(const CFFuncArguments& args) {
+
+    FT_ULong charcode = args.getV("charcode").value<FT_ULong>();
+    QString path = args.getV("path").value<QString>();
+    QString file_name = path.right(path.length() - path.lastIndexOf('/') - 1);
+
+//    QString index = args.getV("index").value<QString>();
+//    int cat = arg.getV("cat").value<int>();
+
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    CFXMLOpt* xml = (CFXMLOpt*)cfmm->queryModuleInstance(FFT_XML_MODULE);
+
+    QDomDocument* doc = xml->doc;
+    QDomElement root = doc->documentElement();
+
+    QDomElement new_ele = doc->createElement("char");
+    new_ele.setAttribute("charcode", (qlonglong)charcode);
+    new_ele.setAttribute("path", file_name);
+    root.appendChild(new_ele);
+
+    QFile* file = xml->file;
+    if (file->exists()) {
+        file->close();
+        file->remove();
+        file->open(QIODevice::WriteOnly);
+    }
+    const int Indent = 3;
+    QTextStream out(file);
+    doc->save(out, Indent);
+
     return CFFuncResults();
 }
 
@@ -114,6 +149,18 @@ pop_font_node(const CFFuncArguments& args) {
 
 CFFuncResults
 sync_doc(const CFFuncArguments& args) {
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    CFXMLOpt* xml = (CFXMLOpt*)cfmm->queryModuleInstance(FFT_XML_MODULE);
+
+    QFile* file = xml->file;
+    if (file->exists()) {
+        file->close();
+        file->remove();
+        file->open(QIODevice::WriteOnly);
+    }
+    const int Indent = 3;
+    QTextStream out(file);
+    doc->save(out, Indent);
 
 }
 

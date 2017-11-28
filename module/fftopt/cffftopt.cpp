@@ -126,6 +126,7 @@ import_code_as_chars(const CFFuncArguments& args) {
     cfmm->pushMessage(FILE_MODULE,
                       FILE_TTF_DIR,
                       CFFuncArguments());
+    CFFuncResults re_dir =
     cfmm->pushMessage(FILE_MODULE,
                       FILE_MOVE_TO_TTF_DIR,
                       vp_args);
@@ -135,8 +136,8 @@ import_code_as_chars(const CFFuncArguments& args) {
      */
     QVariant v;
     v.setValue(charcode);
-    CFFuncArguments v_args;
-    v_args.pushV("path", v);
+    CFFuncArguments v_args = (CFFuncArguments)re_dir;
+    v_args.pushV("charcode", v);
 
     cfmm->pushMessage(FFT_XML_MODULE,
                       FFT_XML_LOAD,

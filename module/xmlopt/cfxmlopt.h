@@ -19,8 +19,8 @@ public:
     bool init_config();
 
     QDomDocument* doc;
-private:
     QFile* file;
+private:
     QString path;
 
     friend class CFModuleManagement;

@@ -5,6 +5,7 @@
 #include "../../common/funcargs/cfargs.h"
 #include <QFile>
 #include <QDir>
+#include <QUuid>
 
 static const QString TTF_PATH = "/ttf_dir";
 
@@ -61,9 +62,17 @@ move_2_ttf_dir(const CFFuncArguments &args) {
     QString ori_path = args.getV("path").value<QString>();
     QString dst_path = QCoreApplication::applicationDirPath() + TTF_PATH;
 
-    if (!QFile(dst_path + "/test.ttf").exists()) {
-        QFile::copy(ori_path, dst_path + "/test.ttf");
+    QUuid id = QUuid::createUuid();
+    QString strId = dst_path + "/" + id.toString().replace('{', "").replace('}', "") + ".ttf";
+
+    if (!QFile(strId).exists()) {
+        QFile::copy(ori_path, strId);
     }
 
-    return CFFuncResults();
+    CFFuncResults reVal;
+    QVariant v;
+    v.setValue(strId);
+    reVal.pushV("path", v);
+
+    return reVal;
 }
