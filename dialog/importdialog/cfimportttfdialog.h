@@ -25,6 +25,7 @@ protected:
 public slots:
     void slot_pageChanged(int);
     void slot_importCurrentFont();
+    void slot_importCurrentSymbol();
 
 private:
     QVector<FT_ULong> char_lst;

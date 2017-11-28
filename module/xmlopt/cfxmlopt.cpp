@@ -115,8 +115,8 @@ push_font_node(const CFFuncArguments& args) {
     QString path = args.getV("path").value<QString>();
     QString file_name = path.right(path.length() - path.lastIndexOf('/') - 1);
 
-//    QString index = args.getV("index").value<QString>();
-//    int cat = arg.getV("cat").value<int>();
+    QString index = args.getV("index").value<QString>();
+    int cat = args.getV("cat").value<int>();
 
     CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
     CFXMLOpt* xml = (CFXMLOpt*)cfmm->queryModuleInstance(FFT_XML_MODULE);
@@ -127,17 +127,19 @@ push_font_node(const CFFuncArguments& args) {
     QDomElement new_ele = doc->createElement("char");
     new_ele.setAttribute("charcode", (qlonglong)charcode);
     new_ele.setAttribute("path", file_name);
+    new_ele.setAttribute("cat", cat);
+    new_ele.setAttribute("index", index);
     root.appendChild(new_ele);
 
-    QFile* file = xml->file;
-    if (file->exists()) {
-        file->close();
-        file->remove();
-        file->open(QIODevice::WriteOnly);
-    }
-    const int Indent = 3;
-    QTextStream out(file);
-    doc->save(out, Indent);
+//    QFile* file = xml->file;
+//    if (file->exists()) {
+//        file->close();
+//        file->remove();
+//        file->open(QIODevice::WriteOnly);
+//    }
+//    const int Indent = 3;
+//    QTextStream out(file);
+//    doc->save(out, Indent);
 
     return CFFuncResults();
 }
@@ -148,7 +150,7 @@ pop_font_node(const CFFuncArguments& args) {
 }
 
 CFFuncResults
-sync_doc(const CFFuncArguments& args) {
+sync_doc(const CFFuncArguments&) {
     CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
     CFXMLOpt* xml = (CFXMLOpt*)cfmm->queryModuleInstance(FFT_XML_MODULE);
 
@@ -160,7 +162,8 @@ sync_doc(const CFFuncArguments& args) {
     }
     const int Indent = 3;
     QTextStream out(file);
-    doc->save(out, Indent);
+    xml->doc->save(out, Indent);
 
+    return CFFuncResults();
 }
 

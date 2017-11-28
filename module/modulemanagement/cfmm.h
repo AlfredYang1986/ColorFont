@@ -20,6 +20,8 @@ static const QString FFT_LOAD_FILE = "load";
 static const QString FFT_FREE_FACE = "free ttf file";
 static const QString FFT_IMPORT_CHAR = "import char";
 static const QString FFT_IMPORT_SYMBOL = "import symbol";
+static const QString FFT_IMPORT_CHAR_LST = "import chars list";
+static const QString FFT_IMPORT_SYMBOL_LST = "import symbols list";
 
 static const QString OPENGL_MODULE = "opengl";
 static const QString INIT_GL = "Init GL";

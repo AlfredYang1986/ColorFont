@@ -69,8 +69,6 @@ void CFImportIndexCell::contextMenuEvent(QContextMenuEvent *) {
 }
 
 void CFImportIndexCell::slot_importCodeAsChar() {
-    qDebug() << "import charcode as char";
-
     CFModuleManagement* cfmm =
             CFModuleManagement::queryInstance();
 
@@ -98,8 +96,6 @@ void CFImportIndexCell::slot_importCodeAsChar() {
 }
 
 void CFImportIndexCell::slot_importCodeAsSymbol() {
-    qDebug() << "import charcode as symbol";
-
     CFModuleManagement* cfmm =
             CFModuleManagement::queryInstance();
 

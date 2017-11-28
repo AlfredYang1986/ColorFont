@@ -74,9 +74,12 @@ void CFImportTTFDialog::setupUi() {
 
     QHBoxLayout* control_panel = new QHBoxLayout();
     control_panel->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
-    QPushButton* import_btn = new QPushButton(tr("导入所有"));
+    QPushButton* import_btn = new QPushButton(tr("当作字符导入全部"));
     QObject::connect(import_btn, SIGNAL(released()), this, SLOT(slot_importCurrentFont()));
     control_panel->addWidget(import_btn);
+    QPushButton* symbol_btn = new QPushButton(tr("当作符号导入全部"));
+    QObject::connect(symbol_btn, SIGNAL(released()), this, SLOT(slot_importCurrentFont()));
+    control_panel->addWidget(symbol_btn);
     control_panel->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
     layout->addLayout(control_panel);
 
@@ -97,5 +100,43 @@ void CFImportTTFDialog::slot_pageChanged(int p) {
 }
 
 void CFImportTTFDialog::slot_importCurrentFont() {
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+
+    CFFuncArguments args;
+
+    {
+        QVariant v;
+        v.setValue(pc);
+        args.pushV("face", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue(this->char_lst);
+        args.pushV("char-lst", v);
+    }
+
+    cfmm->pushMessage(FFT_MODULE, FFT_IMPORT_CHAR_LST, args);
+}
+
+void CFImportTTFDialog::slot_importCurrentSymbol() {
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+
+    CFFuncArguments args;
+
+    {
+        QVariant v;
+        v.setValue(pc);
+        args.pushV("face", v);
+    }
+
+    {
+
+        QVariant v;
+        v.setValue(this->char_lst);
+        args.pushV("char-lst", v);
+    }
+
+    cfmm->pushMessage(FFT_MODULE, FFT_IMPORT_SYMBOL_LST, args);
 
 }

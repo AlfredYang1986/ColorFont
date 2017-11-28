@@ -11,13 +11,17 @@ CFFuncResults loadTTFFile(const CFFuncArguments& args);
 CFFuncResults free_ttf_file(const CFFuncArguments& args);
 CFFuncResults import_code_as_chars(const CFFuncArguments& args);
 CFFuncResults import_code_as_symbol(const CFFuncArguments& args);
+CFFuncResults import_code_as_chars_lst(const CFFuncArguments& args);
+CFFuncResults import_code_as_symbol_lst(const CFFuncArguments& args);
 
 CFFftOpt::CFFftOpt() {
     funcs = {
         std::make_pair(FFT_LOAD_FILE, &loadTTFFile),
         std::make_pair(FFT_FREE_FACE, &free_ttf_file),
         std::make_pair(FFT_IMPORT_CHAR, &import_code_as_chars),
-        std::make_pair(FFT_IMPORT_SYMBOL, &import_code_as_symbol)
+        std::make_pair(FFT_IMPORT_CHAR_LST, &import_code_as_chars_lst),
+        std::make_pair(FFT_IMPORT_SYMBOL, &import_code_as_symbol),
+        std::make_pair(FFT_IMPORT_SYMBOL_LST, &import_code_as_symbol_lst)
     };
 
     if (FT_Init_FreeType(&ft))
@@ -139,6 +143,10 @@ import_code_as_chars(const CFFuncArguments& args) {
     CFFuncArguments v_args = (CFFuncArguments)re_dir;
     v_args.pushV("charcode", v);
 
+    QVariant v_cat;
+    v_cat.setValue(0);
+    v_args.pushV("cat", v_cat);
+
     cfmm->pushMessage(FFT_XML_MODULE,
                       FFT_XML_LOAD,
                       CFFuncArguments());
@@ -146,12 +154,213 @@ import_code_as_chars(const CFFuncArguments& args) {
                       FFT_XML_PUSH,
                       v_args);
 
+    /**
+     * 3. sync doc to file
+     */
+    cfmm->pushMessage(FFT_XML_MODULE,
+                      FFT_XML_SYNC,
+                      CFFuncArguments());
+
     return CFFuncResults();
 }
 
 CFFuncResults
 import_code_as_symbol(const CFFuncArguments& args) {
-    // save as import_code_as_chars
+    FT_ULong charcode = args.getV("charcode").value<FT_ULong>();
+    FT_Face face = args.getV("face").value<FT_Face>();
+
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    CFFftOpt* opt = (CFFftOpt*)cfmm->queryModuleInstance(FFT_MODULE);
+    QVector<std::pair<QString, FT_Face> > faces = opt->queryOpenedFaces();
+
+    QVector<std::pair<QString, FT_Face> >::const_iterator citer =
+        std::find_if(faces.begin(), faces.end(), face_predicate(face));
+
+    QString path = (*citer).first;
+
+    /**
+     *	1. move files to certain path
+     */
+    QVariant vp;
+    vp.setValue(path);
+    CFFuncArguments vp_args;
+    vp_args.pushV("path", vp);
+
+    cfmm->pushMessage(FILE_MODULE,
+                      FILE_TTF_DIR,
+                      CFFuncArguments());
+    CFFuncResults re_dir =
+    cfmm->pushMessage(FILE_MODULE,
+                      FILE_MOVE_TO_TTF_DIR,
+                      vp_args);
+
+    /**
+     *	2. save attributes to the config file for reload
+     */
+    QVariant v;
+    v.setValue(charcode);
+    CFFuncArguments v_args = (CFFuncArguments)re_dir;
+    v_args.pushV("charcode", v);
+
+    QVariant v_cat;
+    v_cat.setValue(1);
+    v_args.pushV("cat", v_cat);
+
+    cfmm->pushMessage(FFT_XML_MODULE,
+                      FFT_XML_LOAD,
+                      CFFuncArguments());
+    cfmm->pushMessage(FFT_XML_MODULE,
+                      FFT_XML_PUSH,
+                      v_args);
+
+    /**
+     * 3. sync doc to file
+     */
+    cfmm->pushMessage(FFT_XML_MODULE,
+                      FFT_XML_SYNC,
+                      CFFuncArguments());
+
+    return CFFuncResults();
+
 }
 
+CFFuncResults
+import_code_as_chars_lst(const CFFuncArguments& args) {
+    FT_Face face = args.getV("face").value<FT_Face>();
 
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    CFFftOpt* opt = (CFFftOpt*)cfmm->queryModuleInstance(FFT_MODULE);
+    QVector<std::pair<QString, FT_Face> > faces = opt->queryOpenedFaces();
+
+    QVector<std::pair<QString, FT_Face> >::const_iterator citer =
+        std::find_if(faces.begin(), faces.end(), face_predicate(face));
+
+    QString path = (*citer).first;
+
+    /**
+     *	1. move files to certain path
+     */
+
+    QVariant vp;
+    vp.setValue(path);
+    CFFuncArguments vp_args;
+    vp_args.pushV("path", vp);
+
+    cfmm->pushMessage(FILE_MODULE,
+                      FILE_TTF_DIR,
+                      CFFuncArguments());
+    CFFuncResults re_dir =
+    cfmm->pushMessage(FILE_MODULE,
+                      FILE_MOVE_TO_TTF_DIR,
+                      vp_args);
+
+    /**
+     *	2. save attributes to the config file for reload
+     */
+    cfmm->pushMessage(FFT_XML_MODULE,
+                      FFT_XML_LOAD,
+                      CFFuncArguments());
+
+    QVector<FT_ULong> vec_chars = args.getV("char-lst").value<QVector<FT_ULong> >();
+
+    QVector<FT_ULong>::const_iterator iter = vec_chars.begin();
+    while (iter != vec_chars.end()) {
+        FT_ULong charcode = *iter;
+
+        CFFuncArguments v_args = (CFFuncArguments)re_dir;
+
+        QVariant v;
+        v.setValue(charcode);
+        v_args.pushV("charcode", v);
+
+        QVariant v_cat;
+        v_cat.setValue(0);
+        v_args.pushV("cat", v_cat);
+
+        cfmm->pushMessage(FFT_XML_MODULE,
+                          FFT_XML_PUSH,
+                          v_args);
+
+        ++iter;
+    }
+
+    /**
+     * 3. sync doc to file
+     */
+    cfmm->pushMessage(FFT_XML_MODULE,
+                      FFT_XML_SYNC,
+                      CFFuncArguments());
+
+    return CFFuncResults();
+}
+
+CFFuncResults
+import_code_as_symbol_lst(const CFFuncArguments& args) {
+    FT_Face face = args.getV("face").value<FT_Face>();
+
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    CFFftOpt* opt = (CFFftOpt*)cfmm->queryModuleInstance(FFT_MODULE);
+    QVector<std::pair<QString, FT_Face> > faces = opt->queryOpenedFaces();
+
+    QVector<std::pair<QString, FT_Face> >::const_iterator citer =
+        std::find_if(faces.begin(), faces.end(), face_predicate(face));
+
+    QString path = (*citer).first;
+
+    /**
+     *	1. move files to certain path
+     */
+
+    QVariant vp;
+    vp.setValue(path);
+    CFFuncArguments vp_args;
+    vp_args.pushV("path", vp);
+
+    cfmm->pushMessage(FILE_MODULE,
+                      FILE_TTF_DIR,
+                      CFFuncArguments());
+    CFFuncResults re_dir =
+    cfmm->pushMessage(FILE_MODULE,
+                      FILE_MOVE_TO_TTF_DIR,
+                      vp_args);
+
+    /**
+     *	2. save attributes to the config file for reload
+     */
+    cfmm->pushMessage(FFT_XML_MODULE,
+                      FFT_XML_LOAD,
+                      CFFuncArguments());
+
+    QVector<FT_ULong> vec_chars = args.getV("char-lst").value<QVector<FT_ULong> >();
+
+    QVector<FT_ULong>::const_iterator iter = vec_chars.begin();
+    while (iter != vec_chars.end()) {
+        FT_ULong charcode = *iter;
+
+        CFFuncArguments v_args = (CFFuncArguments)re_dir;
+
+        QVariant v;
+        v.setValue(charcode);
+        v_args.pushV("charcode", v);
+
+        QVariant v_cat;
+        v_cat.setValue(1);
+        v_args.pushV("cat", v_cat);
+
+        cfmm->pushMessage(FFT_XML_MODULE,
+                          FFT_XML_PUSH,
+                          v_args);
+
+        ++iter;
+    }
+
+    /**
+     * 3. sync doc to file
+     */
+    cfmm->pushMessage(FFT_XML_MODULE,
+                      FFT_XML_SYNC,
+                      CFFuncArguments());
+
+    return CFFuncResults();
+
+}

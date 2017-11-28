@@ -20,6 +20,7 @@ struct Character {
 
 Q_DECLARE_METATYPE(Character)
 Q_DECLARE_METATYPE(FT_Face)
+Q_DECLARE_METATYPE(QVector<FT_ULong>)
 
 class CFFuncArguments : public CFPassable {};
 
