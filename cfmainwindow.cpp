@@ -97,3 +97,10 @@ void CFMainWindow::on_actionImportTTF_triggered() {
         // 用户取消，什么都不做
     }
 }
+
+void CFMainWindow::on_actionOpen_triggered() {
+    CFOperatorWidget* w = new CFOperatorWidget();
+    w->setWindowTitle(tr("New Window"));
+    area->addSubWindow(w);
+    w->show();
+}

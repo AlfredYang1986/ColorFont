@@ -33,8 +33,6 @@ protected:
     void paintGL();
     void paintEvent(QPaintEvent*);
 
-    void setupUi();
-
 private:
     void drawBackground();
     void draw(Character ch);

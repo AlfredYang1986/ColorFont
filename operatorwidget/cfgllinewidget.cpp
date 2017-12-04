@@ -1,4 +1,4 @@
-#include "cfpreviewwidget.h"
+#include "cfgllinewidget.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -7,51 +7,28 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
-#include "../../common/funcargs/cfargs.h"
-#include "../../module/modulemanagement/cfmm.h"
-#include "../../module/openglopt/cfopenglopt.h"
+#include "../common/funcargs/cfargs.h"
+#include "../module/modulemanagement/cfmm.h"
+#include "../module/openglopt/cfopenglopt.h"
+#include <QGLContext>
 #include <QDebug>
 
-
-CFPreviewWidget::CFPreviewWidget(
-        QGLContext* context,
-        QWidget* parent)
-
-    : QGLWidget(context, parent), pc(NULL), charcode(0) {
-
-}
-
-CFPreviewWidget::CFPreviewWidget(
-        FT_Face p,
-        FT_ULong ccd,
-        QGLContext* context,
-        QWidget* parent)
-
-    : QGLWidget(context, parent), pc(p), charcode(ccd) {
-
-}
-
-void CFPreviewWidget::releaseResources() {
+void CFGLLineWidget::releaseResources() {
     makeCurrent();
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteVertexArrays(1, &VAO_BK);
     glDeleteBuffers(1, &VBO_BK);
-    glDeleteTextures(1, &(character.TextureID));
+//    glDeleteTextures(1, &(character.TextureID));
 
     if (program)
         delete program;
 
     if (program_bk)
         delete program_bk;
-
 }
 
-CFPreviewWidget::~CFPreviewWidget() {
-
-}
-
-void CFPreviewWidget::initializeGL() {
+void CFGLLineWidget::initializeGL() {
     makeCurrent();
     qglClearColor(Qt::black);
 
@@ -85,11 +62,9 @@ void CFPreviewWidget::initializeGL() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    if (pc)
-        this->resetCharcode(charcode);
 }
 
-void CFPreviewWidget::resizeGL(int width, int height) {
+void CFGLLineWidget::resizeGL(int width, int height) {
     makeCurrent();
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
@@ -99,16 +74,16 @@ void CFPreviewWidget::resizeGL(int width, int height) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-void CFPreviewWidget::paintGL() {
+void CFGLLineWidget::paintGL() {
     makeCurrent();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    if (pc && charcode > 0) {
-        draw(character);
-    }
+//    if (pc && charcode > 0) {
+//        draw(character);
+//    }
 //    drawBackground();
 }
 
-void CFPreviewWidget::paintEvent(QPaintEvent*) {
+void CFGLLineWidget::paintEvent(QPaintEvent*) {
     QPainter p(this);
     /**
      * background
@@ -122,7 +97,7 @@ void CFPreviewWidget::paintEvent(QPaintEvent*) {
     paintGL();
 }
 
-void CFPreviewWidget::drawBackground() {
+void CFGLLineWidget::drawBackground() {
     CFFuncArguments args;
 
     {
@@ -147,7 +122,7 @@ void CFPreviewWidget::drawBackground() {
     cfmm->pushMessage(OPENGL_MODULE, DRAW_BACKGROUND, args);
 }
 
-void CFPreviewWidget::draw(Character ch) {
+void CFGLLineWidget::draw(Character ch) {
 
     CFFuncArguments args;
 
@@ -179,39 +154,10 @@ void CFPreviewWidget::draw(Character ch) {
     cfmm->pushMessage(OPENGL_MODULE, DRAW_GLYPH, args);
 }
 
-void CFPreviewWidget::resetFace(FT_Face face) {
-    pc = face;
+void CFGLLineWidget::draw(const QVector<Character> &vec) {
+
 }
 
-void CFPreviewWidget::resetCharcode(FT_ULong code) {
-    makeCurrent();
-    charcode = code;
-    {
-        FT_Face face = pc;
-
-        CFFuncArguments args;
-
-        {
-            QVariant v;
-            v.setValue(face);
-            args.pushV("face", v);
-        }
-
-        {
-            QVariant v;
-            v.setValue(charcode);
-            args.pushV("charcode", v);
-        }
-
-        CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
-        CFFuncResults result = cfmm->pushMessage(OPENGL_MODULE, LOAD_FROM_GLYPH, args);
-        character = result.getV("character").value<Character>();
-//        QString name = result.getV("name").value<QString>();
-//        qDebug() << "charcode name is " << name;
-    }
-}
-
-void CFPreviewWidget::repaintOpenGL() {
-//    this->updateGL();
+void CFGLLineWidget::repaintOpenGL() {
     this->update();
 }

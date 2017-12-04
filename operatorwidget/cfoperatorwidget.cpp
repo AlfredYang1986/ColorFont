@@ -4,7 +4,7 @@
 CFOperatorWidget::CFOperatorWidget(QWidget *parent)
     : QMdiSubWindow(parent) {
 
-    this->resize(300, 300);
+    this->resize(800, 400);
     this->setStyleSheet("backgrund-color : red");
 }
 
