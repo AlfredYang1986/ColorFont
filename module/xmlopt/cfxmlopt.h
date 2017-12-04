@@ -20,6 +20,8 @@ public:
 
     QDomDocument* doc;
     QFile* file;
+    QList<std::pair<std::pair<QString, int>,
+            std::pair<QString, FT_ULong> > > lst;
 private:
     QString path;
 

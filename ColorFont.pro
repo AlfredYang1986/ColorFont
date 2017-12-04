@@ -49,7 +49,8 @@ SOURCES += main.cpp\
     module/openglopt/cfopenglopt.cpp \
     common/pagewidget/PageWidget.cpp \
     module/xmlopt/cfxmlopt.cpp \
-    dialog/fftlibprevwidget/cffftlibprevwidget.cpp
+    dialog/fftlibprevwidget/cffftlibprevwidget.cpp \
+    module/fontlib/cffontlib.cpp
 
 HEADERS  += \
 		glm/detail/_features.hpp \
@@ -229,7 +230,8 @@ HEADERS  += \
     module/openglopt/cfopenglopt.h \
     common/pagewidget/PageWidget.h \
     module/xmlopt/cfxmlopt.h \
-    dialog/fftlibprevwidget/cffftlibprevwidget.h
+    dialog/fftlibprevwidget/cffftlibprevwidget.h \
+    module/fontlib/cffontlib.h
 
 FORMS    += cfmainwindow.ui \
     common/pagewidget/PageWidget.ui

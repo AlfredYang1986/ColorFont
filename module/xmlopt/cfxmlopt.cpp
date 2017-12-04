@@ -95,14 +95,29 @@ bool CFXMLOpt::init_config() {
 }
 
 CFFuncResults
-load_font_config(const CFFuncArguments& args) {
+load_font_config(const CFFuncArguments& ) {
     CFModuleManagement* cfmm =
             CFModuleManagement::queryInstance();
-    CFXMLOpt* xml =
-        (CFXMLOpt*)cfmm->queryModuleInstance(FFT_XML_MODULE);
+    CFXMLOpt* xml = (CFXMLOpt*)cfmm->queryModuleInstance(FFT_XML_MODULE);
 
     if (xml->doc == NULL) {
         xml->init_config();
+    }
+
+    QDomElement root = xml->doc->documentElement();
+    QDomNodeList nodes = root.childNodes();
+    for (int index = 0; index < nodes.count(); ++index) {
+        QDomNode node = nodes.at(index);
+        QDomNamedNodeMap map = node.attributes();
+        QString idx = map.namedItem("index").toAttr().value();
+        int cat = map.namedItem("cat").toAttr().value().toInt();
+        QString path = map.namedItem("path").toAttr().value();
+        FT_ULong charcode = map.namedItem("charcode").toAttr().value().toLongLong();
+
+        std::pair<std::pair<QString, int>, std::pair<QString, FT_ULong> > iter =
+            std::make_pair(std::make_pair(idx, cat), std::make_pair(path, charcode));
+
+        xml->lst.push_back(iter);
     }
 
     return CFFuncResults();

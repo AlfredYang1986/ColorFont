@@ -5,6 +5,8 @@
 #include <QSplashScreen>
 #include <QDateTime>
 #include <QtOpenGL>
+#include "module/modulemanagement/cfmm.h"
+#include "common/funcargs/cfargs.h"
 
 int main(int argc, char *argv[]) {
 
@@ -15,6 +17,10 @@ int main(int argc, char *argv[]) {
     splash->show();
 
     QTime dieTime = QTime::currentTime().addMSecs(1500);
+
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    cfmm->pushMessage(FFT_XML_MODULE, FFT_XML_LOAD, CFFuncArguments());
+
     while( QTime::currentTime() < dieTime )
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
