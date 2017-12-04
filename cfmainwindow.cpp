@@ -104,3 +104,7 @@ void CFMainWindow::on_actionOpen_triggered() {
     area->addSubWindow(w);
     w->show();
 }
+
+void CFMainWindow::slot_pushCharacter(FT_Face face, FT_ULong charcode) {
+    qDebug() << "wo kao push char : " << charcode;
+}

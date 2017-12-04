@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 class CFEffectDock;
 class CFResentCharDock;
 class QMdiArea;
@@ -27,6 +30,8 @@ private slots:
     void on_actionImportTTF_triggered();
 
     void on_actionOpen_triggered();
+
+    void slot_pushCharacter(FT_Face face, FT_ULong charcode);
 
 private:
     Ui::CFMainWindow *ui;

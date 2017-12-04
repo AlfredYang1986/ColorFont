@@ -5,10 +5,9 @@
 #include <QMap>
 #include "../../common/funcargs/cfargs.h"
 
-//static const QString LIB_FONT_MODULE = "font lib module";
-//static const QString LIB_FONT_PUSH = "font lib push";
-//static const QString LIB_FONT_POP = "font lib pop";
-//static const QString LIB_FONT_QUERY = "font lib query";
+static const QString QUERY_MODULE = "query module";
+static const QString QUERY_MAIN_WINDOW = "query main window";
+static const QString QUERY_PUSH_MAIN_WINDOW = "push main window";
 
 static const QString FFT_XML_MODULE = "fft xml module";
 static const QString FFT_XML_LOAD = "fft load xml file";

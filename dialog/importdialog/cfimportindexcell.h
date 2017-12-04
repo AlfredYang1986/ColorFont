@@ -25,13 +25,19 @@ public:
     void resetFace(FT_Face face);
     void resetCharcode(FT_ULong code);
     void repaintOpenGL();
+//    CFPreviewWidget* getContentWidget() const;
+
+signals:
+    void signal_pressed(FT_Face face, FT_ULong charcode);
 
 public slots:
     void slot_importCodeAsChar();
     void slot_importCodeAsSymbol();
+
 protected:
     void setupUi();
     void contextMenuEvent(QContextMenuEvent *);
+    void mousePressEvent(QMouseEvent *);
 
 private:
     QMenu* m;

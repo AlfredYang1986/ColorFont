@@ -6,6 +6,7 @@
 #include "../fftopt/cffftopt.h"
 #include "../openglopt/cfopenglopt.h"
 #include "../xmlopt/cfxmlopt.h"
+#include "../queryopt/cfqueryopt.h"
 using namespace std;
 
 CFModuleManagement* CFModuleManagement::instance = NULL;
@@ -32,7 +33,8 @@ void CFModuleManagement::initCFModules() {
         std::make_pair(FILE_MODULE, new CFFileOpt()),
         std::make_pair(FFT_MODULE, new CFFftOpt()),
         std::make_pair(OPENGL_MODULE, new CFOpenGLOpt()),
-        std::make_pair(FFT_XML_MODULE, new CFXMLOpt())
+        std::make_pair(FFT_XML_MODULE, new CFXMLOpt()),
+        std::make_pair(QUERY_MODULE, new CFQueryOpt())
     };
 }
 

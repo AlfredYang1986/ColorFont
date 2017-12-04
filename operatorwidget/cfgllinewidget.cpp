@@ -13,6 +13,15 @@
 #include <QGLContext>
 #include <QDebug>
 
+CFGLLineWidget::CFGLLineWidget(QGLContext *context, QWidget *parent)
+    : QGLWidget(context, parent) {
+
+}
+
+CFGLLineWidget::~CFGLLineWidget() {
+
+}
+
 void CFGLLineWidget::releaseResources() {
     makeCurrent();
     glDeleteVertexArrays(1, &VAO);
@@ -160,4 +169,8 @@ void CFGLLineWidget::draw(const QVector<Character> &vec) {
 
 void CFGLLineWidget::repaintOpenGL() {
     this->update();
+}
+
+void CFGLLineWidget::pushCharacter(FT_Face face, FT_ULong charcode) {
+
 }

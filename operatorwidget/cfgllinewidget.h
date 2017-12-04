@@ -15,14 +15,12 @@ class CFGLLineWidget : public QGLWidget {
 
 public:
     explicit CFGLLineWidget(QGLContext* context,
-                            QWidget* parent = 0) : QGLWidget(context, parent) {}
-
-    ~CFGLLineWidget() {
-        this->releaseResources();
-    }
+                            QWidget* parent = 0);
+    ~CFGLLineWidget();
 
     void repaintOpenGL();
     void releaseResources();
+    void pushCharacter(FT_Face face, FT_ULong charcode);
 protected:
     void initializeGL();
     void resizeGL(int w, int h);

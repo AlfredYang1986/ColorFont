@@ -50,7 +50,8 @@ SOURCES += main.cpp\
     common/pagewidget/PageWidget.cpp \
     module/xmlopt/cfxmlopt.cpp \
     dialog/fftlibprevwidget/cffftlibprevwidget.cpp \
-    operatorwidget/cfgllinewidget.cpp
+	operatorwidget/cfgllinewidget.cpp \
+    module/queryopt/cfqueryopt.cpp
 
 HEADERS  += \
 		glm/detail/_features.hpp \
@@ -231,7 +232,8 @@ HEADERS  += \
     common/pagewidget/PageWidget.h \
     module/xmlopt/cfxmlopt.h \
     dialog/fftlibprevwidget/cffftlibprevwidget.h \
-    operatorwidget/cfgllinewidget.h
+	operatorwidget/cfgllinewidget.h \
+    module/queryopt/cfqueryopt.h
 
 FORMS    += cfmainwindow.ui \
     common/pagewidget/PageWidget.ui

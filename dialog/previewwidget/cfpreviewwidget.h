@@ -27,6 +27,8 @@ public:
     void repaintOpenGL();
 
     void releaseResources();
+
+
 protected:
     void initializeGL();
     void resizeGL(int width, int height);

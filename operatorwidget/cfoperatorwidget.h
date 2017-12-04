@@ -4,6 +4,7 @@
 #include <QMdiSubWindow>
 
 class QWidget;
+class CFGLLineWidget;
 
 class CFOperatorWidget : public QMdiSubWindow {
 
@@ -13,6 +14,11 @@ public:
     explicit CFOperatorWidget(QWidget* parent = 0);
     ~CFOperatorWidget();
 
+protected:
+    void setupUi();
+
+private:
+    QVector<CFGLLineWidget*> contents;
 };
 
 #endif // CFOPERATORWIDGET_H

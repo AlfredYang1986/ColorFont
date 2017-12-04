@@ -18,12 +18,14 @@ public:
 
 protected:
     void setupUi();
+    void showEvent(QShowEvent *);
 
 public slots:
     void slot_pageChanged(int);
 
 private:
     QList<exchange_type>* cur_lst;
+    bool _is_connected;
 };
 
 #endif // CFFFTLIBPREVWIDGET_H

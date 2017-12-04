@@ -129,3 +129,15 @@ void CFImportIndexCell::slot_importCodeAsSymbol() {
 
     cfmm->pushMessage(FFT_MODULE, FFT_IMPORT_SYMBOL, args);
 }
+
+
+void CFImportIndexCell::mousePressEvent(QMouseEvent * event) {
+    if (Qt::LeftButton == event->button()) {
+        qDebug() << "left mouse press";
+        emit signal_pressed(w->pc, w->charcode);
+    }
+}
+
+//CFPreviewWidget* CFImportIndexCell::getContentWidget() const {
+//    return w;
+//}

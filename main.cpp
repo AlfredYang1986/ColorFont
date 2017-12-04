@@ -25,6 +25,13 @@ int main(int argc, char *argv[]) {
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     CFMainWindow w;
+
+    QVariant v;
+    v.setValue(&w);
+    CFFuncArguments args;
+    args.pushV("main_window", v);
+    cfmm->pushMessage(QUERY_MODULE, QUERY_PUSH_MAIN_WINDOW, args);
+
     w.showMaximized();
 
     splash->finish(&w);

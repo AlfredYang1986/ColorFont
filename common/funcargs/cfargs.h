@@ -6,6 +6,7 @@
 #include <QString>
 #include <QtOpenGL/QtOpenGL>
 #include <glm/gtc/type_ptr.hpp>
+#include "../../cfmainwindow.h"
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -29,6 +30,7 @@ Q_DECLARE_METATYPE(Character)
 Q_DECLARE_METATYPE(FT_Face)
 Q_DECLARE_METATYPE(QVector<FT_ULong>)
 Q_DECLARE_METATYPE(QList<exchange_type>*)
+Q_DECLARE_METATYPE(CFMainWindow*)
 
 class CFFuncArguments : public CFPassable {};
 

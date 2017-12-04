@@ -2,9 +2,11 @@
 
 #include <QGridLayout>
 #include "../importdialog/cfimportindexcell.h"
+#include "../previewwidget/cfpreviewwidget.h"
 #include "../../common/pagewidget/PageWidget.h"
 #include "../../module/modulemanagement/cfmm.h"
 #include "../../common/funcargs/cfargs.h"
+#include "../../cfmainwindow.h"
 
 const int LIB_PAGE_COUNT = 48;
 
@@ -27,7 +29,7 @@ void CFFFTLibPrevWidget::setupUi() {
     for (int index = 0; index < LIB_PAGE_COUNT; ++index) {
         CFImportIndexCell* cell = new CFImportIndexCell();
         cell->setMinimumSize(50, 50);
-//        QWidget* cell = new QWidget();
+
         int row = index / cols;
         int col = index % cols;
         table->addWidget(cell, row, col);
@@ -89,5 +91,22 @@ void CFFFTLibPrevWidget::slot_pageChanged(int p) {
             cell->resetCharcode(ccd);
             cell->repaintOpenGL();
         }
+    }
+}
+
+void CFFFTLibPrevWidget::showEvent(QShowEvent * ) {
+
+    if (!_is_connected) {
+        CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+        CFFuncResults reVal = cfmm->pushMessage(QUERY_MODULE, QUERY_MAIN_WINDOW, CFFuncArguments());
+        CFMainWindow* w = reVal.getV("main_window").value<CFMainWindow*>();
+
+        for (int index = 0; index < cur_lst->size(); ++index) {
+            CFImportIndexCell* cell = this->findChild<CFImportIndexCell*>(QString::number(index));
+            QObject::connect(cell, SIGNAL(signal_pressed(FT_Face, FT_ULong)),
+                             w, SLOT(slot_pushCharacter(FT_Face, FT_ULong)));
+        }
+
+        _is_connected = true;
     }
 }
