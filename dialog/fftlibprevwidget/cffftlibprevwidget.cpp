@@ -11,7 +11,7 @@
 const int LIB_PAGE_COUNT = 48;
 
 CFFFTLibPrevWidget::CFFFTLibPrevWidget(QWidget *parent)
-    : QWidget(parent), cur_lst(NULL) {
+    : QWidget(parent), cur_lst(NULL), _is_connected(false) {
 
     setupUi();
 }

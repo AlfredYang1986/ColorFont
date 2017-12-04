@@ -22,6 +22,11 @@ CFGLLineWidget::~CFGLLineWidget() {
 
 }
 
+
+QSize CFGLLineWidget::sizeHint() const {
+    return QSize(200, 200);
+}
+
 void CFGLLineWidget::releaseResources() {
     makeCurrent();
     glDeleteVertexArrays(1, &VAO);
@@ -90,6 +95,10 @@ void CFGLLineWidget::paintGL() {
 //        draw(character);
 //    }
 //    drawBackground();
+
+    if (chars.size() > 0) {
+        draw(chars.first());
+    }
 }
 
 void CFGLLineWidget::paintEvent(QPaintEvent*) {
@@ -97,7 +106,7 @@ void CFGLLineWidget::paintEvent(QPaintEvent*) {
     /**
      * background
      */
-    p.fillRect(this->rect(), Qt::white);
+    p.fillRect(this->rect(), Qt::black);
 
     /**
      * border
@@ -172,5 +181,32 @@ void CFGLLineWidget::repaintOpenGL() {
 }
 
 void CFGLLineWidget::pushCharacter(FT_Face face, FT_ULong charcode) {
+    qDebug() << "start push char : " << charcode;
 
+    makeCurrent();
+//    charcode = code;
+    {
+//        FT_Face face = pc;
+        CFFuncArguments args;
+
+        {
+            QVariant v;
+            v.setValue(face);
+            args.pushV("face", v);
+        }
+
+        {
+            QVariant v;
+            v.setValue(charcode);
+            args.pushV("charcode", v);
+        }
+
+        CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+        CFFuncResults result = cfmm->pushMessage(OPENGL_MODULE, LOAD_FROM_GLYPH, args);
+        Character character = result.getV("character").value<Character>();
+
+        chars.clear();
+        chars.push_back(character);
+        this->update();
+    }
 }

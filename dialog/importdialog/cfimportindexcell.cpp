@@ -45,10 +45,12 @@ void CFImportIndexCell::setupUi() {
 }
 
 void CFImportIndexCell::resetFace(FT_Face face) {
+    this->pc = face;
     w->resetFace(face);
 }
 
 void CFImportIndexCell::resetCharcode(FT_ULong code) {
+    this->charcode = code;
     w->resetCharcode(code);
 }
 
@@ -133,11 +135,6 @@ void CFImportIndexCell::slot_importCodeAsSymbol() {
 
 void CFImportIndexCell::mousePressEvent(QMouseEvent * event) {
     if (Qt::LeftButton == event->button()) {
-        qDebug() << "left mouse press";
-        emit signal_pressed(w->pc, w->charcode);
+        emit signal_pressed(pc, charcode);
     }
 }
-
-//CFPreviewWidget* CFImportIndexCell::getContentWidget() const {
-//    return w;
-//}

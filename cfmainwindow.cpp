@@ -107,4 +107,8 @@ void CFMainWindow::on_actionOpen_triggered() {
 
 void CFMainWindow::slot_pushCharacter(FT_Face face, FT_ULong charcode) {
     qDebug() << "wo kao push char : " << charcode;
+    CFOperatorWidget* ow = (CFOperatorWidget*)area->currentSubWindow();
+    if (ow != NULL) {
+        ow->pushCharacter(face, charcode);
+    }
 }

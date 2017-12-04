@@ -8,6 +8,7 @@ CFOperatorWidget::CFOperatorWidget(QWidget *parent)
     : QMdiSubWindow(parent) {
 
     this->resize(800, 400);
+    setupUi();
 }
 
 CFOperatorWidget::~CFOperatorWidget() {
@@ -15,18 +16,20 @@ CFOperatorWidget::~CFOperatorWidget() {
 }
 
 void CFOperatorWidget::setupUi() {
+
+    QWidget* w = new QWidget();
     QVBoxLayout* layout = new QVBoxLayout();
 
     {
-        QHBoxLayout* line = new QHBoxLayout();
-
         QGLFormat qglFormat(QGL::DoubleBuffer | QGL::DepthBuffer);
         qglFormat.setVersion(4, 2);
         qglFormat.setProfile(QGLFormat::CoreProfile);
         qglFormat.setSampleBuffers(true);
         QGLContext* context = new QGLContext(qglFormat);
 
+        QHBoxLayout* line = new QHBoxLayout();
         CFGLLineWidget* w = new CFGLLineWidget(context);
+        w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         line->addSpacerItem(new QSpacerItem(10, 0, QSizePolicy::Preferred, QSizePolicy::Preferred));
         line->addWidget(w);
         line->addSpacerItem(new QSpacerItem(10, 0, QSizePolicy::Preferred, QSizePolicy::Preferred));
@@ -35,5 +38,11 @@ void CFOperatorWidget::setupUi() {
         layout->addLayout(line);
     }
 
-    this->setLayout(layout);
+    w->setLayout(layout);
+//    this->setLayout(layout);
+    this->setWidget(w);
+}
+
+void CFOperatorWidget::pushCharacter(FT_Face face, FT_ULong charcode) {
+    contents.first()->pushCharacter(face, charcode);
 }

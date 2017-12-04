@@ -3,6 +3,9 @@
 
 #include <QMdiSubWindow>
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 class QWidget;
 class CFGLLineWidget;
 
@@ -14,6 +17,7 @@ public:
     explicit CFOperatorWidget(QWidget* parent = 0);
     ~CFOperatorWidget();
 
+    void pushCharacter(FT_Face face, FT_ULong charcode);
 protected:
     void setupUi();
 

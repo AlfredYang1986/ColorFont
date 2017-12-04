@@ -22,6 +22,7 @@ public:
     void releaseResources();
     void pushCharacter(FT_Face face, FT_ULong charcode);
 protected:
+    QSize sizeHint() const;
     void initializeGL();
     void resizeGL(int w, int h);
     void paintGL();
