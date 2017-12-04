@@ -13,6 +13,8 @@ CFFuncResults
 pop_font_node(const CFFuncArguments& args);
 CFFuncResults
 sync_doc(const CFFuncArguments& args);
+CFFuncResults
+query_font_lib(const CFFuncArguments& args);
 
 static const QString config_path = "/ttf_config.conf";
 
@@ -21,7 +23,8 @@ CFXMLOpt::CFXMLOpt() : doc(NULL), file(NULL) {
         std::make_pair(FFT_XML_LOAD, &load_font_config),
         std::make_pair(FFT_XML_PUSH, &push_font_node),
         std::make_pair(FFT_XML_POP, &pop_font_node),
-        std::make_pair(FFT_XML_SYNC, &sync_doc)
+        std::make_pair(FFT_XML_SYNC, &sync_doc),
+        std::make_pair(FFT_XML_QUERY, &query_font_lib)
     };
 }
 
@@ -114,10 +117,14 @@ load_font_config(const CFFuncArguments& ) {
         QString path = map.namedItem("path").toAttr().value();
         FT_ULong charcode = map.namedItem("charcode").toAttr().value().toLongLong();
 
-        std::pair<std::pair<QString, int>, std::pair<QString, FT_ULong> > iter =
-            std::make_pair(std::make_pair(idx, cat), std::make_pair(path, charcode));
+        exchange_type et = {
+            idx,
+            cat,
+            path,
+            charcode
+        };
 
-        xml->lst.push_back(iter);
+        xml->lst.push_back(et);
     }
 
     return CFFuncResults();
@@ -182,3 +189,30 @@ sync_doc(const CFFuncArguments&) {
     return CFFuncResults();
 }
 
+CFFuncResults
+query_font_lib(const CFFuncArguments& args) {
+    const int LIB_PAGE_COUNT = 48;
+    int page = args.getV("page").value<int>();
+
+    CFModuleManagement* cfmm =
+            CFModuleManagement::queryInstance();
+    CFXMLOpt* xml = (CFXMLOpt*)cfmm->queryModuleInstance(FFT_XML_MODULE);
+
+//    QList<exchange_type>::const_iterator citer = xml->lst.begin();
+
+    QList<exchange_type> *result = new QList<exchange_type>();
+    int start = page * LIB_PAGE_COUNT;
+    int end = (page + 1) * LIB_PAGE_COUNT;
+    for (int cur_index = start; cur_index < end; ++cur_index) {
+        exchange_type tmp = xml->lst.at(cur_index);
+        result->push_back(tmp);
+    }
+
+    QVariant v;
+    v.setValue(result);
+
+    CFFuncResults reVal;
+    reVal.pushV("lst", v);
+
+    return reVal;
+}

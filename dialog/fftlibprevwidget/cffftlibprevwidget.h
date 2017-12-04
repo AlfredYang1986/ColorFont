@@ -23,7 +23,7 @@ public slots:
     void slot_pageChanged(int);
 
 private:
-    QVector<FT_ULong> char_lst;
+    QList<exchange_type>* cur_lst;
 };
 
 #endif // CFFFTLIBPREVWIDGET_H

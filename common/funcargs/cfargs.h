@@ -18,9 +18,17 @@ struct Character {
 //    GLuint 	   Height;     // Offset to next line
 };
 
+struct exchange_type {
+    QString index;
+    int cat;
+    QString path;
+    FT_ULong charcode;
+};
+
 Q_DECLARE_METATYPE(Character)
 Q_DECLARE_METATYPE(FT_Face)
 Q_DECLARE_METATYPE(QVector<FT_ULong>)
+Q_DECLARE_METATYPE(QList<exchange_type>*)
 
 class CFFuncArguments : public CFPassable {};
 

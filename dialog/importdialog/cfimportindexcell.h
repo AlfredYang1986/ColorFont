@@ -14,12 +14,15 @@ class CFImportIndexCell : public QWidget {
     Q_OBJECT
 
 public:
+    explicit CFImportIndexCell(QWidget* parent = 0);
+
     explicit CFImportIndexCell(
             FT_Face p,
             FT_ULong ccd,
             QWidget* parent = 0);
     ~CFImportIndexCell();
 
+    void resetFace(FT_Face face);
     void resetCharcode(FT_ULong code);
     void repaintOpenGL();
 

@@ -12,6 +12,15 @@
 #include "../../module/openglopt/cfopenglopt.h"
 #include <QDebug>
 
+
+CFPreviewWidget::CFPreviewWidget(
+        QGLContext* context,
+        QWidget* parent)
+
+    : QGLWidget(context, parent), pc(NULL), charcode(0) {
+
+}
+
 CFPreviewWidget::CFPreviewWidget(
         FT_Face p,
         FT_ULong ccd,
@@ -76,7 +85,8 @@ void CFPreviewWidget::initializeGL() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    this->resetCharcode(charcode);
+    if (pc)
+        this->resetCharcode(charcode);
 }
 
 void CFPreviewWidget::resizeGL(int width, int height) {
@@ -92,9 +102,24 @@ void CFPreviewWidget::resizeGL(int width, int height) {
 void CFPreviewWidget::paintGL() {
     makeCurrent();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//    if (charcode > 0)
-    draw(character);
-    drawBackground();
+    if (pc && charcode > 0) {
+        draw(character);
+    }
+//    drawBackground();
+}
+
+void CFPreviewWidget::paintEvent(QPaintEvent*) {
+    QPainter p(this);
+    /**
+     * background
+     */
+    p.fillRect(this->rect(), Qt::white);
+
+    /**
+     * border
+     */
+//    p.drawRoundedRect(this->rect(), 5, 5);
+    paintGL();
 }
 
 void CFPreviewWidget::drawBackground() {
@@ -117,7 +142,6 @@ void CFPreviewWidget::drawBackground() {
         v.setValue(program_bk);
         args.pushV("program", v);
     }
-
 
     CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
     cfmm->pushMessage(OPENGL_MODULE, DRAW_BACKGROUND, args);
@@ -156,6 +180,10 @@ void CFPreviewWidget::draw(Character ch) {
     cfmm->pushMessage(OPENGL_MODULE, DRAW_GLYPH, args);
 }
 
+void CFPreviewWidget::resetFace(FT_Face face) {
+    pc = face;
+}
+
 void CFPreviewWidget::resetCharcode(FT_ULong code) {
     makeCurrent();
     charcode = code;
@@ -185,5 +213,6 @@ void CFPreviewWidget::resetCharcode(FT_ULong code) {
 }
 
 void CFPreviewWidget::repaintOpenGL() {
-    this->updateGL();
+//    this->updateGL();
+    this->update();
 }

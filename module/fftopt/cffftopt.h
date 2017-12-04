@@ -25,9 +25,9 @@ public:
     const QVector<std::pair<QString, FT_Face> >& queryOpenedFaces() const;
     QVector<std::pair<QString, FT_Face> >& queryOpenedFaces();
 
+    QVector<std::pair<QString, FT_Face> > faces;
 private:
     FT_Library ft;
-    QVector<std::pair<QString, FT_Face> > faces;
 
     friend class CFModuleManagement;
 };

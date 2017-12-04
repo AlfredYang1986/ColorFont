@@ -7,6 +7,12 @@
 #include <QAction>
 #include <QMenu>
 
+CFImportIndexCell::CFImportIndexCell(QWidget* parent)
+    : QWidget(parent), m(NULL), pc(NULL), charcode(0) {
+
+    setupUi();
+}
+
 CFImportIndexCell::CFImportIndexCell(
         FT_Face p,
         FT_ULong ccd,
@@ -14,7 +20,6 @@ CFImportIndexCell::CFImportIndexCell(
     : QWidget(parent), m(NULL), pc(p), charcode(ccd) {
 
     setupUi();
-
 }
 
 CFImportIndexCell::~CFImportIndexCell() {
@@ -39,6 +44,9 @@ void CFImportIndexCell::setupUi() {
     this->setLayout(layout);
 }
 
+void CFImportIndexCell::resetFace(FT_Face face) {
+    w->resetFace(face);
+}
 
 void CFImportIndexCell::resetCharcode(FT_ULong code) {
     w->resetCharcode(code);
@@ -120,5 +128,4 @@ void CFImportIndexCell::slot_importCodeAsSymbol() {
 //    }
 
     cfmm->pushMessage(FFT_MODULE, FFT_IMPORT_SYMBOL, args);
-
 }

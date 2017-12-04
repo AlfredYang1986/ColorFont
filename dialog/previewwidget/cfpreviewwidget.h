@@ -13,12 +13,16 @@ class CFPreviewWidget : public QGLWidget {
     Q_OBJECT
 
 public:
+    explicit CFPreviewWidget(QGLContext* context,
+                             QWidget* parent = 0);
+
     explicit CFPreviewWidget(FT_Face pc,
                              FT_ULong ccd,
                              QGLContext* context,
                              QWidget* parent = 0);
     ~CFPreviewWidget();
 
+    void resetFace(FT_Face face);
     void resetCharcode(FT_ULong code);
     void repaintOpenGL();
 
@@ -27,6 +31,9 @@ protected:
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();
+    void paintEvent(QPaintEvent*);
+
+    void setupUi();
 
 private:
     void drawBackground();

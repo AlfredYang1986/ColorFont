@@ -44,6 +44,18 @@ QVector<std::pair<QString, FT_Face> >& CFFftOpt::queryOpenedFaces() {
     return faces;
 }
 
+class path_predicate {
+public:
+    path_predicate(const QString& p) : _p(p) {}
+    bool operator()(const std::pair<QString, FT_Face>& iter) {
+        return iter.first == _p;
+    }
+
+private:
+    QString _p;
+};
+
+
 CFFuncResults
 loadTTFFile(const CFFuncArguments& args) {
 
@@ -53,10 +65,20 @@ loadTTFFile(const CFFuncArguments& args) {
 
     const QString& path = args.getV("path").toString();
 
+    QVector<std::pair<QString, FT_Face> >::const_iterator citer =
+        std::find_if(opt->faces.begin(), opt->faces.end(), path_predicate(path));
+
     FT_Face face;
-    int result = FT_New_Face(ft, path.toStdString().c_str(), 0, &face);
-    if (result != 0) {
-        qDebug() << "ERROR::FREETYPE: Failed to load font";
+    if (citer == opt->faces.end()) {
+        int result = FT_New_Face(ft, path.toStdString().c_str(), 0, &face);
+        if (result != 0) {
+            qDebug() << "ERROR::FREETYPE: Failed to load font";
+        }
+        QString p = path;
+        opt->faces.push_back(std::make_pair(p, face));
+
+    } else {
+        face = (*citer).second;
     }
 
     CFFuncResults reVal;
@@ -68,17 +90,6 @@ loadTTFFile(const CFFuncArguments& args) {
 
     return reVal;
 }
-
-class path_predicate {
-public:
-    path_predicate(const QString& p) : _p(p) {}
-    bool operator()(const std::pair<QString, FT_Face>& iter) {
-        return iter.first == _p;
-    }
-
-private:
-    QString _p;
-};
 
 class face_predicate {
 public:
