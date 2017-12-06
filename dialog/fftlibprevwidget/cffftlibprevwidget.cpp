@@ -39,6 +39,7 @@ void CFFFTLibPrevWidget::setupUi() {
     layout->addLayout(table);
 
     PageWidget* pw = new PageWidget();
+    pw->setObjectName("page");
 //    pw->setMaxPage(char_lst.size() / LIB_PAGE_COUNT + 1);
     pw->setMaxPage(1);
     pw->setCurrentPage(1);
@@ -73,22 +74,33 @@ void CFFFTLibPrevWidget::slot_pageChanged(int p) {
     cur_lst = result.getV("lst").value<QList<exchange_type>*>();
     static const QString config_path = QCoreApplication::applicationDirPath() + "/ttf_dir/";
 
-    for (int index = 0; index < cur_lst->size(); ++index) {
-        QString file_name = config_path + cur_lst->at(index).path;
+//    for (int index = 0; index < cur_lst->size(); ++index) {
+    for (int index = 0; index < LIB_PAGE_COUNT; ++index) {
 
-        FT_Face face;
-        {
-            CFFuncArguments args;
-            args.pushV("path", QVariant(file_name));
-            CFFuncResults result = cfmm->pushMessage(FFT_MODULE, FFT_LOAD_FILE, args);
-            face = result.getV("face").value<FT_Face>();
-        }
+        if (index < cur_lst->size()) {
+            QString file_name = config_path + cur_lst->at(index).path;
 
-        {
+            FT_Face face;
+            {
+                CFFuncArguments args;
+                args.pushV("path", QVariant(file_name));
+                CFFuncResults result = cfmm->pushMessage(FFT_MODULE, FFT_LOAD_FILE, args);
+                face = result.getV("face").value<FT_Face>();
+            }
+
+            {
+                CFImportIndexCell* cell = this->findChild<CFImportIndexCell*>(QString::number(index));
+                FT_ULong ccd = cur_lst->at(index).charcode;
+                cell->resetFace(face);
+                cell->resetCharcode(ccd);
+                cell->repaintOpenGL();
+            }
+
+        } else {
+
             CFImportIndexCell* cell = this->findChild<CFImportIndexCell*>(QString::number(index));
-            FT_ULong ccd = cur_lst->at(index).charcode;
-            cell->resetFace(face);
-            cell->resetCharcode(ccd);
+            cell->resetFace(NULL);
+            cell->resetCharcode(0);
             cell->repaintOpenGL();
         }
     }
@@ -101,6 +113,8 @@ void CFFFTLibPrevWidget::showEvent(QShowEvent * ) {
         CFFuncResults reVal = cfmm->pushMessage(QUERY_MODULE, QUERY_MAIN_WINDOW, CFFuncArguments());
         CFMainWindow* w = reVal.getV("main_window").value<CFMainWindow*>();
 
+        resetMaxPage();
+
         for (int index = 0; index < cur_lst->size(); ++index) {
             CFImportIndexCell* cell = this->findChild<CFImportIndexCell*>(QString::number(index));
             QObject::connect(cell, SIGNAL(signal_pressed(FT_Face, FT_ULong)),
@@ -109,4 +123,13 @@ void CFFFTLibPrevWidget::showEvent(QShowEvent * ) {
 
         _is_connected = true;
     }
+}
+
+void CFFFTLibPrevWidget::resetMaxPage() {
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    CFFuncResults reVal = cfmm->pushMessage(FFT_XML_MODULE, FFT_XML_COUNT, CFFuncArguments());
+
+    int pc = reVal.getV("pc").value<int>();
+    PageWidget* pw = this->findChild<PageWidget*>("page");
+    pw->setMaxPage(pc);
 }

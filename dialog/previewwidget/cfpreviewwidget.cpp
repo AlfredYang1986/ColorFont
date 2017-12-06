@@ -186,7 +186,7 @@ void CFPreviewWidget::resetFace(FT_Face face) {
 void CFPreviewWidget::resetCharcode(FT_ULong code) {
     makeCurrent();
     charcode = code;
-    {
+    if (pc != NULL)  {
         FT_Face face = pc;
 
         CFFuncArguments args;

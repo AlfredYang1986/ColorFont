@@ -15,6 +15,8 @@ CFFuncResults
 sync_doc(const CFFuncArguments& args);
 CFFuncResults
 query_font_lib(const CFFuncArguments& args);
+CFFuncResults
+query_font_count(const CFFuncArguments& args);
 
 static const QString config_path = "/ttf_config.conf";
 
@@ -24,7 +26,8 @@ CFXMLOpt::CFXMLOpt() : doc(NULL), file(NULL) {
         std::make_pair(FFT_XML_PUSH, &push_font_node),
         std::make_pair(FFT_XML_POP, &pop_font_node),
         std::make_pair(FFT_XML_SYNC, &sync_doc),
-        std::make_pair(FFT_XML_QUERY, &query_font_lib)
+        std::make_pair(FFT_XML_QUERY, &query_font_lib),
+        std::make_pair(FFT_XML_COUNT, &query_font_count)
     };
 }
 
@@ -204,8 +207,10 @@ query_font_lib(const CFFuncArguments& args) {
     int start = page * LIB_PAGE_COUNT;
     int end = (page + 1) * LIB_PAGE_COUNT;
     for (int cur_index = start; cur_index < end; ++cur_index) {
-        exchange_type tmp = xml->lst.at(cur_index);
-        result->push_back(tmp);
+        if (cur_index < xml->lst.size()) {
+            exchange_type tmp = xml->lst.at(cur_index);
+            result->push_back(tmp);
+        }
     }
 
     QVariant v;
@@ -213,6 +218,34 @@ query_font_lib(const CFFuncArguments& args) {
 
     CFFuncResults reVal;
     reVal.pushV("lst", v);
+
+    return reVal;
+}
+
+CFFuncResults
+query_font_count(const CFFuncArguments& ) {
+    const int LIB_PAGE_COUNT = 48;
+    CFModuleManagement* cfmm =
+            CFModuleManagement::queryInstance();
+    CFXMLOpt* xml = (CFXMLOpt*)cfmm->queryModuleInstance(FFT_XML_MODULE);
+
+    int count = xml->lst.size();
+
+
+    CFFuncResults reVal;
+
+    {
+        QVariant v;
+        v.setValue(count);
+        reVal.pushV("count", v);
+    }
+
+    {
+        int pc = count / LIB_PAGE_COUNT + 1;
+        QVariant v;
+        v.setValue(pc);
+        reVal.pushV("pc", v);
+    }
 
     return reVal;
 }

@@ -20,6 +20,7 @@ protected:
     void setupUi();
     void showEvent(QShowEvent *);
 
+    void resetMaxPage();
 public slots:
     void slot_pageChanged(int);
 
