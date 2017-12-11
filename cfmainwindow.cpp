@@ -116,3 +116,17 @@ void CFMainWindow::slot_pushCharacter(FT_Face face, FT_ULong charcode) {
 void CFMainWindow::slot_refreshCharacters() {
     qDebug() << "import characters need refresh";
 }
+
+void CFMainWindow::slot_resentDockPanelClosed() {
+    qDebug() << "resent dock panel closed";
+    if (char_dock) {
+        char_dock->deleteLater();
+    }
+}
+
+void CFMainWindow::slot_controlPanelClosed() {
+    qDebug() << "resent dock panel closed";
+    if (effect_dock) {
+        effect_dock->deleteLater();
+    }
+}

@@ -17,9 +17,14 @@ public:
     explicit CFResentCharDock(QWidget* parent = 0);
     ~CFResentCharDock();
 
+signals:
+    void signal_resentPanelClosed();
+
 protected:
     void setupUi();
     void setupFlag();
+
+    void closeEvent(QCloseEvent*);
 
 private:
     QWidget* view;

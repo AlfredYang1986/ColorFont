@@ -4,6 +4,8 @@
 #include <QStandardItemModel>
 #include <QHeaderView>
 #include <QHBoxLayout>
+#include "cfmainwindow.h"
+#include "module/modulemanagement/cfmm.h"
 #include "effectwidget/cfeffectwidget.h"
 #include "shadowwidget/cfshadowwidget.h"
 #include "bkgwidget/cfbkgwidget.h"
@@ -65,6 +67,15 @@ void CFEffectDock::setupUi() {
 
     main_layout->addWidget(content);
     view->setLayout(main_layout);
+
+    {
+        CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+        CFFuncResults reVal = cfmm->pushMessage(QUERY_MODULE, QUERY_MAIN_WINDOW, CFFuncArguments());
+        CFMainWindow* w = reVal.getV("main_window").value<CFMainWindow*>();
+
+        QObject::connect(this, SIGNAL(signal_effectDockClosed()),
+                         w, SLOT(slot_controlPanelClosed()));
+    }
 }
 
 void CFEffectDock::setupFlag() {
@@ -131,4 +142,8 @@ CFEffectWidget* CFEffectDock::createSubPanelByName(const QString& name) {
     } else {
         return NULL;
     }
+}
+
+void CFEffectDock::closeEvent(QCloseEvent *) {
+    emit signal_effectDockClosed();
 }

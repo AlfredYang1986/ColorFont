@@ -19,10 +19,14 @@ public:
 protected:
     void setupUi();
     void setupFlag();
+
+    void closeEvent(QCloseEvent*);
+
     CFEffectWidget* createSubPanelByName(const QString& name);
 
 signals:
     void applyEffect(const QString& name);
+    void signal_effectDockClosed();
 
 public slots:
     void slot_effectSelected(const QModelIndex&);

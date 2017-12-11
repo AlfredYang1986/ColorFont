@@ -33,6 +33,8 @@ private slots:
 
     void slot_pushCharacter(FT_Face face, FT_ULong charcode);
     void slot_refreshCharacters();
+    void slot_resentDockPanelClosed();
+    void slot_controlPanelClosed();
 
 private:
     Ui::CFMainWindow *ui;
