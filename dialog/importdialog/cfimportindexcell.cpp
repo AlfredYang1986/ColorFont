@@ -44,6 +44,10 @@ void CFImportIndexCell::setupUi() {
     this->setLayout(layout);
 }
 
+void CFImportIndexCell::resetCurrentUUID(const QString& str) {
+    uuid = str;
+}
+
 void CFImportIndexCell::resetFace(FT_Face face) {
     this->pc = face;
     w->resetFace(face);

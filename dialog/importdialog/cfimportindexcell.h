@@ -22,6 +22,7 @@ public:
             QWidget* parent = 0);
     ~CFImportIndexCell();
 
+    void resetCurrentUUID(const QString& str);
     void resetFace(FT_Face face);
     void resetCharcode(FT_ULong code);
     void repaintOpenGL();
@@ -46,6 +47,8 @@ private:
     CFPreviewWidget* w;
     FT_Face pc;
     FT_ULong charcode;
+
+    QString uuid;
 };
 
 #endif // CFIMPORTINDEXCELL_H

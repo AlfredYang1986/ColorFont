@@ -67,14 +67,12 @@ release_texture(const CFFuncArguments& args);
 
 CFOpenGLOpt::CFOpenGLOpt()
     : _is_init(false) {
-    funcs = {
-        std::make_pair(INIT_GL, &init_gl),
-//        std::make_pair(QUERY_GL_CONTEXT, &query_gl_context),
-        std::make_pair(RELEASE_TEXTURE, &release_texture),
-        std::make_pair(LOAD_FROM_GLYPH, &texture_from_glyph),
-        std::make_pair(DRAW_GLYPH, &draw_glyph),
-        std::make_pair(DRAW_BACKGROUND, &fill_background)
-    };
+
+    funcs.push_back(std::make_pair(INIT_GL, &init_gl));
+    funcs.push_back(std::make_pair(RELEASE_TEXTURE, &release_texture));
+    funcs.push_back(std::make_pair(LOAD_FROM_GLYPH, &texture_from_glyph));
+    funcs.push_back(std::make_pair(DRAW_GLYPH, &draw_glyph));
+    funcs.push_back(std::make_pair(DRAW_BACKGROUND, &fill_background));
 }
 
 CFOpenGLOpt::~CFOpenGLOpt() {
@@ -181,12 +179,17 @@ texture_from_glyph(const CFFuncArguments& args) {
     glBindTexture(GL_TEXTURE_2D, 0);
 
     // Now store character for later use
-    Character c {
-        texture,
-        glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-        glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-        (GLuint)(face->glyph->advance.x)
-    };
+    Character c;
+    c.TextureID = texture;
+    c.Size = glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows);
+    c.Bearing = glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top);
+    c.Advance = (GLuint)(face->glyph->advance.x);
+//    {
+//        texture,
+//        glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+//        glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+//        (GLuint)(face->glyph->advance.x)
+//    };
 
     CFFuncResults result;
     QVariant v;

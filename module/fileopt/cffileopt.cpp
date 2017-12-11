@@ -15,10 +15,8 @@ CFFuncResults
 move_2_ttf_dir(const CFFuncArguments& args);
 
 CFFileOpt::CFFileOpt() {
-    funcs = {
-        std::make_pair(FILE_TTF_DIR, &create_ttf_dir),
-        std::make_pair(FILE_MOVE_TO_TTF_DIR, &move_2_ttf_dir)
-    };
+    funcs.push_back(std::make_pair(FILE_TTF_DIR, &create_ttf_dir));
+    funcs.push_back(std::make_pair(FILE_MOVE_TO_TTF_DIR, &move_2_ttf_dir));
 }
 
 CFFileOpt::~CFFileOpt() {

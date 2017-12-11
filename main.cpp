@@ -12,6 +12,11 @@ int main(int argc, char *argv[]) {
 
     QApplication a(argc, argv);
 
+    QDir dir(QCoreApplication::applicationDirPath());
+    dir.cdUp();
+    dir.cd("plugins");
+    QCoreApplication::setLibraryPaths(QStringList(dir.absolutePath()));
+
     QSplashScreen* splash = new QSplashScreen;
     splash->setPixmap(QPixmap(":/resource/screen.png"));
     splash->show();

@@ -8,10 +8,9 @@ CFFuncResults
 query_query_main_window(const CFFuncArguments& args);
 
 CFQueryOpt::CFQueryOpt() {
-    funcs = {
-        std::make_pair(QUERY_MAIN_WINDOW, &query_query_main_window),
-        std::make_pair(QUERY_PUSH_MAIN_WINDOW, &query_push_main_window)
-    };
+
+    funcs.push_back(std::make_pair(QUERY_MAIN_WINDOW, &query_query_main_window));
+    funcs.push_back(std::make_pair(QUERY_PUSH_MAIN_WINDOW, &query_push_main_window));
 }
 
 CFQueryOpt::~CFQueryOpt() {

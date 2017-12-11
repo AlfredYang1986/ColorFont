@@ -15,14 +15,12 @@ CFFuncResults import_code_as_chars_lst(const CFFuncArguments& args);
 CFFuncResults import_code_as_symbol_lst(const CFFuncArguments& args);
 
 CFFftOpt::CFFftOpt() {
-    funcs = {
-        std::make_pair(FFT_LOAD_FILE, &loadTTFFile),
-        std::make_pair(FFT_FREE_FACE, &free_ttf_file),
-        std::make_pair(FFT_IMPORT_CHAR, &import_code_as_chars),
-        std::make_pair(FFT_IMPORT_CHAR_LST, &import_code_as_chars_lst),
-        std::make_pair(FFT_IMPORT_SYMBOL, &import_code_as_symbol),
-        std::make_pair(FFT_IMPORT_SYMBOL_LST, &import_code_as_symbol_lst)
-    };
+    funcs.push_back(std::make_pair(FFT_LOAD_FILE, &loadTTFFile));
+    funcs.push_back(std::make_pair(FFT_FREE_FACE, &free_ttf_file));
+    funcs.push_back(std::make_pair(FFT_IMPORT_CHAR, &import_code_as_chars));
+    funcs.push_back(std::make_pair(FFT_IMPORT_CHAR_LST, &import_code_as_chars_lst));
+    funcs.push_back(std::make_pair(FFT_IMPORT_SYMBOL, &import_code_as_symbol));
+    funcs.push_back(std::make_pair(FFT_IMPORT_SYMBOL_LST, &import_code_as_symbol_lst));
 
     if (FT_Init_FreeType(&ft))
         qDebug() << "ERROR::FREETYPE: Could not init FreeType Library";

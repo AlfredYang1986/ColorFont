@@ -29,13 +29,11 @@ CFModuleManagement::~CFModuleManagement() {
 }
 
 void CFModuleManagement::initCFModules() {
-    mms = {
-        std::make_pair(FILE_MODULE, new CFFileOpt()),
-        std::make_pair(FFT_MODULE, new CFFftOpt()),
-        std::make_pair(OPENGL_MODULE, new CFOpenGLOpt()),
-        std::make_pair(FFT_XML_MODULE, new CFXMLOpt()),
-        std::make_pair(QUERY_MODULE, new CFQueryOpt())
-    };
+    mms.push_back(std::make_pair(FILE_MODULE, new CFFileOpt()));
+    mms.push_back(std::make_pair(FFT_MODULE, new CFFftOpt()));
+    mms.push_back(std::make_pair(OPENGL_MODULE, new CFOpenGLOpt()));
+    mms.push_back(std::make_pair(FFT_XML_MODULE, new CFXMLOpt()));
+    mms.push_back(std::make_pair(QUERY_MODULE, new CFQueryOpt()));
 }
 
 void CFModuleManagement::destoryCFModules() {

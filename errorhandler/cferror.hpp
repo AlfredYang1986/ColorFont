@@ -10,6 +10,8 @@ public:
 
     int error_code;
     QString error_message;
+
+    virtual ~CFError() _NOEXCEPT {}
 };
 
 #endif // CFERROR_H

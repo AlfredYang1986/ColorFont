@@ -32,6 +32,7 @@ private slots:
     void on_actionOpen_triggered();
 
     void slot_pushCharacter(FT_Face face, FT_ULong charcode);
+    void slot_refreshCharacters();
 
 private:
     Ui::CFMainWindow *ui;

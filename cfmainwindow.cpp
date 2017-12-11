@@ -112,3 +112,7 @@ void CFMainWindow::slot_pushCharacter(FT_Face face, FT_ULong charcode) {
         ow->pushCharacter(face, charcode);
     }
 }
+
+void CFMainWindow::slot_refreshCharacters() {
+    qDebug() << "import characters need refresh";
+}

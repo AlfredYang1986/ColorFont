@@ -16,14 +16,17 @@ struct Character {
     glm::ivec2 Size;       // Size of glyph
     glm::ivec2 Bearing;    // Offset from baseline to left/top of glyph
     GLuint 	   Advance;    // Offset to advance to next glyph
-//    GLuint 	   Height;     // Offset to next line
+    GLuint 	   Height;     // Offset to next line
 };
 
 struct exchange_type {
+    QString uuid;
     QString index;
     int cat;
     QString path;
     FT_ULong charcode;
+
+    int times;
 };
 
 Q_DECLARE_METATYPE(Character)

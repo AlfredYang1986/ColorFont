@@ -18,9 +18,13 @@ public:
             QWidget* parent = 0);
     ~CFImportTTFDialog();
 
+signals:
+    void signal_importSuccess();
 
 protected:
     void setupUi();
+
+    void closeEvent(QCloseEvent*);
 
 public slots:
     void slot_pageChanged(int);

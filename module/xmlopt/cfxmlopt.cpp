@@ -4,6 +4,7 @@
 #include <QDomElement>
 #include <QDomNode>
 #include <QFile>
+#include <QUuid>
 
 CFFuncResults
 load_font_config(const CFFuncArguments& args);
@@ -17,18 +18,20 @@ CFFuncResults
 query_font_lib(const CFFuncArguments& args);
 CFFuncResults
 query_font_count(const CFFuncArguments& args);
+CFFuncResults
+push_times(const CFFuncArguments& args);
 
 static const QString config_path = "/ttf_config.conf";
 
 CFXMLOpt::CFXMLOpt() : doc(NULL), file(NULL) {
-    funcs = {
-        std::make_pair(FFT_XML_LOAD, &load_font_config),
-        std::make_pair(FFT_XML_PUSH, &push_font_node),
-        std::make_pair(FFT_XML_POP, &pop_font_node),
-        std::make_pair(FFT_XML_SYNC, &sync_doc),
-        std::make_pair(FFT_XML_QUERY, &query_font_lib),
-        std::make_pair(FFT_XML_COUNT, &query_font_count)
-    };
+
+    funcs.push_back(std::make_pair(FFT_XML_LOAD, &load_font_config));
+    funcs.push_back(std::make_pair(FFT_XML_PUSH, &push_font_node));
+    funcs.push_back(std::make_pair(FFT_XML_POP, &pop_font_node));
+    funcs.push_back(std::make_pair(FFT_XML_SYNC, &sync_doc));
+    funcs.push_back(std::make_pair(FFT_XML_QUERY, &query_font_lib));
+    funcs.push_back(std::make_pair(FFT_XML_COUNT, &query_font_count));
+    funcs.push_back(std::make_pair(FFT_XML_PUSH_TIMES, &push_times));
 }
 
 CFXMLOpt::~CFXMLOpt() {
@@ -119,12 +122,30 @@ load_font_config(const CFFuncArguments& ) {
         int cat = map.namedItem("cat").toAttr().value().toInt();
         QString path = map.namedItem("path").toAttr().value();
         FT_ULong charcode = map.namedItem("charcode").toAttr().value().toLongLong();
+        int times = 0;
+        QDomNode times_node = map.namedItem("times"); //.toAttr().value().toLongLong();
+        if (times_node.isNull()) {
+            times = 0;
+        } else {
+            times = times_node.toAttr().value().toInt();
+        }
+
+        QString str_uuid = 0;
+        QDomNode uuid_node = map.namedItem("uuid"); //.toAttr().value().toLongLong();
+        if (uuid_node.isNull()) {
+            str_uuid = QUuid::createUuid().toString();
+        } else {
+            str_uuid = uuid_node.toAttr().value();
+        }
+
 
         exchange_type et = {
+            str_uuid,
             idx,
             cat,
             path,
-            charcode
+            charcode,
+            times
         };
 
         xml->lst.push_back(et);
@@ -150,10 +171,13 @@ push_font_node(const CFFuncArguments& args) {
     QDomElement root = doc->documentElement();
 
     QDomElement new_ele = doc->createElement("char");
+    QString str_uuid = QUuid::createUuid().toString();
+    new_ele.setAttribute("uuid", str_uuid);
     new_ele.setAttribute("charcode", (qlonglong)charcode);
     new_ele.setAttribute("path", file_name);
     new_ele.setAttribute("cat", cat);
     new_ele.setAttribute("index", index);
+    new_ele.setAttribute("times", 0);
     root.appendChild(new_ele);
 
 //    QFile* file = xml->file;
@@ -248,4 +272,19 @@ query_font_count(const CFFuncArguments& ) {
     }
 
     return reVal;
+}
+
+CFFuncResults
+push_times(const CFFuncArguments& args) {
+    const int LIB_PAGE_COUNT = 48;
+    int page = args.getV("page").value<int>();
+    int index = args.getV("index").value<int>();
+
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    CFXMLOpt* xml = (CFXMLOpt*)cfmm->queryModuleInstance(FFT_XML_MODULE);
+
+    int i = (page - 1) * LIB_PAGE_COUNT + index;
+    ++(xml->lst[i].times);
+
+    return CFFuncResults();
 }

@@ -4,6 +4,8 @@
 #include <QTableWidget>
 #include <QVBoxLayout>
 #include <QGridLayout>
+#include <QMessageBox>
+#include "cfmainwindow.h"
 #include "cfimportindexcell.h"
 #include "../../common/funcargs/cfargs.h"
 #include "../../common/pagewidget/PageWidget.h"
@@ -84,6 +86,15 @@ void CFImportTTFDialog::setupUi() {
     layout->addLayout(control_panel);
 
     this->setLayout(layout);
+
+    {
+        CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+        CFFuncResults reVal = cfmm->pushMessage(QUERY_MODULE, QUERY_MAIN_WINDOW, CFFuncArguments());
+        CFMainWindow* w = reVal.getV("main_window").value<CFMainWindow*>();
+
+        QObject::connect(this, SIGNAL(signal_importSuccess()),
+                         w, SLOT(slot_refreshCharacters()));
+    }
 }
 
 void CFImportTTFDialog::slot_pageChanged(int p) {
@@ -117,6 +128,12 @@ void CFImportTTFDialog::slot_importCurrentFont() {
     }
 
     cfmm->pushMessage(FFT_MODULE, FFT_IMPORT_CHAR_LST, args);
+
+    if (QMessageBox::warning(this, tr("导入字符成功"), tr("导入字符成功"))
+            == QMessageBox::Ok) {
+
+        this->close();
+    }
 }
 
 void CFImportTTFDialog::slot_importCurrentSymbol() {
@@ -139,4 +156,14 @@ void CFImportTTFDialog::slot_importCurrentSymbol() {
 
     cfmm->pushMessage(FFT_MODULE, FFT_IMPORT_SYMBOL_LST, args);
 
+    if (QMessageBox::warning(this, tr("导入字符成功"), tr("导入字符成功"))
+            == QMessageBox::Ok) {
+
+        this->close();
+    }
+}
+
+void CFImportTTFDialog::closeEvent(QCloseEvent *) {
+    qDebug() << "about to close preview dialog";
+    emit signal_importSuccess();
 }

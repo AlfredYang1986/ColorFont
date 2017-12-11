@@ -16,6 +16,7 @@ static const QString FFT_XML_PUSH = "fft xml file push node";
 static const QString FFT_XML_POP = "fft xml file pop node";
 static const QString FFT_XML_QUERY = "fft xml query node";
 static const QString FFT_XML_COUNT = "fft xml query node count";
+static const QString FFT_XML_PUSH_TIMES = "fft xml push times";
 
 static const QString FILE_MODULE = "file module";
 static const QString FILE_TTF_DIR = "create ttf dir";

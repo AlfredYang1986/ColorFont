@@ -91,6 +91,7 @@ void CFFFTLibPrevWidget::slot_pageChanged(int p) {
             {
                 CFImportIndexCell* cell = this->findChild<CFImportIndexCell*>(QString::number(index));
                 FT_ULong ccd = cur_lst->at(index).charcode;
+                cell->resetCurrentUUID(cur_lst->at(index).uuid);
                 cell->resetFace(face);
                 cell->resetCharcode(ccd);
                 cell->repaintOpenGL();
@@ -99,6 +100,7 @@ void CFFFTLibPrevWidget::slot_pageChanged(int p) {
         } else {
 
             CFImportIndexCell* cell = this->findChild<CFImportIndexCell*>(QString::number(index));
+            cell->resetCurrentUUID("");
             cell->resetFace(NULL);
             cell->resetCharcode(0);
             cell->repaintOpenGL();

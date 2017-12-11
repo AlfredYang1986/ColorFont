@@ -239,7 +239,6 @@ FORMS    += cfmainwindow.ui \
     common/pagewidget/PageWidget.ui
 
 mac {
-
 	INCLUDEPATH += /usr/local/include/freetype2
 	LIBS +=	/usr/local/lib/libfreetype.6.dylib
 }

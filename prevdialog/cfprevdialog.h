@@ -2,6 +2,7 @@
 #define CFPREVDIALOG_H
 
 #include <QSplitter>
+#include <QModelIndex>
 class QListView;
 class QTableView;
 
