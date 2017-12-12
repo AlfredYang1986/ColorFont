@@ -26,6 +26,10 @@ int main(int argc, char *argv[]) {
     CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
     cfmm->pushMessage(FFT_XML_MODULE, FFT_XML_LOAD, CFFuncArguments());
 
+    QSurfaceFormat  format;
+    format.setProfile(QSurfaceFormat::OpenGLContextProfile::CompatibilityProfile);
+    QSurfaceFormat::setDefaultFormat(format);
+
     while( QTime::currentTime() < dieTime )
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 

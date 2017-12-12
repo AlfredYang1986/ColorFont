@@ -233,7 +233,8 @@ HEADERS  += \
     module/xmlopt/cfxmlopt.h \
     dialog/fftlibprevwidget/cffftlibprevwidget.h \
 	operatorwidget/cfgllinewidget.h \
-    module/queryopt/cfqueryopt.h
+    module/queryopt/cfqueryopt.h \
+    common/funcargs/cfaligndefine.h
 
 FORMS    += cfmainwindow.ui \
     common/pagewidget/PageWidget.ui

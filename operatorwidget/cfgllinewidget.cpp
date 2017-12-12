@@ -11,6 +11,7 @@
 #include "../module/modulemanagement/cfmm.h"
 #include "../module/openglopt/cfopenglopt.h"
 #include <QGLContext>
+#include <algorithm>
 #include <QDebug>
 
 CFGLLineWidget::CFGLLineWidget(QGLContext *context, QWidget *parent)
@@ -22,9 +23,18 @@ CFGLLineWidget::~CFGLLineWidget() {
 
 }
 
-
 QSize CFGLLineWidget::sizeHint() const {
-    return QSize(200, 200);
+
+    GLfloat x = 0.f;
+    GLfloat y = 0.f;
+
+    for (int index = 0; index < chars.size(); ++index) {
+        Character ch = chars[index];
+        x += (ch.Advance >> 6) * 1.f;
+        y = std::max(y, (GLfloat)ch.Size.y);
+    }
+
+    return QSize(x, y);
 }
 
 void CFGLLineWidget::releaseResources() {
@@ -94,7 +104,7 @@ void CFGLLineWidget::paintGL() {
 //    if (pc && charcode > 0) {
 //        draw(character);
 //    }
-//    drawBackground();
+    drawBackground();
 
     if (chars.size() > 0) {
 //        draw(chars.first());
@@ -104,15 +114,6 @@ void CFGLLineWidget::paintGL() {
 
 void CFGLLineWidget::paintEvent(QPaintEvent*) {
     QPainter p(this);
-    /**
-     * background
-     */
-    p.fillRect(this->rect(), Qt::black);
-
-    /**
-     * border
-     */
-//    p.drawRoundedRect(this->rect(), 5, 5);
     paintGL();
 }
 
@@ -214,6 +215,18 @@ void CFGLLineWidget::draw(const QVector<Character> &vec) {
 
     {
         QVariant v;
+        v.setValue((GLfloat)(this->size().width()));
+        args.pushV("w", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue((GLfloat)(this->size().height()));
+        args.pushV("h", v);
+    }
+
+    {
+        QVariant v;
         v.setValue((GLfloat)1.0);
         args.pushV("scale", v);
     }
@@ -230,9 +243,7 @@ void CFGLLineWidget::pushCharacter(FT_Face face, FT_ULong charcode) {
     qDebug() << "start push char : " << charcode;
 
     makeCurrent();
-//    charcode = code;
     {
-//        FT_Face face = pc;
         CFFuncArguments args;
 
         {
@@ -251,8 +262,6 @@ void CFGLLineWidget::pushCharacter(FT_Face face, FT_ULong charcode) {
         CFFuncResults result = cfmm->pushMessage(OPENGL_MODULE, LOAD_FROM_GLYPH, args);
         Character character = result.getV("character").value<Character>();
 
-//        chars.clear();
         chars.push_back(character);
-        this->update();
     }
 }

@@ -103,7 +103,7 @@ init_gl(const CFFuncArguments&) {
     glShadeModel(GL_FLAT); 	// 设置阴影平滑模式
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
-    glEnable(GL_CULL_FACE);
+//    glEnable(GL_CULL_FACE);
 
     glEnable(GL_ALPHA_TEST);
 
@@ -190,6 +190,7 @@ texture_from_glyph(const CFFuncArguments& args) {
     c.Size = glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows);
     c.Bearing = glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top);
     c.Advance = (GLuint)(face->glyph->advance.x);
+    c.Height = (GLuint)(face->height);
 //    {
 //        texture,
 //        glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
@@ -323,13 +324,15 @@ draw_glyph_lst(const CFFuncArguments& args) {
     QVector<Character> text = args.getV("char-lst").value<QVector<Character> >();
     GLfloat x = args.getV("x").value<GLfloat>();
     GLfloat y = args.getV("y").value<GLfloat>();
+    GLfloat w = args.getV("w").value<GLfloat>();
+    GLfloat h = args.getV("h").value<GLfloat>();
     GLfloat scale = args.getV("scale").value<GLfloat>();
     QOpenGLShaderProgram* program = args.getV("program").value<QOpenGLShaderProgram*>();
 
     program->link();
     program->bind();
 
-    glm::mat4 projection = glm::ortho(0.0f, DEFAULT_WIDTH, 0.0f, DEFAULT_HEIGHT);
+    glm::mat4 projection = glm::ortho(0.0f, w, 0.0f, h);
     glUniformMatrix4fv(glGetUniformLocation(program->programId(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
     glUniform3f(glGetUniformLocation(program->programId(), "textColor"), 0.0, 0.0, 0.0);
@@ -341,8 +344,10 @@ draw_glyph_lst(const CFFuncArguments& args) {
     while (c != text.end()) {
         Character ch = *c;
 
-        GLfloat xpos = x + ch.Bearing.x * scale;
-        GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+//        GLfloat xpos = x + ch.Bearing.x * scale;
+//        GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+        GLfloat xpos = x;
+        GLfloat ypos = y;
 
         GLfloat w = ch.Size.x * scale;
         GLfloat h = ch.Size.y * scale;
