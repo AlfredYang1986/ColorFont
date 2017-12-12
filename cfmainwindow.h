@@ -22,6 +22,9 @@ public:
     explicit CFMainWindow(QWidget *parent = 0);
     ~CFMainWindow();
 
+    void setupEffectDock();
+    void setupResentSymbolDock();
+
 private slots:
 
     void on_actionClose_triggered();

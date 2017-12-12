@@ -97,7 +97,8 @@ void CFGLLineWidget::paintGL() {
 //    drawBackground();
 
     if (chars.size() > 0) {
-        draw(chars.first());
+//        draw(chars.first());
+        draw(chars);
     }
 }
 
@@ -173,7 +174,52 @@ void CFGLLineWidget::draw(Character ch) {
 }
 
 void CFGLLineWidget::draw(const QVector<Character> &vec) {
+    CFFuncArguments args;
 
+    {
+        QVariant v;
+        v.setValue(VAO);
+        args.pushV("VAO", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue(VBO);
+        args.pushV("VBO", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue(vec);
+        args.pushV("char-lst", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue(program);
+        args.pushV("program", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue((GLfloat)0.0);
+        args.pushV("x", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue((GLfloat)0.0);
+        args.pushV("y", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue((GLfloat)1.0);
+        args.pushV("scale", v);
+    }
+
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    cfmm->pushMessage(OPENGL_MODULE, DRAW_GLYPH_LST, args);
 }
 
 void CFGLLineWidget::repaintOpenGL() {
@@ -205,7 +251,7 @@ void CFGLLineWidget::pushCharacter(FT_Face face, FT_ULong charcode) {
         CFFuncResults result = cfmm->pushMessage(OPENGL_MODULE, LOAD_FROM_GLYPH, args);
         Character character = result.getV("character").value<Character>();
 
-        chars.clear();
+//        chars.clear();
         chars.push_back(character);
         this->update();
     }

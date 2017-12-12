@@ -29,6 +29,7 @@ void CFOperatorWidget::setupUi() {
 
         QHBoxLayout* line = new QHBoxLayout();
         CFGLLineWidget* w = new CFGLLineWidget(context);
+        w->setMinimumSize(300, 300);
         w->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         line->addSpacerItem(new QSpacerItem(10, 0, QSizePolicy::Preferred, QSizePolicy::Preferred));
         line->addWidget(w);

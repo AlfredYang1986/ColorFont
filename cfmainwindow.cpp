@@ -18,24 +18,10 @@ CFMainWindow::CFMainWindow(QWidget *parent) :
     ui(new Ui::CFMainWindow) {
 
     ui->setupUi(this);
-    effect_dock = new CFEffectDock();
-    this->addDockWidget(Qt::RightDockWidgetArea, effect_dock);
-
-    char_dock = new CFResentCharDock();
-    this->addDockWidget(Qt::LeftDockWidgetArea , char_dock);
-
-//    QWidget* view = new QWidget();
-//    view->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-//    QVBoxLayout* layout = new QVBoxLayout();
-//    layout->addWidget(new CFOperatorTab());
 
     area = new QMdiArea();
     area->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setCentralWidget(area);
-//    layout->addWidget(area);
-//    view->setLayout(layout);
-
-//    setCentralWidget(view);
 
     this->setWindowTitle(tr("方仪设计工具"));
 }
@@ -44,13 +30,15 @@ CFMainWindow::~CFMainWindow() {
     delete ui;
 }
 
-//void CFMainWindow::on_actionOpenFont_triggered() {
-//    // TODO: Open a ttf file, and load ttf to the main area
-//    qDebug() << "open action triggered";
+void CFMainWindow::setupEffectDock() {
+    effect_dock = new CFEffectDock();
+    this->addDockWidget(Qt::RightDockWidgetArea, effect_dock);
+}
 
-//    CFOperatorWidget* w = new CFOperatorWidget(area);
-//    w->show();
-//}
+void CFMainWindow::setupResentSymbolDock() {
+    char_dock = new CFResentCharDock();
+    this->addDockWidget(Qt::LeftDockWidgetArea , char_dock);
+}
 
 void CFMainWindow::on_actionClose_triggered() {
     // TODO: close all

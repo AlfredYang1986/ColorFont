@@ -30,6 +30,7 @@ struct exchange_type {
 };
 
 Q_DECLARE_METATYPE(Character)
+Q_DECLARE_METATYPE(QVector<Character>)
 Q_DECLARE_METATYPE(FT_Face)
 Q_DECLARE_METATYPE(QVector<FT_ULong>)
 Q_DECLARE_METATYPE(QList<exchange_type>*)

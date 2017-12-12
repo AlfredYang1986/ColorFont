@@ -37,6 +37,8 @@ int main(int argc, char *argv[]) {
     args.pushV("main_window", v);
     cfmm->pushMessage(QUERY_MODULE, QUERY_PUSH_MAIN_WINDOW, args);
 
+    w.setupEffectDock();
+    w.setupResentSymbolDock();
     w.showMaximized();
 
     splash->finish(&w);

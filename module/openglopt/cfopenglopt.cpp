@@ -2,6 +2,7 @@
 #include "../../common/funcargs/cfargs.h"
 #include "../modulemanagement/cfmm.h"
 #include <QGLContext>
+#include <QVector>
 
 //#include <ft2build.h>
 //#include FT_FREETYPE_H
@@ -10,17 +11,17 @@ const GLfloat DEFAULT_WIDTH = 100.f;
 const GLfloat DEFAULT_HEIGHT = 100.f;
 
 static const char *vertexShaderSourceCore =
-    "#version 410\n"
-    "layout (location = 0) in vec4 vertex; // <vec2 pos, vec2 tex> \n"
+    "#version 410 \n"
+    "layout (location = 0) in vec4 vertex; \n"
     "out vec2 TexCoords;\n"
     "uniform mat4 projection;\n"
     "void main() {\n"
     "	gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);\n"
     "	TexCoords = vertex.zw;\n"
-    "}\n";
+    "}";
 
 static const char *fragmentShaderSourceCore =
-    "#version 410\n"
+    "#version 410 \n"
     "in vec2 TexCoords;\n"
     "out vec4 color;\n"
     "uniform sampler2D text;\n"
@@ -33,16 +34,16 @@ static const char *fragmentShaderSourceCore =
     "		color = vec4(textColor, 1.0) * sampled ;\n"
     "	} else { \n"
     "		color = vec4(bkColor, 1.0);\n"
-    "	}"
-    "}\n";
+    "	}\n"
+    "}";
 
 static const char *vertexBackgroundShaderSourceCore =
     "#version 410\n"
-    "layout (location = 0) in vec2 vertex; // <vec2 pos, vec2 tex> \n"
+    "layout (location = 0) in vec2 vertex; \n"
     "uniform mat4 projection;\n"
     "void main() {\n"
     "	gl_Position = projection * vec4(vertex.xy, 0.1, 1.0);\n"
-    "}\n";
+    "}";
 
 static const char *fragmentBackgroundShaderSourceCore =
     "#version 410\n"
@@ -50,7 +51,7 @@ static const char *fragmentBackgroundShaderSourceCore =
     "uniform vec3 textColor;\n"
     "void main() {\n"
     "	color = vec4(textColor, 1.0);\n"
-    "}\n";
+    "}";
 
 CFFuncResults
 init_gl(const CFFuncArguments& args);
@@ -64,6 +65,8 @@ CFFuncResults
 fill_background(const CFFuncArguments& args);
 CFFuncResults
 release_texture(const CFFuncArguments& args);
+CFFuncResults
+draw_glyph_lst(const CFFuncArguments& args);
 
 CFOpenGLOpt::CFOpenGLOpt()
     : _is_init(false) {
@@ -73,6 +76,7 @@ CFOpenGLOpt::CFOpenGLOpt()
     funcs.push_back(std::make_pair(LOAD_FROM_GLYPH, &texture_from_glyph));
     funcs.push_back(std::make_pair(DRAW_GLYPH, &draw_glyph));
     funcs.push_back(std::make_pair(DRAW_BACKGROUND, &fill_background));
+    funcs.push_back(std::make_pair(DRAW_GLYPH_LST, &draw_glyph_lst));
 }
 
 CFOpenGLOpt::~CFOpenGLOpt() {
@@ -145,6 +149,8 @@ texture_from_glyph(const CFFuncArguments& args) {
     FT_Face face = args.getV("face").value<FT_Face>();
     FT_ULong charcode = args.getV("charcode").value<FT_ULong>();
 //    FT_UInt gindex = args.getV("gindex").value<FT_UInt>();
+
+    // font 18
 
     FT_Set_Pixel_Sizes(face, 0, 48);
     FT_Set_Char_Size(face, 0, 18<<6, 300, 300);
@@ -308,4 +314,63 @@ fill_background(const CFFuncArguments& args) {
 CFFuncResults
 release_texture(const CFFuncArguments& args) {
 
+}
+
+CFFuncResults
+draw_glyph_lst(const CFFuncArguments& args) {
+    GLuint VAO = args.getV("VAO").value<GLuint>();
+    GLuint VBO = args.getV("VBO").value<GLuint>();
+    QVector<Character> text = args.getV("char-lst").value<QVector<Character> >();
+    GLfloat x = args.getV("x").value<GLfloat>();
+    GLfloat y = args.getV("y").value<GLfloat>();
+    GLfloat scale = args.getV("scale").value<GLfloat>();
+    QOpenGLShaderProgram* program = args.getV("program").value<QOpenGLShaderProgram*>();
+
+    program->link();
+    program->bind();
+
+    glm::mat4 projection = glm::ortho(0.0f, DEFAULT_WIDTH, 0.0f, DEFAULT_HEIGHT);
+    glUniformMatrix4fv(glGetUniformLocation(program->programId(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+    glUniform3f(glGetUniformLocation(program->programId(), "textColor"), 0.0, 0.0, 0.0);
+    glUniform3f(glGetUniformLocation(program->programId(), "bkColor"), 1.0, 1.0, 1.0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindVertexArray(VAO);
+
+    QVector<Character>::const_iterator c = text.begin();
+    while (c != text.end()) {
+        Character ch = *c;
+
+        GLfloat xpos = x + ch.Bearing.x * scale;
+        GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+
+        GLfloat w = ch.Size.x * scale;
+        GLfloat h = ch.Size.y * scale;
+        // Update VBO for each character
+        GLfloat vertices[6][4] = {
+            { xpos,     ypos + h,   0.0, 0.0 },
+            { xpos,     ypos,       0.0, 1.0 },
+            { xpos + w, ypos,       1.0, 1.0 },
+
+            { xpos,     ypos + h,   0.0, 0.0 },
+            { xpos + w, ypos,       1.0, 1.0 },
+            { xpos + w, ypos + h,   1.0, 0.0 }
+        };
+        // Render glyph texture over quad
+        glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+        // Update content of VBO memory
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        // Render quad
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+        x += (ch.Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
+
+        ++c;
+    }
+    glBindVertexArray(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    return CFFuncResults();
 }
