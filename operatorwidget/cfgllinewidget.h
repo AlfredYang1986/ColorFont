@@ -39,6 +39,7 @@ private:
     QOpenGLShaderProgram * program;
     QOpenGLShaderProgram * program_bk;
     QVector<Character> chars;
+
 };
 
 #endif // CFGLLINEWIDGET_H

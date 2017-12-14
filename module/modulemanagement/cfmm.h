@@ -18,9 +18,12 @@ static const QString FFT_XML_QUERY = "fft xml query node";
 static const QString FFT_XML_COUNT = "fft xml query node count";
 static const QString FFT_XML_PUSH_TIMES = "fft xml push times";
 
+static const QString FFT_XML_SAVE_CURRENT = "fft xml save current";
+
 static const QString FILE_MODULE = "file module";
 static const QString FILE_TTF_DIR = "create ttf dir";
 static const QString FILE_MOVE_TO_TTF_DIR = "move to ttf dir";
+static const QString FILE_SAVE_DIR = "carete save dir";
 
 static const QString FFT_MODULE = "fft";
 static const QString FFT_LOAD_FILE = "load";
@@ -29,6 +32,7 @@ static const QString FFT_IMPORT_CHAR = "import char";
 static const QString FFT_IMPORT_SYMBOL = "import symbol";
 static const QString FFT_IMPORT_CHAR_LST = "import chars list";
 static const QString FFT_IMPORT_SYMBOL_LST = "import symbols list";
+static const QString FFT_QUERY_PATHS_FROM_FACES = "query paths from faces";
 
 static const QString OPENGL_MODULE = "opengl";
 static const QString INIT_GL = "Init GL";

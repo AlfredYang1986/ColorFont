@@ -3,10 +3,14 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QScrollArea>
+#include <QSet>
+#include <QVector>
+#include <QFileDialog>
 #include "../operatorwidget/cfgllinewidget.h"
+#include "../module/modulemanagement/cfmm.h"
 
 CFOperatorWidget::CFOperatorWidget(QWidget *parent)
-    : QMdiSubWindow(parent) {
+    : QMdiSubWindow(parent), file_path("") {
 
     this->resize(800, 400);
     setupUi();
@@ -56,10 +60,56 @@ void CFOperatorWidget::setupUi() {
 }
 
 void CFOperatorWidget::pushCharacter(FT_Face face, FT_ULong charcode) {
+    storage.push_back(std::make_pair(face, charcode));
     CFGLLineWidget* cur = contents.first();
     cur->pushCharacter(face, charcode);
     QSize s = cur->sizeHint();
     cur->resize(s);
     cur->resizeGL(s.width(), s.height());
     this->update();
+}
+
+void CFOperatorWidget::save() {
+
+    if (file_path.isEmpty()) {
+        file_path = QFileDialog::getSaveFileName(this,
+                                                 tr("Save File"),
+                                                 "", "", 0);
+
+        qDebug() << "file path is : " << file_path;
+    }
+
+    QSet<FT_Face> faces;
+    QVector<FT_ULong> chars;
+    for (int index = 0; index < storage.size(); ++index) {
+        std::pair<FT_Face, FT_ULong> tmp = storage[index];
+        faces.insert(tmp.first);
+        chars.push_back(tmp.second);
+    }
+
+    CFFuncArguments args;
+    {
+        QVariant v;
+        v.setValue(faces.toList().toVector());
+        args.pushV("faces", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue(chars);
+        args.pushV("chars", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue(file_path);
+        args.pushV("save_path", v);
+    }
+
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    cfmm->pushMessage(FFT_XML_MODULE, FFT_XML_SAVE_CURRENT, args);
+}
+
+void CFOperatorWidget::saveAs(const QString& path) {
+
 }

@@ -18,11 +18,17 @@ public:
     ~CFOperatorWidget();
 
     void pushCharacter(FT_Face face, FT_ULong charcode);
+
+    void save();
+    void saveAs(const QString& path);
+
 protected:
     void setupUi();
 
 private:
     QVector<CFGLLineWidget*> contents;
+    QString file_path;
+    QVector<std::pair<FT_Face, FT_ULong> > storage;
 };
 
 #endif // CFOPERATORWIDGET_H

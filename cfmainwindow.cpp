@@ -50,7 +50,11 @@ void CFMainWindow::on_actionSaveAs_triggered() {
 }
 
 void CFMainWindow::on_actionSave_triggered() {
-    // TODO: save current edit
+    qDebug() << "save current edit";
+    CFOperatorWidget* ow = (CFOperatorWidget*)area->currentSubWindow();
+    if (ow != NULL) {
+        ow->save();
+    }
 }
 
 void CFMainWindow::on_actionImportTTF_triggered() {
@@ -94,7 +98,7 @@ void CFMainWindow::on_actionOpen_triggered() {
 }
 
 void CFMainWindow::slot_pushCharacter(FT_Face face, FT_ULong charcode) {
-    qDebug() << "wo kao push char : " << charcode;
+    qDebug() << "push char : " << charcode;
     CFOperatorWidget* ow = (CFOperatorWidget*)area->currentSubWindow();
     if (ow != NULL) {
         ow->pushCharacter(face, charcode);

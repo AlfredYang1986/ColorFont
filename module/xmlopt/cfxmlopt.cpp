@@ -21,6 +21,9 @@ query_font_count(const CFFuncArguments& args);
 CFFuncResults
 push_times(const CFFuncArguments& args);
 
+CFFuncResults
+save(const CFFuncArguments& args);
+
 static const QString config_path = "/ttf_config.conf";
 
 CFXMLOpt::CFXMLOpt() : doc(NULL), file(NULL) {
@@ -32,6 +35,7 @@ CFXMLOpt::CFXMLOpt() : doc(NULL), file(NULL) {
     funcs.push_back(std::make_pair(FFT_XML_QUERY, &query_font_lib));
     funcs.push_back(std::make_pair(FFT_XML_COUNT, &query_font_count));
     funcs.push_back(std::make_pair(FFT_XML_PUSH_TIMES, &push_times));
+    funcs.push_back(std::make_pair(FFT_XML_SAVE_CURRENT, &save));
 }
 
 CFXMLOpt::~CFXMLOpt() {
@@ -137,7 +141,6 @@ load_font_config(const CFFuncArguments& ) {
         } else {
             str_uuid = uuid_node.toAttr().value();
         }
-
 
         exchange_type et = {
             str_uuid,
@@ -285,6 +288,40 @@ push_times(const CFFuncArguments& args) {
 
     int i = (page - 1) * LIB_PAGE_COUNT + index;
     ++(xml->lst[i].times);
+
+    return CFFuncResults();
+}
+
+CFFuncResults
+save(const CFFuncArguments& args) {
+    QString save_path = args.getV("save_path").value<QString>();
+    QVector<FT_Face> faces = args.getV("faces").value<QVector<FT_Face> >();
+    QVector<FT_ULong> chars = args.getV("chars").value<QVector<FT_ULong> >();
+
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    CFFuncResults re_paths = cfmm->pushMessage(FFT_MODULE, FFT_QUERY_PATHS_FROM_FACES, args);
+
+    QVector<QString> used_paths = re_paths.getV("paths").value<QVector<QString> >();
+    cfmm->pushMessage(FILE_MODULE, FILE_SAVE_DIR, args);
+
+    /**
+     * save all the faces
+     */
+    for (int index = 0; index < used_paths.size(); ++index) {
+        qDebug() << "used paths at " << index << " is : " << used_paths[index];
+    }
+
+    /**
+     * save all charcode
+     */
+
+    /**
+     * save layout property
+     */
+
+    /**
+     * save rander property
+     */
 
     return CFFuncResults();
 }
