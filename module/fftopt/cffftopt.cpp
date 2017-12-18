@@ -14,6 +14,7 @@ CFFuncResults import_code_as_symbol(const CFFuncArguments& args);
 CFFuncResults import_code_as_chars_lst(const CFFuncArguments& args);
 CFFuncResults import_code_as_symbol_lst(const CFFuncArguments& args);
 CFFuncResults query_path_from_faces(const CFFuncArguments& args);
+CFFuncResults query_path_by_one_face(const CFFuncArguments& args);
 
 CFFftOpt::CFFftOpt() {
     funcs.push_back(std::make_pair(FFT_LOAD_FILE, &loadTTFFile));
@@ -23,6 +24,7 @@ CFFftOpt::CFFftOpt() {
     funcs.push_back(std::make_pair(FFT_IMPORT_SYMBOL, &import_code_as_symbol));
     funcs.push_back(std::make_pair(FFT_IMPORT_SYMBOL_LST, &import_code_as_symbol_lst));
     funcs.push_back(std::make_pair(FFT_QUERY_PATHS_FROM_FACES, &query_path_from_faces));
+    funcs.push_back(std::make_pair(FFT_QUERY_PATH_BY_FACE, &query_path_by_one_face));
 
     if (FT_Init_FreeType(&ft))
         qDebug() << "ERROR::FREETYPE: Could not init FreeType Library";
@@ -404,4 +406,24 @@ CFFuncResults query_path_from_faces(const CFFuncArguments& args) {
    reVal.pushV("paths", v);
 
    return reVal;
+}
+
+
+CFFuncResults query_path_by_one_face(const CFFuncArguments& args) {
+    FT_Face face = args.getV("face").value<FT_Face>();
+
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    CFFftOpt* opt = (CFFftOpt*)cfmm->queryModuleInstance(FFT_MODULE);
+    QVector<std::pair<QString, FT_Face> > opend_faces = opt->queryOpenedFaces();
+
+    QVector<std::pair<QString, FT_Face> >::iterator i =
+        std::find_if(opend_faces.begin(), opend_faces.end(), face_predicate(face));
+
+    CFFuncResults reVal;
+    QVariant v;
+    v.setValue((*i).first);
+    reVal.pushV("path", v);
+
+    return reVal;
+
 }

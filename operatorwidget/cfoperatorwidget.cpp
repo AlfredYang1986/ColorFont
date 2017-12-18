@@ -79,12 +79,15 @@ void CFOperatorWidget::save() {
         qDebug() << "file path is : " << file_path;
     }
 
+    if (file_path.isEmpty())
+        return ;
+
     QSet<FT_Face> faces;
     QVector<FT_ULong> chars;
     for (int index = 0; index < storage.size(); ++index) {
         std::pair<FT_Face, FT_ULong> tmp = storage[index];
         faces.insert(tmp.first);
-        chars.push_back(tmp.second);
+//        chars.push_back(tmp.second);
     }
 
     CFFuncArguments args;
@@ -96,7 +99,7 @@ void CFOperatorWidget::save() {
 
     {
         QVariant v;
-        v.setValue(chars);
+        v.setValue(storage);
         args.pushV("chars", v);
     }
 

@@ -19,11 +19,14 @@ CFFuncResults
 create_save_dir(const CFFuncArguments& args);
 CFFuncResults
 move_2_dist_dir(const CFFuncArguments& args);
+CFFuncResults
+check_save_dir(const CFFuncArguments& args);
 
 CFFileOpt::CFFileOpt() {
     funcs.push_back(std::make_pair(FILE_TTF_DIR, &create_ttf_dir));
     funcs.push_back(std::make_pair(FILE_MOVE_TO_TTF_DIR, &move_2_ttf_dir));
     funcs.push_back(std::make_pair(FILE_SAVE_DIR, &create_save_dir));
+    funcs.push_back(std::make_pair(FILE_CHECK_SAVE_DIR, &check_save_dir));
 }
 
 CFFileOpt::~CFFileOpt() {
@@ -116,4 +119,30 @@ create_save_dir(const CFFuncArguments& args) {
 CFFuncResults
 move_2_dist_dir(const CFFuncArguments& args) {
 
+}
+
+CFFuncResults
+check_save_dir(const CFFuncArguments &args) {
+    QString path = args.getV("path").value<QString>();
+
+    QDir dir;
+    QString save_dir = path.left(path.lastIndexOf("/") - 1);
+    if (!dir.exists(save_dir)) {
+        qDebug() << "save file is not exists";
+        exit(1);
+    }
+
+    QString save_ttf_dir = save_dir + TTF_PATH;
+    if (!dir.exists(save_ttf_dir)) {
+        qDebug() << "save ttf file is not exists";
+        exit(1);
+    }
+
+    QString save_resource_dir = save_dir + RESOURCE_PATH;
+    if (!dir.exists(save_resource_dir)) {
+        qDebug() << "save resources file is not exists";
+        exit(1);
+    }
+
+    return CFFuncResults();
 }

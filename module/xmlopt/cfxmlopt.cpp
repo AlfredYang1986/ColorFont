@@ -5,6 +5,7 @@
 #include <QDomNode>
 #include <QFile>
 #include <QUuid>
+#include <QTextStream>
 
 CFFuncResults
 load_font_config(const CFFuncArguments& args);
@@ -23,6 +24,17 @@ push_times(const CFFuncArguments& args);
 
 CFFuncResults
 save(const CFFuncArguments& args);
+CFFuncResults
+save_pro_file(const CFFuncArguments& args);
+CFFuncResults
+save_cur_ttf_files(const CFFuncArguments& args);
+
+CFFuncResults
+load(const CFFuncArguments& args);
+CFFuncResults
+load_pro_file(const CFFuncArguments& args);
+CFFuncResults
+load_cur_ttf_files(const CFFuncArguments& args);
 
 static const QString config_path = "/ttf_config.conf";
 
@@ -35,7 +47,14 @@ CFXMLOpt::CFXMLOpt() : doc(NULL), file(NULL) {
     funcs.push_back(std::make_pair(FFT_XML_QUERY, &query_font_lib));
     funcs.push_back(std::make_pair(FFT_XML_COUNT, &query_font_count));
     funcs.push_back(std::make_pair(FFT_XML_PUSH_TIMES, &push_times));
+
     funcs.push_back(std::make_pair(FFT_XML_SAVE_CURRENT, &save));
+    funcs.push_back(std::make_pair(FFT_XML_SAVE_CURRENT_PRO, &save_pro_file));
+    funcs.push_back(std::make_pair(FFT_XML_SAVE_TTF_FILES, &save_cur_ttf_files));
+
+    funcs.push_back(std::make_pair(FFT_XML_LOAD_CURRENT, &load));
+    funcs.push_back(std::make_pair(FFT_XML_LOAD_CURRENT_PRO, &load_pro_file));
+    funcs.push_back(std::make_pair(FFT_XML_LOAD_TTF_FILES, &load_cur_ttf_files));
 }
 
 CFXMLOpt::~CFXMLOpt() {
@@ -294,34 +313,159 @@ push_times(const CFFuncArguments& args) {
 
 CFFuncResults
 save(const CFFuncArguments& args) {
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    cfmm->pushMessage(FILE_MODULE, FILE_SAVE_DIR, args);
+    cfmm->pushMessage(FFT_XML_MODULE, FFT_XML_SAVE_CURRENT_PRO, args);
+    cfmm->pushMessage(FFT_XML_MODULE, FFT_XML_SAVE_TTF_FILES, args);
+
+    return CFFuncResults();
+}
+
+CFFuncResults
+save_pro_file(const CFFuncArguments& args) {
     QString save_path = args.getV("save_path").value<QString>();
+    QVector<std::pair<FT_Face, FT_ULong> > chars = args.getV("chars").value<QVector<std::pair<FT_Face, FT_ULong> > >();
+
+    qDebug() << "chars size is : " << chars.size();
+
+    QFile file(save_path + "/project.pro");
+    if (file.exists()) {
+//        file.remove();
+        QFile::remove(save_path + "/project.pro");
+    }
+
+    bool result;
+
+    if(!file.open(QIODevice::WriteOnly)) {
+        qDebug() << "Error: cannot create new file : " << save_path;
+        result = false;
+    } else {
+        QDomDocument* doc = new QDomDocument();
+        QTextStream out(&file);
+        QDomNode xmlNode =
+                doc->createProcessingInstruction("xml",
+                                                 "version=\"1.0\" encoding=\"ISO-8859-1\"");
+
+        doc->insertBefore(xmlNode, doc->firstChild());
+
+        QDomNode rootNode = doc->createElement("project");
+        doc->insertAfter(rootNode, xmlNode);
+
+        CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+//        cfmm->pushMessage(FFT_MODULE, )
+
+        for (int index = 0; index < chars.size(); ++index) {
+
+            FT_ULong charcode = chars[index].second;
+            FT_Face f = chars[index].first;
+
+            CFFuncArguments arg_path_by_face;
+            QVariant v;
+            v.setValue(f);
+            arg_path_by_face.pushV("face", v);
+
+            CFFuncResults re_path_by_face =
+                cfmm->pushMessage(FFT_MODULE, FFT_QUERY_PATH_BY_FACE, arg_path_by_face);
+
+            QDomElement new_ele = doc->createElement("char");
+            QString str_uuid = QUuid::createUuid().toString().replace('{', "").replace('}', "");
+            new_ele.setAttribute("uuid", str_uuid);
+            new_ele.setAttribute("charcode", (qlonglong)charcode);
+
+            QString ttf_path = re_path_by_face.getV("path").value<QString>();
+            new_ele.setAttribute("path",
+                                 ttf_path.right(ttf_path.size() - ttf_path.lastIndexOf("/") - 1));
+            rootNode.appendChild(new_ele);
+        }
+
+        const int Indent = 4;
+        doc->save(out, Indent);
+        delete doc;
+        file.close();
+        result = true;
+    }
+
+    return CFFuncResults();
+}
+
+CFFuncResults
+save_cur_ttf_files(const CFFuncArguments &args) {
     QVector<FT_Face> faces = args.getV("faces").value<QVector<FT_Face> >();
-    QVector<FT_ULong> chars = args.getV("chars").value<QVector<FT_ULong> >();
+    QString save_path = args.getV("save_path").value<QString>();
 
     CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
     CFFuncResults re_paths = cfmm->pushMessage(FFT_MODULE, FFT_QUERY_PATHS_FROM_FACES, args);
 
     QVector<QString> used_paths = re_paths.getV("paths").value<QVector<QString> >();
-    cfmm->pushMessage(FILE_MODULE, FILE_SAVE_DIR, args);
-
-    /**
-     * save all the faces
-     */
     for (int index = 0; index < used_paths.size(); ++index) {
-        qDebug() << "used paths at " << index << " is : " << used_paths[index];
+        QString tmp_file = used_paths[index];
+        if (!tmp_file.startsWith(save_path)) {
+            QString tmp_ttf = tmp_file.right(tmp_file.size() - tmp_file.lastIndexOf("/") - 1);
+            QString new_file = save_path + "/ttf_dir/" + tmp_ttf;
+            QFile::copy(tmp_file, new_file);
+        }
     }
 
-    /**
-     * save all charcode
-     */
+    return CFFuncResults();
+}
 
-    /**
-     * save layout property
-     */
+CFFuncResults
+load(const CFFuncArguments& args) {
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    cfmm->pushMessage(FILE_MODULE, FILE_CHECK_SAVE_DIR, args);
+//    cfmm->pushMessage(FFT_XML_MODULE, FFT_XML_SAVE_CURRENT_PRO, args);
+//    cfmm->pushMessage(FFT_XML_MODULE, FFT_XML_SAVE_TTF_FILES, args);
 
-    /**
-     * save rander property
-     */
+    return CFFuncResults();
+}
 
+CFFuncResults
+load_pro_file(const CFFuncArguments& args) {
+    QString save_path = args.getV("path").value<QString>();
+
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+
+    bool result;
+    QFile* file = new QFile(save_path);
+
+    if (!file->open(QIODevice::ReadOnly | QFile::Text)) {
+        qDebug() << "Error: cannot open file : " << save_file;
+        result = false;
+        exit(1);
+    }
+
+    QString errorStr;
+    int errorLine;
+    int errorColum;
+
+    QDomDocument* doc = new QDomDocument();
+    if (!doc->setContent(file, false, &errorStr, &errorLine, &errorColum)) {
+        qDebug() << "Error: Parse error at line " << errorLine << ", "
+                 << "column " << errorColum << ": "
+                 << errorStr;
+        result = false;
+        exit(1);
+    } else {
+        result = true;
+
+        QVector<std::pair<QString, FT_ULong> > char_paths;
+        QVector<std::pair<FT_Face, FT_ULong> > chars;
+
+        QDomElement root = doc->documentElement();
+        QDomNodeList nodes = root.childNodes();
+        for (int index = 0; index < nodes.count(); ++index) {
+            QDomNode node = nodes.at(index);
+            QDomNamedNodeMap map = node.attributes();
+
+            QString ttr_path = save_path.left(save_path.size() - save_path.lastIndexOf("/") - 1) + "/ttf_dir/";
+
+        }
+    }
+
+    return CFFuncResults();
+}
+
+CFFuncResults
+load_cur_ttf_files(const CFFuncArguments& args) {
     return CFFuncResults();
 }

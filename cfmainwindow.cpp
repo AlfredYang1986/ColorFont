@@ -91,10 +91,16 @@ void CFMainWindow::on_actionImportTTF_triggered() {
 }
 
 void CFMainWindow::on_actionOpen_triggered() {
-    CFOperatorWidget* w = new CFOperatorWidget();
-    w->setWindowTitle(tr("New Window"));
-    area->addSubWindow(w);
-    w->show();
+    QString file_name = QFileDialog::getOpenFileName(this,
+                                                     tr("Open TTF File"),
+                                                     "", "", 0);
+
+    if (!file_name.isEmpty()) {
+        CFOperatorWidget* w = new CFOperatorWidget();
+        w->setWindowTitle(tr("New Window"));
+        area->addSubWindow(w);
+        w->show();
+    }
 }
 
 void CFMainWindow::slot_pushCharacter(FT_Face face, FT_ULong charcode) {
@@ -121,4 +127,11 @@ void CFMainWindow::slot_controlPanelClosed() {
     if (effect_dock) {
         effect_dock->deleteLater();
     }
+}
+
+void CFMainWindow::on_actionBrandNew_triggered() {
+    CFOperatorWidget* w = new CFOperatorWidget();
+    w->setWindowTitle(tr("New Window"));
+    area->addSubWindow(w);
+    w->show();
 }
