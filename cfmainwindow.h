@@ -39,6 +39,8 @@ private slots:
     void slot_resentDockPanelClosed();
     void slot_controlPanelClosed();
 
+    void slot_changeTextColor(const QColor& color);
+
     void on_actionBrandNew_triggered();
 
 private:

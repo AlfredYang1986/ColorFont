@@ -7,6 +7,8 @@
 #include <QRgb>
 #include "cfcolorselectpanel.h"
 #include "cfcolorpreviewpanel.h"
+#include "module/modulemanagement/cfmm.h"
+#include "cfmainwindow.h"
 
 #include <QDebug>
 
@@ -75,6 +77,22 @@ void CFColorBkg::setupUi() {
 
     vl->addLayout(hl);
 
+    {
+        QHBoxLayout* h = new QHBoxLayout();
+        h->addSpacerItem(new QSpacerItem(0, 0,
+                                         QSizePolicy::Expanding, QSizePolicy::Fixed));
+
+        QPushButton* apply_btn = new QPushButton(tr("应用效果"));
+        QObject::connect(apply_btn, SIGNAL(pressed()),
+                         this, SLOT(slot_applyColorChange()));
+        h->addWidget(apply_btn);
+
+        h->addSpacerItem(new QSpacerItem(0, 0,
+                                         QSizePolicy::Expanding, QSizePolicy::Fixed));
+
+        vl->addLayout(h);
+    }
+
     this->setLayout(vl);
 
     QObject::connect(red_panel, SIGNAL(signal_selectedColorChanged()),
@@ -85,6 +103,13 @@ void CFColorBkg::setupUi() {
                      this, SLOT(slot_selectedColorChanged()));
     QObject::connect(alpha_panel, SIGNAL(signal_selectedColorChanged()),
                      this, SLOT(slot_selectedColorChanged()));
+
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    CFFuncResults result = cfmm->pushMessage(QUERY_MODULE, QUERY_MAIN_WINDOW, CFFuncArguments());
+    CFMainWindow* w = result.getV("main_window").value<CFMainWindow*>();
+
+    QObject::connect(this, SIGNAL(signal_selectedBkgColorChanged(QColor)),
+                     w, SLOT(slot_changeTextColor(QColor)));
 }
 
 void CFColorBkg::slot_selectedColorChanged() {
@@ -95,4 +120,8 @@ void CFColorBkg::slot_selectedColorChanged() {
 
     prev_panel->changeColor(QColor(r, g, b, a));
     prev_panel->update();
+}
+
+void CFColorBkg::slot_applyColorChange() {
+    emit signal_selectedBkgColorChanged(prev_panel->currentColor());
 }

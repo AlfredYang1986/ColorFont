@@ -115,6 +115,47 @@ void CFOperatorWidget::save() {
 
 void CFOperatorWidget::saveAs(const QString& path) {
 
+    QString file_path = "";
+    if (file_path.isEmpty()) {
+        file_path = QFileDialog::getSaveFileName(this,
+                                                 tr("Save File"),
+                                                 "", "", 0);
+
+        qDebug() << "file path is : " << file_path;
+    }
+
+    if (file_path.isEmpty())
+        return ;
+
+    QSet<FT_Face> faces;
+    QVector<FT_ULong> chars;
+    for (int index = 0; index < storage.size(); ++index) {
+        std::pair<FT_Face, FT_ULong> tmp = storage[index];
+        faces.insert(tmp.first);
+//        chars.push_back(tmp.second);
+    }
+
+    CFFuncArguments args;
+    {
+        QVariant v;
+        v.setValue(faces.toList().toVector());
+        args.pushV("faces", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue(storage);
+        args.pushV("chars", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue(file_path);
+        args.pushV("save_path", v);
+    }
+
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    cfmm->pushMessage(FFT_XML_MODULE, FFT_XML_SAVE_CURRENT, args);
 }
 
 void CFOperatorWidget::loadPath(const QString &path) {

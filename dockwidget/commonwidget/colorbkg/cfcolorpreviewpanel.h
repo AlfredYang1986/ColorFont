@@ -11,6 +11,8 @@ public:
     ~CFColorPreviewPanel();
 
     void changeColor(const QColor& color);
+    QColor currentColor() const;
+
 protected:
     virtual void paintEvent(QPaintEvent *);
 

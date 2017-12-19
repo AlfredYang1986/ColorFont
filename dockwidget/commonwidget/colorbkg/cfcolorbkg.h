@@ -15,8 +15,12 @@ public:
     explicit CFColorBkg(QWidget* parent = 0);
     ~CFColorBkg();
 
+signals:
+    void signal_selectedBkgColorChanged(const QColor&);
+
 public slots:
     void slot_selectedColorChanged();
+    void slot_applyColorChange();
 
 protected:
     void setupUi();

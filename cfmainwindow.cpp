@@ -130,6 +130,16 @@ void CFMainWindow::slot_controlPanelClosed() {
     }
 }
 
+void CFMainWindow::slot_changeTextColor(const QColor& color) {
+    CFOperatorWidget* ow = (CFOperatorWidget*)area->currentSubWindow();
+    if (ow != NULL) {
+        qDebug() << "about to change the color"
+                 << "red is : " << color.red()
+                 << "green is : " << color.green()
+                 << "blue is : " << color.blue();
+    }
+}
+
 void CFMainWindow::on_actionBrandNew_triggered() {
     CFOperatorWidget* w = new CFOperatorWidget();
     w->setWindowTitle(tr("New Window"));

@@ -26,3 +26,7 @@ void CFColorPreviewPanel::changeColor(const QColor &color) {
     b = color.blue();
     a = color.alpha();
 }
+
+QColor CFColorPreviewPanel::currentColor() const {
+    return QColor(r, g, b, a);
+}
