@@ -412,11 +412,11 @@ save_cur_ttf_files(const CFFuncArguments &args) {
 CFFuncResults
 load(const CFFuncArguments& args) {
     CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
-    cfmm->pushMessage(FILE_MODULE, FILE_CHECK_SAVE_DIR, args);
-//    cfmm->pushMessage(FFT_XML_MODULE, FFT_XML_SAVE_CURRENT_PRO, args);
+    CFFuncResults r0 = cfmm->pushMessage(FILE_MODULE, FILE_CHECK_SAVE_DIR, args);
+    CFFuncResults r1 = cfmm->pushMessage(FFT_XML_MODULE, FFT_XML_LOAD_CURRENT_PRO, args);
 //    cfmm->pushMessage(FFT_XML_MODULE, FFT_XML_SAVE_TTF_FILES, args);
 
-    return CFFuncResults();
+    return CFFuncResults::mergeResult(r0, r1);
 }
 
 CFFuncResults
@@ -429,7 +429,7 @@ load_pro_file(const CFFuncArguments& args) {
     QFile* file = new QFile(save_path);
 
     if (!file->open(QIODevice::ReadOnly | QFile::Text)) {
-        qDebug() << "Error: cannot open file : " << save_file;
+        qDebug() << "Error: cannot open file : " << save_path;
         result = false;
         exit(1);
     }
@@ -437,6 +437,7 @@ load_pro_file(const CFFuncArguments& args) {
     QString errorStr;
     int errorLine;
     int errorColum;
+    QVector<std::pair<FT_Face, FT_ULong> > chars;
 
     QDomDocument* doc = new QDomDocument();
     if (!doc->setContent(file, false, &errorStr, &errorLine, &errorColum)) {
@@ -449,7 +450,6 @@ load_pro_file(const CFFuncArguments& args) {
         result = true;
 
         QVector<std::pair<QString, FT_ULong> > char_paths;
-        QVector<std::pair<FT_Face, FT_ULong> > chars;
 
         QDomElement root = doc->documentElement();
         QDomNodeList nodes = root.childNodes();
@@ -457,12 +457,32 @@ load_pro_file(const CFFuncArguments& args) {
             QDomNode node = nodes.at(index);
             QDomNamedNodeMap map = node.attributes();
 
-            QString ttr_path = save_path.left(save_path.size() - save_path.lastIndexOf("/") - 1) + "/ttf_dir/";
+            QString file_path = map.namedItem("path").toAttr().value();
+            QString ttr_path = save_path.left(save_path.lastIndexOf("/")) + "/ttf_dir/" + file_path;
 
+            FT_ULong charcode = map.namedItem("charcode").toAttr().value().toLongLong();
+            char_paths.push_back(std::make_pair(ttr_path, charcode));
+        }
+
+        for (int index = 0; index < char_paths.size(); ++index) {
+            std::pair<QString, FT_ULong> tmp = char_paths[index];
+            QString path = tmp.first;
+            CFFuncArguments arg_load;
+            QVariant v;
+            v.setValue(path);
+            arg_load.pushV("path", v);
+            CFFuncResults reVal = cfmm->pushMessage(FFT_MODULE, FFT_LOAD_FILE, arg_load);
+            FT_Face face = reVal.getV("face").value<FT_Face>();
+            chars.push_back(std::make_pair(face, tmp.second));
         }
     }
 
-    return CFFuncResults();
+    CFFuncResults rrt;
+    QVariant v;
+    v.setValue(chars);
+    rrt.pushV("chars", v);
+
+    return rrt;
 }
 
 CFFuncResults

@@ -116,3 +116,28 @@ void CFOperatorWidget::save() {
 void CFOperatorWidget::saveAs(const QString& path) {
 
 }
+
+void CFOperatorWidget::loadPath(const QString &path) {
+    CFFuncArguments args;
+    QVariant v;
+    v.setValue(path);
+    args.pushV("path", v);
+
+    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
+    CFFuncResults reVal = cfmm->pushMessage(FFT_XML_MODULE, FFT_XML_LOAD_CURRENT, args);
+    storage = reVal.getV("chars").value<QVector<std::pair<FT_Face, FT_ULong> > >();
+
+    CFGLLineWidget* cur = contents.first();
+
+    for (int index = 0; index < storage.size(); ++index) {
+        FT_Face face = storage[index].first;
+        FT_ULong charcode = storage[index].second;
+        cur->pushCharacter(face, charcode);
+    }
+
+    QSize s = cur->sizeHint();
+    cur->resize(s);
+    cur->resizeGL(s.width(), s.height());
+
+    this->update();
+}

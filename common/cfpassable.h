@@ -13,7 +13,7 @@ public:
     const QVariant& getV(const QString& name) const;
     void pushV(const QString& name, const QVariant& value);
 
-private:
+protected:
     QList<std::pair<QString, QVariant> > content;
 };
 

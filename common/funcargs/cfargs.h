@@ -48,6 +48,8 @@ public:
     void resetError(const CFError& e);
     bool isOk() const;
 
+    static CFFuncResults mergeResult(const CFFuncResults& left,
+                                     const CFFuncResults& right);
 private:
     CFError _e;
 };

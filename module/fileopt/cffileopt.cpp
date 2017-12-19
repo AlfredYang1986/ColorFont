@@ -126,7 +126,7 @@ check_save_dir(const CFFuncArguments &args) {
     QString path = args.getV("path").value<QString>();
 
     QDir dir;
-    QString save_dir = path.left(path.lastIndexOf("/") - 1);
+    QString save_dir = path.left(path.lastIndexOf("/"));
     if (!dir.exists(save_dir)) {
         qDebug() << "save file is not exists";
         exit(1);

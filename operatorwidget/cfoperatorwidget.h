@@ -22,6 +22,7 @@ public:
     void save();
     void saveAs(const QString& path);
 
+    void loadPath(const QString& path);
 protected:
     void setupUi();
 

@@ -99,6 +99,7 @@ void CFMainWindow::on_actionOpen_triggered() {
         CFOperatorWidget* w = new CFOperatorWidget();
         w->setWindowTitle(tr("New Window"));
         area->addSubWindow(w);
+        w->loadPath(file_name);
         w->show();
     }
 }
