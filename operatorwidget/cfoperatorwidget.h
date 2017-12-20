@@ -6,6 +6,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#include "dockwidget/effectwidget/cfeffectwidget.h"
+
 class QWidget;
 class CFGLLineWidget;
 
@@ -18,6 +20,7 @@ public:
     ~CFOperatorWidget();
 
     void pushCharacter(FT_Face face, FT_ULong charcode);
+    void setCurrentFillColor(const QColor& color);
 
     void save();
     void saveAs(const QString& path);
@@ -30,6 +33,8 @@ private:
     QVector<CFGLLineWidget*> contents;
     QString file_path;
     QVector<std::pair<FT_Face, FT_ULong> > storage;
+//    QVector<std::pair<int, > > property;
+    QColor fill_color;
 };
 
 #endif // CFOPERATORWIDGET_H

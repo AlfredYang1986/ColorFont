@@ -24,6 +24,8 @@ public:
 
     QSize sizeHint() const;
     void resizeGL(int w, int h);
+
+    void setFillColor(const QColor& c);
 protected:
     void initializeGL();
     void paintGL();
@@ -40,6 +42,7 @@ private:
     QOpenGLShaderProgram * program_bk;
     QVector<Character> chars;
 
+    QColor fill_color;
 };
 
 #endif // CFGLLINEWIDGET_H

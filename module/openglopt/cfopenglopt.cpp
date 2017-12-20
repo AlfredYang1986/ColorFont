@@ -225,6 +225,8 @@ draw_glyph(const CFFuncArguments& args) {
     Character ch = args.getV("character").value<Character>();
     QOpenGLShaderProgram* program = args.getV("program").value<QOpenGLShaderProgram*>();
 
+//    QColor fill_color = args.getV("fill_color").value<QColor>();
+
     program->link();
     program->bind();
 

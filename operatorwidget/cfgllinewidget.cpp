@@ -15,7 +15,7 @@
 #include <QDebug>
 
 CFGLLineWidget::CFGLLineWidget(QGLContext *context, QWidget *parent)
-    : QGLWidget(context, parent) {
+    : QGLWidget(context, parent), fill_color(Qt::black) {
 
 }
 
@@ -231,6 +231,12 @@ void CFGLLineWidget::draw(const QVector<Character> &vec) {
         args.pushV("scale", v);
     }
 
+    {
+        QVariant v;
+        v.setValue(fill_color);
+        args.pushV("fill_color", v);
+    }
+
     CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
     cfmm->pushMessage(OPENGL_MODULE, DRAW_GLYPH_LST, args);
 }
@@ -264,4 +270,9 @@ void CFGLLineWidget::pushCharacter(FT_Face face, FT_ULong charcode) {
 
         chars.push_back(character);
     }
+}
+
+void CFGLLineWidget::setFillColor(const QColor& c) {
+    fill_color = c;
+    this->repaintOpenGL();
 }

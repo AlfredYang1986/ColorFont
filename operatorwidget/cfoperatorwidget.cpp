@@ -182,3 +182,7 @@ void CFOperatorWidget::loadPath(const QString &path) {
 
     this->update();
 }
+
+void CFOperatorWidget::setCurrentFillColor(const QColor &color) {
+    this->fill_color = color;
+}
