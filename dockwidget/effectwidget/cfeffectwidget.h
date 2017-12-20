@@ -12,6 +12,11 @@ class CFEffectWidget : public QWidget {
     Q_OBJECT
 
 public:
+    enum EFFECT_INDEX {
+        FILL_COLOR = 0x01,
+    };
+
+public:
     explicit CFEffectWidget(QWidget* parent = 0);
     ~CFEffectWidget();
 
@@ -19,6 +24,12 @@ public:
     virtual void setupContent() = 0;
     virtual void setControlPanel() = 0;
     virtual QPushButton* setClearBtn();
+
+signals:
+    void signal_effectColorChanged(const QColor&, int e);
+
+public slots:
+    virtual void slot_effectColorChange(const QColor&);
 
 protected:
     QTabWidget* tab;

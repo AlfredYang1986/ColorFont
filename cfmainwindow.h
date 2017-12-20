@@ -6,6 +6,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#include "dockwidget/effectwidget/cfeffectwidget.h"
+
 class CFEffectDock;
 class CFResentCharDock;
 class QMdiArea;
@@ -39,7 +41,7 @@ private slots:
     void slot_resentDockPanelClosed();
     void slot_controlPanelClosed();
 
-    void slot_changeTextColor(const QColor& color);
+    void slot_dockColorChanged(const QColor& color, int e);
 
     void on_actionBrandNew_triggered();
 

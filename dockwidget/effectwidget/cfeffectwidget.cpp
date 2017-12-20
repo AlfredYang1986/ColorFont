@@ -79,3 +79,7 @@ QPushButton* CFEffectWidget::setClearBtn() {
     QPushButton* btn = new QPushButton(tr("清除效果"));
     return btn;
 }
+
+void CFEffectWidget::slot_effectColorChange(const QColor &) {
+
+}

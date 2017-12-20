@@ -15,7 +15,7 @@ CFBorderWidget::~CFBorderWidget() {
 }
 
 void CFBorderWidget::setupContent() {
-    QWidget* view = new CFColorBkg();
+    QWidget* view = new CFColorBkg(this);
     tab->addTab(view, tr("颜色"));
 
     QWidget* view2 = new CFGradientWidget();

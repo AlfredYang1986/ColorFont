@@ -15,6 +15,9 @@ public:
 
     virtual void setupContent();
     virtual void setControlPanel();
+
+public slots:
+    virtual void slot_effectColorChange(const QColor &);
 };
 
 #endif // CFFILLWIDGET_H

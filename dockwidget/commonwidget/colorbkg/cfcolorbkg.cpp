@@ -5,15 +5,17 @@
 #include <QLabel>
 #include <QSpacerItem>
 #include <QRgb>
+#include <QPushButton>
 #include "cfcolorselectpanel.h"
 #include "cfcolorpreviewpanel.h"
-#include "module/modulemanagement/cfmm.h"
-#include "cfmainwindow.h"
+#include "dockwidget/effectwidget/cfeffectwidget.h"
+//#include "module/modulemanagement/cfmm.h"
+//#include "cfmainwindow.h"
 
 #include <QDebug>
 
-CFColorBkg::CFColorBkg(QWidget *parent)
-    : QWidget(parent) {
+CFColorBkg::CFColorBkg(CFEffectWidget * constianer, QWidget* parent)
+    : QWidget(parent), _c(constianer) {
 
     setupUi();
 }
@@ -104,12 +106,9 @@ void CFColorBkg::setupUi() {
     QObject::connect(alpha_panel, SIGNAL(signal_selectedColorChanged()),
                      this, SLOT(slot_selectedColorChanged()));
 
-    CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
-    CFFuncResults result = cfmm->pushMessage(QUERY_MODULE, QUERY_MAIN_WINDOW, CFFuncArguments());
-    CFMainWindow* w = result.getV("main_window").value<CFMainWindow*>();
-
     QObject::connect(this, SIGNAL(signal_selectedBkgColorChanged(QColor)),
-                     w, SLOT(slot_changeTextColor(QColor)));
+                     _c, SLOT(slot_effectColorChange(QColor)));
+
 }
 
 void CFColorBkg::slot_selectedColorChanged() {

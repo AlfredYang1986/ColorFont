@@ -6,13 +6,14 @@
 class QLineEdit;
 class CFColorSelectPanel;
 class CFColorPreviewPanel;
+class CFEffectWidget;
 
 class CFColorBkg : public QWidget {
 
     Q_OBJECT
 
 public:
-    explicit CFColorBkg(QWidget* parent = 0);
+    explicit CFColorBkg(CFEffectWidget* container, QWidget* parent = 0);
     ~CFColorBkg();
 
 signals:
@@ -32,6 +33,8 @@ private:
     CFColorSelectPanel* alpha_panel;
 
     CFColorPreviewPanel* prev_panel;
+
+    CFEffectWidget* _c;
 
 };
 
