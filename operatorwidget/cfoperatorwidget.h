@@ -26,6 +26,7 @@ public:
     void saveAs(const QString& path);
 
     void loadPath(const QString& path);
+    void setFillColor(const QColor& c);
 protected:
     void setupUi();
 

@@ -225,7 +225,6 @@ draw_glyph(const CFFuncArguments& args) {
     Character ch = args.getV("character").value<Character>();
     QOpenGLShaderProgram* program = args.getV("program").value<QOpenGLShaderProgram*>();
 
-//    QColor fill_color = args.getV("fill_color").value<QColor>();
 
     program->link();
     program->bind();
@@ -331,13 +330,18 @@ draw_glyph_lst(const CFFuncArguments& args) {
     GLfloat scale = args.getV("scale").value<GLfloat>();
     QOpenGLShaderProgram* program = args.getV("program").value<QOpenGLShaderProgram*>();
 
+    QColor fill_color = args.getV("fill_color").value<QColor>();
+    GLfloat red = fill_color.redF();
+    GLfloat green = fill_color.greenF();
+    GLfloat blue = fill_color.blueF();
+
     program->link();
     program->bind();
 
     glm::mat4 projection = glm::ortho(0.0f, w, 0.0f, h);
     glUniformMatrix4fv(glGetUniformLocation(program->programId(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
-    glUniform3f(glGetUniformLocation(program->programId(), "textColor"), 0.0, 0.0, 0.0);
+    glUniform3f(glGetUniformLocation(program->programId(), "textColor"), red, green, blue);
     glUniform3f(glGetUniformLocation(program->programId(), "bkColor"), 1.0, 1.0, 1.0);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);

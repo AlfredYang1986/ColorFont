@@ -186,3 +186,9 @@ void CFOperatorWidget::loadPath(const QString &path) {
 void CFOperatorWidget::setCurrentFillColor(const QColor &color) {
     this->fill_color = color;
 }
+
+void CFOperatorWidget::setFillColor(const QColor& c) {
+    CFGLLineWidget* cur = contents.first();
+    cur->setFillColor(c);;
+    cur->update();
+}
