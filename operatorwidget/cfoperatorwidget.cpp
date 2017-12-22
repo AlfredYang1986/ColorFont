@@ -192,3 +192,9 @@ void CFOperatorWidget::setFillColor(const QColor& c) {
     cur->setFillColor(c);;
     cur->update();
 }
+
+void CFOperatorWidget::setBKGColor(const QColor& c) {
+    CFGLLineWidget* cur = contents.first();
+    cur->setBKGColor(c);
+    cur->update();
+}

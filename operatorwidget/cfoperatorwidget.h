@@ -27,6 +27,7 @@ public:
 
     void loadPath(const QString& path);
     void setFillColor(const QColor& c);
+    void setBKGColor(const QColor& c);
 protected:
     void setupUi();
 

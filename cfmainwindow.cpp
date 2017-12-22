@@ -133,12 +133,17 @@ void CFMainWindow::slot_controlPanelClosed() {
 void CFMainWindow::slot_dockColorChanged(const QColor& color, int e) {
     CFOperatorWidget* ow = (CFOperatorWidget*)area->currentSubWindow();
     if (ow != NULL) {
-        qDebug() << "e is : " << e
-                 << "about to change the color"
-                 << "red is : " << color.red()
-                 << "green is : " << color.green()
-                 << "blue is : " << color.blue();
-        ow->setFillColor(color);
+
+        switch (e) {
+        case CFEffectWidget::FILL_COLOR:
+            ow->setFillColor(color);
+            break;
+        case CFEffectWidget::FILL_BKG:
+            ow->setBKGColor(color);
+            break;
+        default:
+            break;
+        }
     }
 }
 

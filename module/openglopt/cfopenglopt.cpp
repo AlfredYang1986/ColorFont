@@ -277,12 +277,17 @@ fill_background(const CFFuncArguments& args) {
     GLuint VBO = args.getV("VBO").value<GLuint>();
     QOpenGLShaderProgram* program = args.getV("program").value<QOpenGLShaderProgram*>();
 
+    QColor bkg_color = args.getV("bkg_color").value<QColor>();
+    GLfloat red = bkg_color.redF();
+    GLfloat green = bkg_color.greenF();
+    GLfloat blue = bkg_color.blueF();
+
     program->link();
     program->bind();
 
     glm::mat4 projection = glm::ortho(0.0f, DEFAULT_WIDTH, 0.0f, DEFAULT_HEIGHT);
     glUniformMatrix4fv(glGetUniformLocation(program->programId(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-    glUniform3f(glGetUniformLocation(program->programId(), "textColor"), 1.0, 1.0, 1.0);
+    glUniform3f(glGetUniformLocation(program->programId(), "textColor"), red, green, blue);
     glBindVertexArray(VAO);
 
     GLfloat xpos = 0;

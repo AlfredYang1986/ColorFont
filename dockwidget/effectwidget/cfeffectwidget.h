@@ -14,6 +14,7 @@ class CFEffectWidget : public QWidget {
 public:
     enum EFFECT_INDEX {
         FILL_COLOR = 0x01,
+        FILL_BKG = 0x02,
     };
 
 public:

@@ -15,7 +15,7 @@
 #include <QDebug>
 
 CFGLLineWidget::CFGLLineWidget(QGLContext *context, QWidget *parent)
-    : QGLWidget(context, parent), fill_color(Qt::black) {
+    : QGLWidget(context, parent), fill_color(Qt::black), bkg_color(Qt::white) {
 
 }
 
@@ -136,6 +136,12 @@ void CFGLLineWidget::drawBackground() {
         QVariant v;
         v.setValue(program_bk);
         args.pushV("program", v);
+    }
+
+    {
+        QVariant v;
+        v.setValue(bkg_color);
+        args.pushV("bkg_color", v);
     }
 
     CFModuleManagement* cfmm = CFModuleManagement::queryInstance();
@@ -276,3 +282,9 @@ void CFGLLineWidget::setFillColor(const QColor& c) {
     fill_color = c;
     this->repaintOpenGL();
 }
+
+void CFGLLineWidget::setBKGColor(const QColor& c) {
+    bkg_color = c;
+    this->repaintOpenGL();
+}
+

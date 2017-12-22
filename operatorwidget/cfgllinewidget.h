@@ -26,6 +26,7 @@ public:
     void resizeGL(int w, int h);
 
     void setFillColor(const QColor& c);
+    void setBKGColor(const QColor& c);
 protected:
     void initializeGL();
     void paintGL();
@@ -43,6 +44,7 @@ private:
     QVector<Character> chars;
 
     QColor fill_color;
+    QColor bkg_color;
 };
 
 #endif // CFGLLINEWIDGET_H
