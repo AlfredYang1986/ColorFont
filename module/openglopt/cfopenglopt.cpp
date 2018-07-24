@@ -97,15 +97,18 @@ QGLContext* CFOpenGLOpt::systemGLContext() const {
 
 CFFuncResults
 init_gl(const CFFuncArguments&) {
+
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);
+//    glBlendFunc(GL_DST_ALPHA, GL_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glShadeModel(GL_FLAT); 	// 设置阴影平滑模式
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
+//    glEnable(GL_DEPTH_TEST);
+//    glDepthFunc(GL_LEQUAL);
 //    glEnable(GL_CULL_FACE);
 
     glEnable(GL_ALPHA_TEST);
+//    glAlphaFunc(GL_GREATER, 0.01);
 
     QOpenGLShaderProgram * program_bk = new QOpenGLShaderProgram;
     program_bk->addShaderFromSourceCode(
@@ -347,7 +350,7 @@ draw_glyph_lst(const CFFuncArguments& args) {
     glUniformMatrix4fv(glGetUniformLocation(program->programId(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
     glUniform3f(glGetUniformLocation(program->programId(), "textColor"), red, green, blue);
-    glUniform3f(glGetUniformLocation(program->programId(), "bkColor"), 1.0, 1.0, 1.0);
+    glUniform3f(glGetUniformLocation(program->programId(), "bkColor"), 1.0, 0.0, 0.0);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 

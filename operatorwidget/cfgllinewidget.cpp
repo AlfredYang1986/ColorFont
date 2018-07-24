@@ -54,7 +54,8 @@ void CFGLLineWidget::releaseResources() {
 
 void CFGLLineWidget::initializeGL() {
     makeCurrent();
-    qglClearColor(Qt::black);
+//    qglClearColor(0.0, 0.0, 0.0, 0.0);
+    glClearColor(0.0, 0.0, 0.0, 0.0);
 
     CFModuleManagement* cfmm =
         CFModuleManagement::queryInstance();
@@ -104,7 +105,7 @@ void CFGLLineWidget::paintGL() {
 //    if (pc && charcode > 0) {
 //        draw(character);
 //    }
-    drawBackground();
+//    drawBackground();
 
     if (chars.size() > 0) {
 //        draw(chars.first());
